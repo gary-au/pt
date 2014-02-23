@@ -4,15 +4,15 @@ library("pt")
 # These routines test drawing decision trees.
 ########################
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 3, 3)
-outcome_id_vector <- c(1, 2, 3, 4, 1, 2, 3, 1, 2)
-objective_consequence_vector <- c(10, 14, 21, 2, 40, 45, 30, 100, 200)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1, 1)
+gamble_ids <- c(1, 1, 1, 1, 2, 2, 2, 3, 3)
+outcome_ids <- c(1, 2, 3, 4, 1, 2, 3, 1, 2)
+objective_consequences <- c(10, 14, 21, 2, 40, 45, 30, 100, 200)
+probability_strings <- 
 	c("1/4", "1/4", "1/4", "1/4", "1/3", "1/3", "1/3", "1/2", "1/2")
 
-my_choices <- create_choices(choice_id_vector, gamble_id_vector, outcome_id_vector, 
-	objective_consequence_vector, probability_string_vector)
+my_choices <- Choices(choice_ids, gamble_ids, outcome_ids, 
+	objective_consequences, probability_strings)
 my_choices
 
 drawChoices(my_choices, 
@@ -31,8 +31,8 @@ drawChoices(my_choices,
 # These routines test drawing the simplex.
 ########################
 
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 
 drawSimplex(window_width=7, window_height=7, 
 	x1=0, x2=100, x3=200,
@@ -61,8 +61,8 @@ drawSimplex(window_width=7, window_height=7,
 		arrow_colours=c("red"))
 
 # draw the simplex for the Allais common consequence paradox 
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=1))
 
 drawSimplex(window_width=7, window_height=7, 
 	x1=0, x2=1000000, x3=5000000,
@@ -91,8 +91,8 @@ drawSimplex(window_width=7, window_height=7,
 		arrow_colours=c("red"))
 
 # draw the simplex using the following outcomes (x1=0, x2=1, x3=2)
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=1))
 
 drawSimplex(window_width=7, window_height=7, 
 	x1=0, x2=1, x3=2, 
@@ -122,8 +122,8 @@ drawSimplex(window_width=7, window_height=7,
 
 
 # draw a minimal version of the above, omitting extra labelling 
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=1))
 
 drawSimplex(window_width=7, window_height=7, 
 	x1=0, x2=1, x3=2, 

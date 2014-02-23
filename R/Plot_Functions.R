@@ -10,7 +10,7 @@
 ########################	
 
 #' @name linear_pwf
-#' @title linear_pwf
+#' @title The linear probability weighting function.
 #' @description Linear probability weighting function.
 #' @param x numeric, the x value
 #' @export
@@ -20,18 +20,18 @@ linear_pwf <- function(x)
 }
 
 #' @name kt_pwf
-#' @title kt_pwf
+#' @title The Tversky and Kahneman (1992) probability weighting function.
 #' @description Tversky and Kahneman's (1992) probability weighting function.
 #' @references
 #' Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and Uncertainty, 5(4), 297-323.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-kt_pwf <- function(parameters, x)
+kt_pwf <- function(par, x)
 {
-	if (length(parameters) == 1)
+	if (length(par) == 1)
 	{
-		alpha <- parameters[1]
+		alpha <- par[1]
 	
 		return (x^alpha / ((x^alpha + (1 - x)^alpha)^(1/alpha)))		
 	}
@@ -42,19 +42,19 @@ kt_pwf <- function(parameters, x)
 }
 
 #' @name linear_in_log_odds_pwf
-#' @title linear_in_log_odds_pwf
+#' @title The linear in log odds probability weighting function.
 #' @description Linear in log odds probability weighting function.
 #' @references
 #' Wu, G., & Gonzalez, R. (1996). Curvature of the probability weighting function. Management Science, 42(12), 1676-1690.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-linear_in_log_odds_pwf <- function(parameters, x)
+linear_in_log_odds_pwf <- function(par, x)
 {
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		return (beta * x^alpha / (beta * x^alpha + (1 - x)^alpha))
 	}
@@ -65,19 +65,19 @@ linear_in_log_odds_pwf <- function(parameters, x)
 }
 
 #' @name power_pwf
-#' @title power_pwf
+#' @title The power probability weighting function.
 #' @description Power probability weighting function.
 #' @references
 #' Stott, H. P. (2006). Cumulative prospect theory's functional menagerie. Journal of Risk and Uncertainty, 32(2), 101-130.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-power_pwf <- function(parameters, x)
+power_pwf <- function(par, x)
 {
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{
-		alpha <- parameters[1]	
-		beta <- parameters[2]
+		alpha <- par[1]	
+		beta <- par[2]
 		
 		return (beta * x^alpha)		
 	}
@@ -88,19 +88,19 @@ power_pwf <- function(parameters, x)
 }
 
 #' @name neo_additive_pwf
-#' @title neo_additive_pwf
+#' @title The neo-additive probability weighting function.
 #' @description Neo-additive probability weighting function.
 #' @references
 #' Stott, H. P. (2006). Cumulative prospect theory's functional menagerie. Journal of Risk and Uncertainty, 32(2), 101-130.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-neo_additive_pwf <- function(parameters, x)
+neo_additive_pwf <- function(par, x)
 {	
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		return (beta + alpha*x)
 	}
@@ -111,19 +111,19 @@ neo_additive_pwf <- function(parameters, x)
 }
 
 #' @name exponential_power_pwf
-#' @title exponential_power_pwf
+#' @title The exponential power probability weighting function.
 #' @description Exponential-power probability weighting function.
 #' @references
 #' Stott, H. P. (2006). Cumulative prospect theory's functional menagerie. Journal of Risk and Uncertainty, 32(2), 101-130.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-exponential_power_pwf <- function(parameters, x)
+exponential_power_pwf <- function(par, x)
 {	
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		return (exp(-alpha/beta * (1-x)^beta))
 	}
@@ -134,19 +134,19 @@ exponential_power_pwf <- function(parameters, x)
 }
 
 #' @name hyperbolic_logarithm_pwf
-#' @title hyperbolic_logarithm_pwf
+#' @title The hyperbolic logarithm probability weighting function.
 #' @description Hyperbolic-logarithm probability weighting function.
 #' @references
 #' Stott, H. P. (2006). Cumulative prospect theory's functional menagerie. Journal of Risk and Uncertainty, 32(2), 101-130.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-hyperbolic_logarithm_pwf <- function(parameters, x)
+hyperbolic_logarithm_pwf <- function(par, x)
 {
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		return ((1 - alpha * log(x))^(-beta/alpha))
 	}
@@ -157,20 +157,20 @@ hyperbolic_logarithm_pwf <- function(parameters, x)
 }
 
 #' @name compound_invariance_pwf
-#' @title compound_invariance_pwf
+#' @title The compound invariance probability weighting function.
 #' @description Compound invariance probability weighting function.
 #' @references
 #' Prelec, D. (1998). The probability weighting function. Econometrica, 60(3), 497-528.
-#' @param parameters vector, a vector containing parameters for the pwf
+#' @param par vector, a vector containing parameters for the pwf
 #' @param x numeric, the x value
 #' @export
-compound_invariance_pwf <- function(parameters, x)
+compound_invariance_pwf <- function(par, x)
 {
 
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		return ((exp(-beta * (-log(x))^alpha)))
 	}
@@ -181,19 +181,19 @@ compound_invariance_pwf <- function(parameters, x)
 }
 
 #' @name constant_relative_sensitivity_pwf
-#' @title constant_relative_sensitivity_pwf
+#' @title The constant relative sensitivity probability weighting function.
 #' @description Constant relative sensitivity probability weighting function.
 #' @references
 #' Abdellaoui, M., L'Haridon, O., & Zank, H. (2010). Separating curvature and elevation: A parametric probability weighting function. Journal of Risk and Uncertainty, 41(1), 39-65.
-#' @param parameters vector, parameters for the probability weighting function.
+#' @param par vector, parameters for the probability weighting function.
 #' @param x numeric, the x value
 #' @export
-constant_relative_sensitivity_pwf <- function(parameters, x)
+constant_relative_sensitivity_pwf <- function(par, x)
 {
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{	
-		alpha <- parameters[1]
-		beta <- parameters[2]
+		alpha <- par[1]
+		beta <- par[2]
 		
 		if (x <= beta)
 		{
@@ -216,16 +216,16 @@ constant_relative_sensitivity_pwf <- function(parameters, x)
 ########################	
 
 #' @name linear_uf
-#' @title linear_uf
+#' @title The linear utility function.
 #' @description Linear utility function.
-#' @param parameters vector, parameters for the utility function.
+#' @param par vector, parameters for the utility function.
 #' @param x numeric, the x value
 #' @export
-linear_uf <- function(parameters, x)
+linear_uf <- function(par, x)
 {	
-	if (length(parameters) == 1)
+	if (length(par) == 1)
 	{
-		lambda <- parameters[1]
+		lambda <- par[1]
 	
 		value <- ifelse(x < 0, -lambda * (-x), x)
 		
@@ -238,18 +238,18 @@ linear_uf <- function(parameters, x)
 }
 
 #' @name power_uf
-#' @title power_uf
+#' @title The power utility function.
 #' @description Power utility function.
-#' @param parameters vector, parameters for the utility function.
+#' @param par vector, parameters for the utility function.
 #' @param x numeric, the x value 
 #' @export
-power_uf <- function(parameters, x)
+power_uf <- function(par, x)
 {
-	if (length(parameters) == 3)
+	if (length(par) == 3)
 	{
-		alpha <- parameters[1]
-		beta <- parameters[2]
-		lambda <- parameters[3]
+		alpha <- par[1]
+		beta <- par[2]
+		lambda <- par[3]
 		
 		value <- ifelse(x < 0, -lambda * (-x)^beta, x^alpha)
 		
@@ -262,16 +262,16 @@ power_uf <- function(parameters, x)
 }
 
 #' @name exponential_uf
-#' @title exponential_uf
+#' @title The exponential utility function.
 #' @description Exponential utility function.
-#' @param parameters vector, parameters for the utility function.
+#' @param par vector, parameters for the utility function.
 #' @param x numeric, the x value
 #' @export
-exponential_uf <- function(parameters, x)
+exponential_uf <- function(par, x)
 {	
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{
-		alpha <- parameters[1]
+		alpha <- par[1]
 		
 		value <- ifelse(alpha > 0, (1 - exp(-alpha *x)), ifelse(alpha < 0, exp(-alpha * x) - 1, x))
 		
@@ -284,17 +284,17 @@ exponential_uf <- function(parameters, x)
 }
 
 #' @name quadratic_uf
-#' @title quadratic_uf
+#' @title The quadratic utility function.
 #' @description Quadratic utility function.
-#' @param parameters vector, parameters for the utility function.
+#' @param par vector, parameters for the utility function.
 #' @param x numeric, the x value
 #' @export
-quadratic_uf <- function(parameters, x)
+quadratic_uf <- function(par, x)
 {	
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{
-		alpha <- parameters[1]
-		lambda <- parameters[2]	
+		alpha <- par[1]
+		lambda <- par[2]	
 		
 		value <- ifelse(x < 0, -lambda * (alpha * (-x) - (-x)^2), alpha * x - x^2)
 		
@@ -307,17 +307,17 @@ quadratic_uf <- function(parameters, x)
 }
 
 #' @name logarithmic_uf
-#' @title logarithmic_uf
+#' @title The logarithmic utility function.
 #' @description Logarithmic utility function.
-#' @param parameters vector, parameters for the utility function.
+#' @param par vector, parameters for the utility function.
 #' @param x numeric, the x value
 #' @export
-logarithmic_uf <- function(parameters, x)
+logarithmic_uf <- function(par, x)
 {	
-	if (length(parameters) == 2)
+	if (length(par) == 2)
 	{
-		alpha <- parameters[1]
-		lambda <- parameters[2]	
+		alpha <- par[1]
+		lambda <- par[2]	
 		
 		value <- ifelse(x < 0, -lambda * (log(alpha + (-x))), log(alpha + x))
 		
@@ -334,8 +334,8 @@ logarithmic_uf <- function(parameters, x)
 # plot functions
 ########################	
 
-#' @name plot_pwf
-#' @title plot_pwf
+#' @name plotProbW
+#' @title Plot a probability weighting function.
 #' @description Plot a probability weighting function using base graphics.
 #' @param my_title text, the title
 #' @param my_title_colour text, the title colour
@@ -343,7 +343,7 @@ logarithmic_uf <- function(parameters, x)
 #' @param my_x_label text, my_x_label
 #' @param my_y_label text, the my_y_label
 #' @param pwf function, the pwf
-#' @param parameters vector, the pwf_parameters
+#' @param par vector, the pwf_parameters
 #' @param draw_reference_line_flag logical, draw_reference_line_flag
 #' @param reference_line_colour text, reference_line_colour
 #' @param reference_line_style text, reference_line_style
@@ -355,11 +355,11 @@ logarithmic_uf <- function(parameters, x)
 #' @param window_height numeric, the window_height
 #' @examples
 #' 
-#' plot_pwf(my_title=expression(paste("Kahneman & Tversky (1992), ",
+#' plotProbW(my_title=expression(paste("Kahneman & Tversky (1992), ",
 #' 	c==0.61)),
 #' 	my_title_colour="black", my_title_font_size=4,
 #' 	my_x_label = "p", my_y_label = "w(p)",
-#' 	pwf=kt_pwf, parameters=c(c=0.61),
+#' 	pwf=kt_pwf, par=c(c=0.61),
 #' 	draw_reference_line_flag=TRUE, reference_line_colour="red",
 #' 	reference_line_style="dotted",
 #' 	my_labels=c(expression(paste(w(italic(p)) == frac(italic(p)^c,
@@ -369,14 +369,27 @@ logarithmic_uf <- function(parameters, x)
 #' 	window_width=7, window_height=7)
 #' 	
 #' @export
-plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
+plotProbW <- function(my_title, my_title_colour, my_title_font_size,
 	my_x_label, my_y_label, 
-	pwf, parameters,
+	pwf, par,
 	draw_reference_line_flag, reference_line_colour, reference_line_style, 
 	my_labels, my_label_positions, font_scaling, arrow_positions,	
 	window_width, window_height)
 {
-	win.graph(window_width, window_height)
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}	
+	
+	dev.new(window_width, window_height)
 	plot.new()
 	
 	x=NULL # put this here to avoid a R cmd check NOTE: no visible binding for global variable 'x'	
@@ -396,7 +409,7 @@ plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
 		ylab = my_y_label,
 		pty = "s")		
 	
-	curve(FUN(parameters=parameters, x),
+	curve(FUN(par=par, x),
 		from = 0, 
 		to = 1, 
 		n = 1000,
@@ -464,8 +477,8 @@ plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
 	return (invisible())
 }
 
-#' @name plot_pwf_family
-#' @title plot_pwf_family
+#' @name plotProbWFam
+#' @title Plot a family of two parameter probability weighting functions.
 #' @description Plot a family of two parameter probability weighting functions using base graphics.
 #' @param my_title text, the title
 #' @param my_title_colour text, the title colour
@@ -473,7 +486,7 @@ plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
 #' @param my_x_label text, my_x_label
 #' @param my_y_label text, the my_y_label
 #' @param pwf function, the pwf
-#' @param parameters vector, the pwf_parameters
+#' @param par vector, the pwf_parameters
 #' @param draw_reference_line_flag logical, draw_reference_line_flag
 #' @param reference_line_colour text, reference_line_colour
 #' @param reference_line_style text, reference_line_style
@@ -485,11 +498,11 @@ plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
 #' @param window_height numeric, the window_height
 #' @examples
 #' 
-#' plot_pwf_family(my_title=expression(paste("linear in log odds, ",
+#' plotProbWFam(my_title=expression(paste("linear in log odds, ",
 #' 	gamma == 0.6)),
 #' 	my_title_colour="black", my_title_font_size=4,
 #' 	my_x_label = "p", my_y_label = "w(p)", pwf=linear_in_log_odds_pwf,
-#' 	parameters=list(a_list=c(0.6), b_list=seq(from=0.2, to=1.8, by=0.06)),
+#' 	par=list(a_list=c(0.6), b_list=seq(from=0.2, to=1.8, by=0.06)),
 #' 	draw_reference_line_flag=TRUE, reference_line_colour="red",
 #' 	reference_line_style="dotted",
 #' 	my_labels=c(expression(paste(delta == 0.2)),
@@ -502,15 +515,27 @@ plot_pwf <- function(my_title, my_title_colour, my_title_font_size,
 #' 	window_width=7, window_height=7)
 #' 	
 #' @export
-plot_pwf_family <- function(my_title, my_title_colour, my_title_font_size,
+plotProbWFam <- function(my_title, my_title_colour, my_title_font_size,
 	my_x_label, my_y_label, 
-	pwf, parameters, 
+	pwf, par, 
 	draw_reference_line_flag, reference_line_colour, reference_line_style, 
 	my_labels, my_label_positions, font_scaling, arrow_positions, 
 	window_width, window_height)
 {
-
-	win.graph(window_width, window_height)
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height)
 	plot.new()	
 	
 	x=NULL # put this here to avoid a R cmd check NOTE: no visible binding for global variable 'x'	
@@ -530,8 +555,8 @@ plot_pwf_family <- function(my_title, my_title_colour, my_title_font_size,
 		ylab = my_y_label,
 		pty = "s")
 	
-	p1_list <- parameters[[1]]
-	p2_list <- parameters[[2]]
+	p1_list <- par[[1]]
+	p2_list <- par[[2]]
 	
 	for(p1 in p1_list)
 	{
@@ -609,8 +634,8 @@ plot_pwf_family <- function(my_title, my_title_colour, my_title_font_size,
 	return (invisible())
 }
 
-#' @name plot_utility_function
-#' @title plot_utility_function
+#' @name plotUtility
+#' @title Plot a utility function.
 #' @description Plot the utility function.
 #' @param my_title text, the title of the chart.
 #' @param my_title_colour text, the title colour.
@@ -619,9 +644,9 @@ plot_pwf_family <- function(my_title, my_title_colour, my_title_font_size,
 #' @param xmin numeric, the xmin on the x-axis.
 #' @param xmax numeric, the xmax on the x-axis.
 #' @param my_y_label text, the y-axis label.
-#' @param utility_function Utility, an instance of the Utility class.
-#' @param parameters vector, the parameters for the utility_function.
-#' @param utility_function_colour text, the colour of the utility_function.
+#' @param fun Utility, an instance of the Utility class.
+#' @param par vector, the parameters for the utility function.
+#' @param fun_colour text, the colour of the utility function line.
 #' @param draw_reference_line_flag logical, a boolean flag determining whether or not to draw a y=x reference line.
 #' @param reference_line_colour text, the reference line colour.
 #' @param reference_line_style numeric, the reference line style.
@@ -633,38 +658,51 @@ plot_pwf_family <- function(my_title, my_title_colour, my_title_font_size,
 #' @param window_height numeric, the window_height
 #' @examples
 #' 
-#' plot_utility_function(my_x_label = "objective consequence",
+#' plotUtility(my_x_label = "objective consequence",
 #' 	my_y_label = "subjective value",
 #' 	xmin = -10, xmax = 10, 
-#' 	utility_function=power_uf,
-#' 	parameters=c(alpha = 0.88, beta = 0.88, lambda = 2.25),
-#' 	utility_function_colour = "purple",
+#' 	fun=power_uf,
+#' 	par=c(alpha = 0.88, beta = 0.88, lambda = 2.25),
+#' 	fun_colour = "purple",
 #' 	draw_reference_line_flag = TRUE,
 #' 	reference_line_colour = "red",
 #' 	reference_line_style = 1,
 #' 	window_width = 5, window_height = 5)
 #' 
 #' @export
-plot_utility_function <- function(my_title, my_title_colour, my_title_font_size, 
+plotUtility <- function(my_title, my_title_colour, my_title_font_size, 
 	my_x_label, xmin, xmax, my_y_label, 
-	utility_function, parameters, 
-	utility_function_colour, 
+	fun, par, 
+	fun_colour, 
 	draw_reference_line_flag, reference_line_colour, reference_line_style, 
 	my_labels, my_label_positions, my_label_colours, my_label_font_sizes,
 	window_width, window_height)
 {
-	win.graph(window_width, window_height)
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height)
 	plot.new()
 	
 	x=NULL # put this here to avoid a R cmd check NOTE: no visible binding for global variable 'x'	
 		
-	FUN <- match.fun(utility_function)
+	FUN <- match.fun(fun)
 
-	curve(FUN(parameters, x),
+	curve(FUN(par, x),
 		from = xmin,
 		to = xmax,
 		add = FALSE,
-		col = utility_function_colour,		
+		col = fun_colour,		
 		type = "l",
 		xlab = my_x_label,
 		ylab = my_y_label,
@@ -706,8 +744,8 @@ plot_utility_function <- function(my_title, my_title_colour, my_title_font_size,
 }
 
 
-#' @name plot_risk_premium
-#' @title plot_risk_premium
+#' @name plotRP
+#' @title Plot the risk premium.
 #' @description Plot the risk premium.
 #' @param my_title text, the title
 #' @param my_title_colour text, the title colour
@@ -717,8 +755,8 @@ plot_utility_function <- function(my_title, my_title_colour, my_title_font_size,
 #' @param xmax numeric, the xmax
 #' @param my_y_label text, the my_y_label
 #' @param my_color text, the line color
-#' @param utility_function function, the utility function
-#' @param parameters vector, the uf_parameters
+#' @param fun function, the utility function
+#' @param par vector, the uf_parameters
 #' @param ev numeric, the expected value
 #' @param eu numeric, the expected utility
 #' @param ce numeric, the certainty equivalent
@@ -730,44 +768,44 @@ plot_utility_function <- function(my_title, my_title_colour, my_title_font_size,
 #' @param window_height numeric, the window_height
 #' @examples
 #' 
-#' choice_id_vector <- c(1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 1, 2, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 1, 2, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(4000, 0, 3000,
+#' objective_consequences <- c(4000, 0, 3000,
 #' 4000, 0, 3000, 0)
 #' 
-#' probability_string_vector <- c("0.8", "0.2", "1.0",
+#' probability_strings <- c("0.8", "0.2", "1.0",
 #' "0.2", "0.8", "0.25", "0.75")
 #' 
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector,
-#' 	outcome_id_vector=outcome_id_vector,
-#' 	objective_consequence_vector=objective_consequence_vector,
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids,
+#' 	outcome_ids=outcome_ids,
+#' 	objective_consequences=objective_consequences,
+#' 	probability_strings=probability_strings)
 #' 
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="power",
-#' parameters=c(alpha=0.88, beta=0.88, lambda=1))
+#' my_utility <- Utility(fun="power",
+#' par=c(alpha=0.88, beta=0.88, lambda=1))
 #' eu_df <- compareEU(my_choices, utility=my_utility, digits=4)
 #' eu_df
 #' 
 #' ev <- as.numeric(eu_df$ev[1])
 #' eu <- as.numeric(eu_df$eu[1])
-#' ce <- as.numeric(eu_df$euce[1])
+#' ce <- as.numeric(eu_df$ce[1])
 #' 
-#' plot_risk_premium(my_title = "risk premium",
+#' plotRP(my_title = "risk premium",
 #' 	my_title_colour="black", 
 #' 	my_title_font_size=4,
 #' 	my_x_label = "objective consequence",
 #' 	my_y_label = "subjective value", 
 #' 	xmin = 2500, xmax = 3500,
 #' 	my_color="violet",
-#' 	utility_function=power_uf,
-#' 	parameters=c(alpha=0.88, beta=0.88, lambda=1),
+#' 	fun=power_uf,
+#' 	par=c(alpha=0.88, beta=0.88, lambda=1),
 #' 	ev=ev, eu=eu, ce=ce,
 #' 	my_labels=c(expression(paste(U(x)==x^alpha, ",
 #' 	", x>=0)),
@@ -780,20 +818,33 @@ plot_utility_function <- function(my_title, my_title_colour, my_title_font_size,
 #' 	window_width = 7, window_height = 7)
 #' 
 #' @export
-plot_risk_premium <- function(my_title, my_title_colour, my_title_font_size, 
+plotRP <- function(my_title, my_title_colour, my_title_font_size, 
 	my_x_label, xmin, xmax, my_y_label, my_color, 
-	utility_function, parameters, ev, eu, ce, 
+	fun, par, ev, eu, ce, 
 	my_labels, my_label_colors, my_label_positions, font_scaling, 
 	window_width, window_height)
 {
-	win.graph(window_width, window_height)
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height)
 	plot.new()
 	
 	x=NULL # put this here to avoid a R cmd check NOTE: no visible binding for global variable 'x'	
 		
-	FUN <- match.fun(utility_function)
+	FUN <- match.fun(fun)
 
-	curve(FUN(parameters, x),
+	curve(FUN(par, x),
 		from = xmin,
 		to = xmax,
 		add = FALSE,
@@ -809,7 +860,7 @@ plot_risk_premium <- function(my_title, my_title_colour, my_title_font_size,
 	x0 <- ev
 	y0 <- 0
 	x1 <- ev	
-	y1 <- FUN(parameters, x0)
+	y1 <- FUN(par, x0)
 	
 	segments(x0, y0, x1, y1, lty="dashed")
 	

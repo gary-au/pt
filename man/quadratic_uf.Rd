@@ -1,16 +1,15 @@
 \name{quadratic_uf}
 \alias{quadratic_uf}
-\title{quadratic_uf}
+\title{The quadratic utility function.}
 \usage{
-  quadratic_uf(parameters, x)
+quadratic_uf(par, x)
 }
 \arguments{
-  \item{parameters}{vector, parameters for the utility
-  function.}
+  \item{par}{vector, parameters for the utility function.}
 
   \item{x}{numeric, the x value}
 }
 \description{
-  Quadratic utility function.
+Quadratic utility function.
 }
 

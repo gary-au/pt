@@ -1,17 +1,14 @@
 \name{drawSimplex}
 \alias{drawSimplex}
-\title{drawSimplex}
+\title{Draw the probability simplex.}
 \usage{
-  drawSimplex(window_width, window_height, x1, x2, x3,
-    line_dot_density, draw_ev_flag, ev_colour,
-    draw_pt_flag, alpha, beta, pt_colour,
-    draw_utility_flag, utility, eu_colour, start_points,
-    labels, label_positions, label_colours,
-    label_font_sizes, label_font_faces, label_rotations,
-    circle_radii, circle_outline_colours,
-    circle_fill_colours, circle_positions, lines,
-    line_widths, line_styles, line_colours, arrows,
-    arrow_widths, arrow_styles, arrow_colours)
+drawSimplex(window_width, window_height, x1, x2, x3, line_dot_density,
+  draw_ev_flag, ev_colour, draw_pt_flag, alpha, beta, pt_colour,
+  draw_utility_flag, utility, eu_colour, start_points, labels, label_positions,
+  label_colours, label_font_sizes, label_font_faces, label_rotations,
+  circle_radii, circle_outline_colours, circle_fill_colours, circle_positions,
+  lines, line_widths, line_styles, line_colours, arrows, arrow_widths,
+  arrow_styles, arrow_colours)
 }
 \arguments{
   \item{window_width}{numeric, the window_width}
@@ -100,17 +97,17 @@
   \item{arrow_colours}{vector, a vector of arrow_colours}
 }
 \description{
-  Draws the probability simplex.
+Draws the probability simplex.
 }
 \details{
-  Iso-expected value lines, expected utility indifference
-  lines and prospect theory indifference curves (based on a
-  linear in log odds probability weighting function) can be
-  drawn.
+Iso-expected value lines, expected utility indifference
+lines and prospect theory indifference curves (based on a
+linear in log odds probability weighting function) can be
+drawn.
 }
 \examples{
-my_utility <- create_utility(utility_function="power",
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+my_utility <- Utility(fun="power",
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 
 drawSimplex(window_width=7, window_height=7,
 	x1=0, x2=100, x3=200,
@@ -118,9 +115,11 @@ drawSimplex(window_width=7, window_height=7,
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red",
 	draw_utility_flag=TRUE, utility=my_utility, eu_colour="purple",
-	start_points=list(c(0.1,0.9),c(0.2,0.8),c(0.3,0.7),c(0.4,0.6),c(0.5,0.5),c(0.6,0.4),c(0.7,0.3),c(0.8,0.2),c(0.9,0.1)),
+	start_points=list(c(0.1,0.9),c(0.2,0.8),c(0.3,0.7),
+	c(0.4,0.6),c(0.5,0.5),c(0.6,0.4),c(0.7,0.3),c(0.8,0.2),c(0.9,0.1)),
 		labels=c("A","B","C","D","increasing preference"),
-		label_positions=list(c(0.05,0.02),c(0.07,0.12),c(0.92,0.02),c(0.95,0.10),c(0.7,0.7)),
+		label_positions=list(c(0.05,0.02),c(0.07,0.12),
+		c(0.92,0.02),c(0.95,0.10),c(0.7,0.7)),
 		label_colours=c("red","green","blue","orange","red"),
 		label_font_sizes=c(12,12,12,12,16),
 		label_font_faces=c("plain","plain","plain","plain","bold"),
@@ -129,7 +128,8 @@ drawSimplex(window_width=7, window_height=7,
 		circle_outline_colours=c("black","black","black","black"),
 		circle_fill_colours=c("red","green","blue","orange"),
 		circle_positions=list(c(0,0),c(0.01,0.1),c(0.89,0),c(0.9,0.1)),
-		lines=list(c(0,0,0.01,0.1),c(0.89,0,0.9,0.1),c(0.01,0.1,0.9,0.1),c(0,0,0.89,0)),
+		lines=list(c(0,0,0.01,0.1),c(0.89,0,0.9,0.1),
+		c(0.01,0.1,0.9,0.1),c(0,0,0.89,0)),
 		line_widths=c(1, 1, 1, 1),
 		line_styles=c("dashed", "dashed", "dashed", "dashed"),
 		line_colours=c("red","red","red","red"),
@@ -139,12 +139,12 @@ drawSimplex(window_width=7, window_height=7,
 		arrow_colours=c("red"))
 }
 \references{
-  Marschak, J. (1950). Rational behavior, uncertain
-  prospects, and measurable utility. Econometrica, 18(2),
-  111-141.
+Marschak, J. (1950). Rational behavior, uncertain
+prospects, and measurable utility. Econometrica, 18(2),
+111-141.
 
-  Machina, M. J. (1987). Choice under uncertainty: Problems
-  solved and unsolved. Journal of Economic Perspectives,
-  1(1), 121-154.
+Machina, M. J. (1987). Choice under uncertainty: Problems
+solved and unsolved. Journal of Economic Perspectives,
+1(1), 121-154.
 }
 

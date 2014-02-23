@@ -4,18 +4,7 @@
 #
 ########################	
 
-#' The Gambles class
 
-#' @section Slots:
-#'  \describe{
-#'    \item{\code{gambles}:}{Object of class \code{"vector"}, containing the gambles.}
-#'  }
-#'
-#' @note The Gambles class represents a set of gambles.
-#' @name Gambles 
-#' @rdname Gambles
-#' @exportClass Gambles
-#' @aliases Gambles-class
 setClass(Class = "Gambles",
 	representation = representation
 	(
@@ -92,31 +81,31 @@ create_gambles <- function()
 }
 
 
-create_gambles_v3 <- function(gamble_id_vector, outcome_id_vector, objective_consequence_vector, probability_string_vector)
+create_gambles_v3 <- function(gamble_ids, outcome_ids, objective_consequences, probability_strings)
 {
 
 	# perform validity checks on the input
 	
-	# firstly the gamble_id_vector and all other vectors must be the same length
+	# firstly the gamble_ids and all other vectors must be the same length
 	
-	gamble_id_vector_length <- length(gamble_id_vector)
-	outcome_id_vector_length <- length(outcome_id_vector)	
-	objective_consequence_vector_length <- length(objective_consequence_vector)
-	probability_string_vector_length <- length(probability_string_vector)
+	gamble_ids_length <- length(gamble_ids)
+	outcome_ids_length <- length(outcome_ids)	
+	objective_consequences_length <- length(objective_consequences)
+	probability_strings_length <- length(probability_strings)
 
-	if (gamble_id_vector_length != outcome_id_vector_length)
+	if (gamble_ids_length != outcome_ids_length)
 	{
-		stop(paste("gamble_id_vector_length has length: ", gamble_id_vector_length, " and outcome_id_vector has length: ", outcome_id_vector_length, "\n"));			
+		stop(paste("gamble_ids_length has length: ", gamble_ids_length, " and outcome_ids has length: ", outcome_ids_length, "\n"));			
 	}
 	
-	if (gamble_id_vector_length != objective_consequence_vector_length)
+	if (gamble_ids_length != objective_consequences_length)
 	{
-		stop(paste("gamble_id_vector_length has length: ", gamble_id_vector_length, " and objective_consequence_vector has length: ", objective_consequence_vector_length, "\n"));			
+		stop(paste("gamble_ids_length has length: ", gamble_ids_length, " and objective_consequences has length: ", objective_consequences_length, "\n"));			
 	}
 	
-	if (gamble_id_vector_length != probability_string_vector_length)
+	if (gamble_ids_length != probability_strings_length)
 	{
-		stop(paste("gamble_id_vector_length has length: ", gamble_id_vector_length, " and probability_string_vector has length: ", probability_string_vector_length, "\n"));			
+		stop(paste("gamble_ids_length has length: ", gamble_ids_length, " and probability_strings has length: ", probability_strings_length, "\n"));			
 	}	
 
 	
@@ -124,16 +113,16 @@ create_gambles_v3 <- function(gamble_id_vector, outcome_id_vector, objective_con
 	
 	object <- new(Class = "Gambles")
 	
-	outc_gamble_vector <- c()
-	prob_string_gamble_vector <- c()
-	obj_cons_gamble_vector <- c()
+	outc_gambles <- c()
+	prob_string_gambles <- c()
+	obj_cons_gambles <- c()
 	old_gamble_id <- 1
 	
-	for (n in 1:length(gamble_id_vector))
+	for (n in 1:length(gamble_ids))
 	{
 			
-		gamble_id <- gamble_id_vector[n]
-		outcome_id <- outcome_id_vector[n]		
+		gamble_id <- gamble_ids[n]
+		outcome_id <- outcome_ids[n]		
 	
 		if (n == 1)
 		{
@@ -144,47 +133,47 @@ create_gambles_v3 <- function(gamble_id_vector, outcome_id_vector, objective_con
 		if (gamble_id != old_gamble_id)
 		{
 
-			# the probabilities for each gamble id the in probability_vector must sum to 1
+			# the probabilities for each gamble id the in probabilitys must sum to 1
 			
-			probability_vector <- unlist(lapply(prob_string_gamble_vector, function(prob_string_gamble_vector) eval(parse(text=prob_string_gamble_vector))))			
-			probability_sum <- sum(probability_vector)
+			probabilitys <- unlist(lapply(prob_string_gambles, function(prob_string_gambles) eval(parse(text=prob_string_gambles))))			
+			probability_sum <- sum(probabilitys)
 	
 			if (probability_sum < 0 | probability_sum > 1)
 			{
 				stop(paste("gamble id: ", old_gamble_id, " sum of probabilities: ", probability_sum, " is outside valid range [0, 1].\n"));
 			}				
 			
-			my_gamble <- create_gamble_v3(old_gamble_id, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+			my_gamble <- create_gamble_v3(old_gamble_id, outc_gambles, obj_cons_gambles, prob_string_gambles)
 			object@gambles <- append(object@gambles, my_gamble)
 	
 			set_gamble_id(object@gambles[[length(object@gambles)]]) <- old_gamble_id
 			
 			old_gamble_id <- gamble_id
 			
-			outc_gamble_vector <- c()
-			prob_string_gamble_vector <- c()
-			obj_cons_gamble_vector <- c()
+			outc_gambles <- c()
+			prob_string_gambles <- c()
+			obj_cons_gambles <- c()
 
-			outcome_id <- outcome_id_vector[n]			
-			probability_string <- probability_string_vector[n]
-			objective_consequence <- objective_consequence_vector[n]			
+			outcome_id <- outcome_ids[n]			
+			probability_string <- probability_strings[n]
+			objective_consequence <- objective_consequences[n]			
 			
-			outc_gamble_vector <- append(outc_gamble_vector, outcome_id)	
-			prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)
-			obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
+			outc_gambles <- append(outc_gambles, outcome_id)	
+			prob_string_gambles <- append(prob_string_gambles, probability_string)
+			obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
 			
-			if (n == length(gamble_id_vector))
+			if (n == length(gamble_ids))
 			{
-				# the probabilities for each gamble id the in probability_vector must sum to 1	
-				probability_vector <- unlist(lapply(prob_string_gamble_vector, function(prob_string_gamble_vector) eval(parse(text=prob_string_gamble_vector))))			
-				probability_sum <- sum(probability_vector)				
+				# the probabilities for each gamble id the in probabilitys must sum to 1	
+				probabilitys <- unlist(lapply(prob_string_gambles, function(prob_string_gambles) eval(parse(text=prob_string_gambles))))			
+				probability_sum <- sum(probabilitys)				
 
 				if (probability_sum < 0 | probability_sum > 1)
 				{
 					stop(paste("sum of probabilities: ", probability_sum, " is outside valid range [0, 1].\n"));
 				}				
 				
-				my_gamble <- create_gamble_v3(gamble_id, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+				my_gamble <- create_gamble_v3(gamble_id, outc_gambles, obj_cons_gambles, prob_string_gambles)
 				object@gambles <- append(object@gambles, my_gamble)
 		
 				set_gamble_id(object@gambles[[length(object@gambles)]]) <- old_gamble_id	
@@ -193,26 +182,26 @@ create_gambles_v3 <- function(gamble_id_vector, outcome_id_vector, objective_con
 		else
 		{
 
-			outcome_id <- outcome_id_vector[n]			
-			probability_string <- probability_string_vector[n]
-			objective_consequence <- objective_consequence_vector[n]			
+			outcome_id <- outcome_ids[n]			
+			probability_string <- probability_strings[n]
+			objective_consequence <- objective_consequences[n]			
 			
-			outc_gamble_vector <- append(outc_gamble_vector, outcome_id)
-			prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)
-			obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
+			outc_gambles <- append(outc_gambles, outcome_id)
+			prob_string_gambles <- append(prob_string_gambles, probability_string)
+			obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
 
-			if (n == length(gamble_id_vector))
+			if (n == length(gamble_ids))
 			{
-				# the probabilities for each gamble id the in probability_vector must sum to 1			
-				probability_vector <- unlist(lapply(prob_string_gamble_vector, function(prob_string_gamble_vector) eval(parse(text=prob_string_gamble_vector))))			
-				probability_sum <- sum(probability_vector)
+				# the probabilities for each gamble id the in probabilitys must sum to 1			
+				probabilitys <- unlist(lapply(prob_string_gambles, function(prob_string_gambles) eval(parse(text=prob_string_gambles))))			
+				probability_sum <- sum(probabilitys)
 				
 				if (probability_sum < 0 | probability_sum > 1)
 				{
 					stop(paste("gamble_id: ", gamble_id, " sum of probabilities: ", probability_sum, " is outside valid range [0, 1].\n"));
 				}				
 				
-				my_gamble <- create_gamble_v3(gamble_id, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+				my_gamble <- create_gamble_v3(gamble_id, outc_gambles, obj_cons_gambles, prob_string_gambles)
 				object@gambles <- append(object@gambles, my_gamble)
 		
 				set_gamble_id(object@gambles[[length(object@gambles)]]) <- old_gamble_id	
@@ -247,9 +236,9 @@ setMethod(f = "read_multiple_gambles_data_file",
 		#read in outcomes from external file
 		my_data_frame <- data.frame(read.table(file = input_file, header = TRUE, stringsAsFactors = FALSE, sep = DELIMITER))
 
-		objective_consequence_vector <- c()
-		gamble_id_vector <- c()
-		outcome_id_vector <- c()
+		objective_consequences <- c()
+		gamble_ids <- c()
+		outcome_ids <- c()
 		
 		for (n in 1:nrow(my_data_frame))
 		{
@@ -261,10 +250,10 @@ setMethod(f = "read_multiple_gambles_data_file",
 
 			my_outcome <- create_outcome(outcome_id = outcome_id, position = n, objective_consequence = objective_consequence, probability_string = probability_string, rank = 0, decision_weight = 0.0, subjective_value = 0.0, w = 0.0)
 	
-			if ((gamble_id %in% gamble_id_vector) == FALSE)
+			if ((gamble_id %in% gamble_ids) == FALSE)
 			{
 		
-				gamble_id_vector <- append(gamble_id_vector, gamble_id)
+				gamble_ids <- append(gamble_ids, gamble_id)
 				
 				my_gamble <- create_gamble()
 				
@@ -501,17 +490,17 @@ setMethod(f = "delete_gambles",
 		nameObject <- deparse(substitute(.Object))	
 
 
-		keep_gambles_vector <- c()
+		keep_gambless <- c()
 		
 		for (n in 1:length(.Object@gambles))
 		{
 			if ((get_gamble_id(.Object@gambles[[n]]) %in% value) == FALSE)
 			{
-				keep_gambles_vector <- c(keep_gambles_vector, .Object@gambles[[n]])
+				keep_gambless <- c(keep_gambless, .Object@gambles[[n]])
 			}				
 		}		
 		
-		.Object@gambles <- keep_gambles_vector
+		.Object@gambles <- keep_gambless
 		
 		assign(nameObject,.Object,envir=parent.frame())
 	
@@ -656,7 +645,7 @@ setMethod(f = "compare_gambles_under_expected_utility",
 			summary_df <- rbind(summary_df, df)
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "eu", "euce", "eurp")	
+		colnames(summary_df) <- c("gid", "ev", "eu", "ce", "rp")	
 		
 		return (summary_df)
 	}
@@ -678,14 +667,14 @@ setGeneric(name = "compare_gambles_under_pt",
 
 setMethod(f = "compare_gambles_under_pt",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification_for_positive_outcomes, probability_weighting_specification_for_negative_outcomes, utility, digits)
+	definition = function(object, prob_weight_for_positive_outcomes, prob_weight_for_negative_outcomes, utility, digits)
 	{	
 	
 		results_list <- list()
 		
 		for (n in 1:length(object@gambles))
 		{	
-			df_list <- compute_prospect(object@gambles[[n]], probability_weighting_specification_for_positive_outcomes, probability_weighting_specification_for_negative_outcomes, utility, digits)
+			df_list <- compute_prospect(object@gambles[[n]], prob_weight_for_positive_outcomes, prob_weight_for_negative_outcomes, utility, digits)
 			results_list[[n]] <- df_list
 		}
 		
@@ -709,7 +698,7 @@ setGeneric(name = "compare_gambles_under_rdu",
 
 setMethod(f = "compare_gambles_under_rdu",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 
 		results_list <- list()
@@ -717,7 +706,7 @@ setMethod(f = "compare_gambles_under_rdu",
 		for (n in 1:length(object@gambles))
 		{	
 
-			df_list <- compute_rdu_value_for_gamble(object@gambles[[n]], probability_weighting_specification, utility, digits)
+			df_list <- compute_rdu_value_for_gamble(object@gambles[[n]], prob_weight, utility, digits)
 			results_list[[n]] <- df_list
 		}
 
@@ -740,7 +729,7 @@ setGeneric(name = "compare_gambles_under_ram",
 
 setMethod(f = "compare_gambles_under_ram",
 	signature = "Gambles",
-	definition = function(object, branch_weighting_vector_list, probability_weighting_specification, utility, digits)
+	definition = function(object, branch_weight_list, prob_weight, utility, digits)
 	{	
 				
 		summary_df <- data.frame()
@@ -749,13 +738,13 @@ setMethod(f = "compare_gambles_under_ram",
 		{			
 			number_of_outcomes <- get_number_of_outcomes(object@gambles[[n]])
 		
-			for (m in 1:length(branch_weighting_vector_list))
+			for (m in 1:length(branch_weight_list))
 			{
-				if (length(branch_weighting_vector_list[[m]]) == number_of_outcomes)
+				if (length(branch_weight_list[[m]]) == number_of_outcomes)
 				{
-					branch_weighting_vector <- branch_weighting_vector_list[[m]]
+					branch_weights <- branch_weight_list[[m]]
 					
-					df <- compute_ram_model(object@gambles[[n]], branch_weighting_vector, probability_weighting_specification, utility, digits)
+					df <- compute_ram_model(object@gambles[[n]], branch_weights, prob_weight, utility, digits)
 					
 					summary_df <- rbind(summary_df, df)
 					
@@ -765,7 +754,7 @@ setMethod(f = "compare_gambles_under_ram",
 	
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "ramu", "ramuce", "ramurp")		
+		colnames(summary_df) <- c("gid", "ev", "ramu", "ce", "rp")		
 		
 		return (summary_df)
 
@@ -787,7 +776,7 @@ setGeneric(name = "compare_gambles_under_tax",
 
 setMethod(f = "compare_gambles_under_tax",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification, utility, delta, digits)
+	definition = function(object, prob_weight, utility, delta, digits)
 	{	
 	
 		summary_df <- data.frame()
@@ -795,13 +784,13 @@ setMethod(f = "compare_gambles_under_tax",
 		for (n in 1:length(object@gambles))
 		{	
 		
-			df <- compute_tax_model(object@gambles[[n]], probability_weighting_specification, utility, delta, digits)
+			df <- compute_tax_model(object@gambles[[n]], prob_weight, utility, delta, digits)
 
 			summary_df <- rbind(summary_df, df)
 			
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "tax", "taxce", "taxrp")		
+		colnames(summary_df) <- c("gid", "ev", "tax", "ce", "rp")		
 
 		return (summary_df)
 	}
@@ -822,7 +811,7 @@ setGeneric(name = "compare_gambles_under_swu",
 
 setMethod(f = "compare_gambles_under_swu",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 		
 		summary_df <- data.frame()
@@ -830,13 +819,13 @@ setMethod(f = "compare_gambles_under_swu",
 		for (n in 1:length(object@gambles))
 		{	
 		
-			df <- compute_swu(object@gambles[[n]], probability_weighting_specification, utility, digits)
+			df <- compute_swu(object@gambles[[n]], prob_weight, utility, digits)
 
 			summary_df <- rbind(summary_df, df)
 	
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "swu", "swuce", "swurp")		
+		colnames(summary_df) <- c("gid", "ev", "swu", "ce", "rp")		
 
 		return (summary_df)
 	}
@@ -857,7 +846,7 @@ setGeneric(name = "compare_gambles_under_swau",
 
 setMethod(f = "compare_gambles_under_swau",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 	
 		summary_df <- data.frame()
@@ -865,13 +854,13 @@ setMethod(f = "compare_gambles_under_swau",
 		for (n in 1:length(object@gambles))
 		{	
 		
-			df <- compute_swau(object@gambles[[n]], probability_weighting_specification, utility, digits)
+			df <- compute_swau(object@gambles[[n]], prob_weight, utility, digits)
 
 			summary_df <- rbind(summary_df, df)
 	
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "swau", "swauce", "swaurp")		
+		colnames(summary_df) <- c("gid", "ev", "swau", "ce", "rp")		
 
 		return (summary_df)
 	}
@@ -907,7 +896,7 @@ setMethod(f = "compare_gambles_under_prt",
 	
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "prtu", "prtuce", "prturp")		
+		colnames(summary_df) <- c("gid", "ev", "prtu", "ce", "rp")		
 
 		return (summary_df)
 	}
@@ -928,7 +917,7 @@ setGeneric(name = "compare_gambles_under_gdu",
 
 setMethod(f = "compare_gambles_under_gdu",
 	signature = "Gambles",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 		
 		summary_df <- data.frame()
@@ -936,13 +925,13 @@ setMethod(f = "compare_gambles_under_gdu",
 		for (n in 1:length(object@gambles))
 		{	
 		
-			df <- compute_gdu(object@gambles[[n]], probability_weighting_specification, utility, digits)
+			df <- compute_gdu(object@gambles[[n]], prob_weight, utility, digits)
 
 			summary_df <- rbind(summary_df, df)
 	
 		}
 		
-		colnames(summary_df) <- c("gid", "ev", "gdu", "gduce", "gdurp")		
+		colnames(summary_df) <- c("gid", "ev", "gdu", "ce", "rp")		
 
 		return (summary_df)
 	}

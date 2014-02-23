@@ -13,30 +13,30 @@ library("pt")
 # G = (-6000, 0.25; 3000, 0.75)
 #   ~ -743 PT
 # F > G
-choice_id_vector <- c(1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 2, 2)
-outcome_id_vector <- c(1, 2, 1, 2)
-objective_consequence_vector <- c(-3000, 4500, -6000, 3000)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1)
+gamble_ids <- c(1, 1, 2, 2)
+outcome_ids <- c(1, 2, 1, 2)
+objective_consequences <- c(-3000, 4500, -6000, 3000)
+probability_strings <- 
 	c("0.5", "0.5", "0.25", "0.75")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
-tk_1992_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
-tk_1992_positive_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.61))
-tk_1992_negative_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.69))
+tk_1992_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
+tk_1992_positive_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.61))
+tk_1992_negative_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.69))
 comparePT(my_choices, 
-	probability_weighting_specification_for_positive_outcomes=tk_1992_positive_probability_weighting,
-	probability_weighting_specification_for_negative_outcomes=tk_1992_negative_probability_weighting,
+	prob_weight_for_positive_outcomes=tk_1992_positive_probWeight,
+	prob_weight_for_negative_outcomes=tk_1992_negative_probWeight,
 	utility=tk_1992_utility, digits=4)
 
 #  gid od    oc  pr     dw    sv     pt
@@ -45,7 +45,7 @@ comparePT(my_choices,
 #  gid od    oc   pr     dw    sv     pt
 #    2  2  3000 0.75 0.5683  1148  652.3
 #    2  1 -6000 0.25 0.2935 -4753 -742.8
-#   cid gid  ev     pt ptce ptrp
+#   cid gid  ev     pt ce rp
 # 1   1   1 750 -482.6 -446 1196
 # 2   1   2 750 -742.8 -728 1478
 
@@ -57,30 +57,30 @@ comparePT(my_choices,
 # G = (-1000, 0.25; -800, 0.25; 800, 0.25; 2000, 0.25)
 #   ~ -138 PT
 # G > F
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 4, 1, 2, 3, 4)
-objective_consequence_vector <- c(-1600, -200, 1200, 1600, -1000, -800, 800, 2000)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
+gamble_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
+outcome_ids <- c(1, 2, 3, 4, 1, 2, 3, 4)
+objective_consequences <- c(-1600, -200, 1200, 1600, -1000, -800, 800, 2000)
+probability_strings <- 
 	c("0.25", "0.25", "0.25", "0.25", "0.25", "0.25", "0.25", "0.25")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
-tk_1992_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
-tk_1992_positive_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.61))
-tk_1992_negative_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.69))
+tk_1992_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
+tk_1992_positive_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.61))
+tk_1992_negative_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.69))
 comparePT(my_choices, 
-	probability_weighting_specification_for_positive_outcomes=tk_1992_positive_probability_weighting,
-	probability_weighting_specification_for_negative_outcomes=tk_1992_negative_probability_weighting,
+	prob_weight_for_positive_outcomes=tk_1992_positive_probWeight,
+	prob_weight_for_negative_outcomes=tk_1992_negative_probWeight,
 	utility=tk_1992_utility, digits=4)
 
 #  gid od    oc   pr     dw      sv     pt
@@ -93,7 +93,7 @@ comparePT(my_choices,
 #    2  3   800 0.25 0.1299  358.7  280.2
 #    2  2  -800 0.25 0.1605 -807.1  150.7
 #    2  1 -1000 0.25 0.2935 -982.2 -137.6
-#   cid gid  ev     pt   ptce  ptrp
+#   cid gid  ev     pt   ce  rp
 # 1   1   1 250 -215.7 -178.6 428.6
 # 2   1   2 250 -137.6 -107.2 357.2
 
@@ -105,30 +105,30 @@ comparePT(my_choices,
 # G = (-3000, 0.25; 3000, 0.75)
 #   ~ -106 PT
 # F > G
-choice_id_vector <- c(1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 2, 2)
-outcome_id_vector <- c(1, 2, 1, 2)
-objective_consequence_vector <- c(-1500, 4500, -3000, 3000)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1)
+gamble_ids <- c(1, 1, 2, 2)
+outcome_ids <- c(1, 2, 1, 2)
+objective_consequences <- c(-1500, 4500, -3000, 3000)
+probability_strings <- 
 	c("0.5", "0.5", "0.25", "0.75")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
-tk_1992_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
-tk_1992_positive_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.61))
-tk_1992_negative_probability_weighting <- 
-	create_probability_weighting(probability_function="Tversky_Kahneman_1992", 
-		parameters=c(alpha=0.69))
+tk_1992_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
+tk_1992_positive_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.61))
+tk_1992_negative_probWeight <- 
+	ProbWeight(fun="Tversky_Kahneman_1992", 
+		par=c(alpha=0.69))
 comparePT(my_choices, 
-	probability_weighting_specification_for_positive_outcomes=tk_1992_positive_probability_weighting,
-	probability_weighting_specification_for_negative_outcomes=tk_1992_negative_probability_weighting,
+	prob_weight_for_positive_outcomes=tk_1992_positive_probWeight,
+	prob_weight_for_negative_outcomes=tk_1992_negative_probWeight,
 	utility=tk_1992_utility, digits=4)
 
 #  gid od    oc  pr     dw    sv     pt
@@ -137,6 +137,6 @@ comparePT(my_choices,
 #  gid od    oc   pr     dw    sv     pt
 #    2  2  3000 0.75 0.5683  1148  652.3
 #    2  1 -3000 0.25 0.2935 -2583 -105.8
-#   cid gid   ev     pt   ptce ptrp
+#   cid gid   ev     pt   ce rp
 # 1   1   1 1500  52.75  90.59 1409
 # 2   1   2 1500 -105.8 -79.47 1579

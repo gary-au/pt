@@ -1,16 +1,15 @@
 \name{logarithmic_uf}
 \alias{logarithmic_uf}
-\title{logarithmic_uf}
+\title{The logarithmic utility function.}
 \usage{
-  logarithmic_uf(parameters, x)
+logarithmic_uf(par, x)
 }
 \arguments{
-  \item{parameters}{vector, parameters for the utility
-  function.}
+  \item{par}{vector, parameters for the utility function.}
 
   \item{x}{numeric, the x value}
 }
 \description{
-  Logarithmic utility function.
+Logarithmic utility function.
 }
 

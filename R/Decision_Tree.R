@@ -7,7 +7,7 @@
 ########################
 
 #' @name drawChoices
-#' @title drawChoices
+#' @title Draw a one-stage decision tree.
 #' @description Draws choices.
 #' @param choices, an instance of class Choices
 #' @param window_width numeric, the window_width
@@ -39,18 +39,18 @@
 #' # This example creates the Allais common consequence paradox choices, and
 #' # draws them.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' my_choices
 #' 
 #' drawChoices(my_choices, window_width=5, window_height=5, 
@@ -67,23 +67,45 @@
 #' 		c(0.26,0.4),c(0.26,0.1)))
 #' 		
 #' @export
-drawChoices <- function(choices, window_width, window_height, decision_square_x, decision_square_edge_length, circle_radius, y_split_gap, x_split_offset, probability_text_digits, y_probability_text_offset, y_value_text_offset, x_value_text_offset, probability_text_font_colour, probability_text_font_size, objective_consequence_text_font_colour, objective_consequence_text_font_size, label, label_font_colour, label_font_size, label_positions, line_positions, line_colours, line_styles, line_arrows, line_widths)
+drawChoices <- function(choices, 
+	window_width, window_height, 
+	decision_square_x, decision_square_edge_length, 
+	circle_radius, y_split_gap, x_split_offset, 
+	probability_text_digits, 
+	y_probability_text_offset, y_value_text_offset, x_value_text_offset, 
+	probability_text_font_colour, probability_text_font_size, 
+	objective_consequence_text_font_colour, objective_consequence_text_font_size, 
+	label, label_font_colour, label_font_size, label_positions, 
+	line_positions, line_colours, line_styles, line_arrows, line_widths)
 {
-	windows(window_width, window_height, rescale = "fixed", buffered=TRUE)	
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height, rescale = "fixed", buffered=TRUE)	
 	grid::grid.newpage()	
 	plot.new()	
 
-	gambles_vector <- get_choices(choices)
+	gambless <- get_choices(choices)
 	
-	n_gambles <- length(gambles_vector)
+	n_gambles <- length(gambless)
 	
 	square_gap <- 1/n_gambles
 	
 	decision_square_y <- 1 - square_gap/2
 	
-	for (choice_index in 1:length(gambles_vector))
+	for (choice_index in 1:length(gambless))
 	{
-		gambles <- gambles_vector[[choice_index]]
+		gambles <- gambless[[choice_index]]
 	
 		draw_multiple_gambles_internal(gambles, window_width, window_height, decision_square_x, decision_square_y, decision_square_edge_length, circle_radius, y_split_gap, x_split_offset, probability_text_digits, y_probability_text_offset, y_value_text_offset, x_value_text_offset, probability_text_font_colour, probability_text_font_size, objective_consequence_text_font_colour, objective_consequence_text_font_size, label, label_font_colour, label_font_size, label_positions, line_positions, line_colours, line_styles, line_arrows, line_widths)
 	
@@ -106,7 +128,20 @@ draw_multiple_gambles <- function(gambles, window_width, window_height,
 	label, label_font_colour, label_font_size, label_positions, 
 	line_positions, line_colours, line_styles, line_arrows, line_widths)
 {
-	windows(window_width, window_height, rescale = "fixed", buffered=TRUE)	
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}	
+	
+	dev.new(window_width, window_height, rescale = "fixed", buffered=TRUE)	
 	grid::grid.newpage()	
 	plot.new()	
 
@@ -366,8 +401,20 @@ draw_single_gamble <- function(gamble,
 	x_value_text_offset, probability_text_font_colour, probability_text_font_size, 
 	objective_consequence_text_font_colour, objective_consequence_text_font_size)
 {
-
-	win.graph(window_width, window_height)
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height)
 	grid::grid.newpage()	
 	plot.new()	
 
@@ -377,7 +424,7 @@ draw_single_gamble <- function(gamble,
 }
 
 #' @name drawSimplex
-#' @title drawSimplex
+#' @title Draw the probability simplex.
 #' @description Draws the probability simplex.
 #' @details Iso-expected value lines, expected utility indifference lines and prospect theory
 #' indifference curves (based on a linear in log odds probability weighting function) can be drawn.
@@ -422,8 +469,8 @@ draw_single_gamble <- function(gamble,
 #' @param arrow_colours vector, a vector of arrow_colours
 #' @examples
 #' 
-#' my_utility <- create_utility(utility_function="power", 
-#'	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+#' my_utility <- Utility(fun="power", 
+#'	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 #'
 #'drawSimplex(window_width=7, window_height=7, 
 #'	x1=0, x2=100, x3=200,
@@ -431,9 +478,11 @@ draw_single_gamble <- function(gamble,
 #'	draw_ev_flag=TRUE, ev_colour="black",
 #'	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red", 
 #'	draw_utility_flag=TRUE, utility=my_utility, eu_colour="purple",
-#'	start_points=list(c(0.1,0.9),c(0.2,0.8),c(0.3,0.7),c(0.4,0.6),c(0.5,0.5),c(0.6,0.4),c(0.7,0.3),c(0.8,0.2),c(0.9,0.1)), 
+#'	start_points=list(c(0.1,0.9),c(0.2,0.8),c(0.3,0.7),
+#'	c(0.4,0.6),c(0.5,0.5),c(0.6,0.4),c(0.7,0.3),c(0.8,0.2),c(0.9,0.1)), 
 #'		labels=c("A","B","C","D","increasing preference"),
-#'		label_positions=list(c(0.05,0.02),c(0.07,0.12),c(0.92,0.02),c(0.95,0.10),c(0.7,0.7)),	
+#'		label_positions=list(c(0.05,0.02),c(0.07,0.12),
+#'		c(0.92,0.02),c(0.95,0.10),c(0.7,0.7)),	
 #'		label_colours=c("red","green","blue","orange","red"),
 #'		label_font_sizes=c(12,12,12,12,16),
 #'		label_font_faces=c("plain","plain","plain","plain","bold"),	
@@ -442,7 +491,8 @@ draw_single_gamble <- function(gamble,
 #'		circle_outline_colours=c("black","black","black","black"),
 #'		circle_fill_colours=c("red","green","blue","orange"),	
 #'		circle_positions=list(c(0,0),c(0.01,0.1),c(0.89,0),c(0.9,0.1)), 
-#'		lines=list(c(0,0,0.01,0.1),c(0.89,0,0.9,0.1),c(0.01,0.1,0.9,0.1),c(0,0,0.89,0)),
+#'		lines=list(c(0,0,0.01,0.1),c(0.89,0,0.9,0.1),
+#'		c(0.01,0.1,0.9,0.1),c(0,0,0.89,0)),
 #'		line_widths=c(1, 1, 1, 1),
 #'		line_styles=c("dashed", "dashed", "dashed", "dashed"),	
 #'		line_colours=c("red","red","red","red"),	
@@ -464,8 +514,20 @@ drawSimplex <- function(window_width, window_height,
 	lines, line_widths, line_styles, line_colours, 
 	arrows, arrow_widths, arrow_styles, arrow_colours)
 {
-
-	windows(window_width, window_height, rescale = "fixed", buffered=TRUE)	
+	if (.Platform$OS.type == "windows")
+	{
+		options(device=windows)
+	}
+	else if (.Platform$OS.type == "unix")
+	{
+		options(device=X11)		
+	}
+	else if (.Platform$OS.type == "apple")
+	{
+		options(device=quartz)		
+	}
+	
+	dev.new(window_width, window_height, rescale = "fixed", buffered=TRUE)	
 	grid::grid.newpage()	
 	plot.new()	
 

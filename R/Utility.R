@@ -4,25 +4,27 @@
 #
 ########################	
 
-#' The Utility class
+#' The Utility class.
+#' 
+#' The Utility class stores both the functional form and parameter specification for a utility function.
 #' 
 #' @section Slots:
 #'  \describe{
-#'    \item{\code{utility_function}:}{Object of class \code{"text"}, containing a text string that specifies the functional form of the utility function.}
-#'    \item{\code{parameters}:}{Object of class \code{"vector"}, containing numeric values for the parameter specifications associated with the utility function.}
+#'    \item{\code{fun}:}{Object of class \code{"text"}, containing a text string that specifies the functional form of the utility function.}
+#'    \item{\code{par}:}{Object of class \code{"vector"}, containing numeric values for the parameter specifications associated with the utility function.}
 #'  }
 #'
-#' @note Utility stores both the functional form and parameter specification for a utility function.
-#' @name Utility 
-#' @rdname Utility
-#' @exportClass Utility
+#' @note A wrapper function (also called Utility) can be used to create an instance of this class.
+#' @seealso {\code{\link{Utility}}}
+#' @name Utility-class
 #' @aliases Utility-class
-setClass(
-	Class = "Utility",
+#' @rdname Utility-class
+#' @exportClass Utility
+setClass(Class = "Utility",
 	representation = representation
 	(
-		utility_function = "character",
-		parameters = "vector"
+		fun = "character",
+		par = "vector"
 	),
 	# check for input consistency when creating new Utility objects using "new" constructor
 	validity = function(object)
@@ -69,11 +71,20 @@ setClass(
 	}
 )
 
-#' @name create_utility
-#' @title create_utility
+
+#' This function creates an instance of a Utility class object.
+#' Two arguments need to be provided to create this object. The
+#' first argument is a text string that defines the functional
+#' form of a utility function stored by the Utility class object. 
+#' The second argument is a vector of parameters needed for the
+#' selected utility function. 
+#' 
+#' @name Utility
+#' @title Create an instance of a Utility class.
+#' @rdname Utility
+#' @aliases Utility
 #' @description This function creates an instance of a Utility class.
-#' @details 
-#' The following functional forms are currently implemented:
+#' @details The following functional forms are currently implemented:
 #' 
 #' linear (requires 1 parameter)
 #' 
@@ -85,8 +96,22 @@ setClass(
 #' 
 #' general_linear (requires 2 parameters)
 #' 
-#' @param utility_function text, the utility function string
-#' @param parameters vector, a vector of parameters for the utility_function
+#' @usage Utility(fun, par)
+#' @param fun text, a string selecting the utility function 
+#' @param par vector, parameters for the utility function
+#' @examples
+#' 
+#' # This example creates the power utility function with parameters
+#' # used in the Tversky & Kahneman (1992) paper.
+#' 
+#' tk_1992_utility <- Utility(fun="power",
+#'	par=c(alpha=0.88, beta=0.88, lambda=2.25))
+#'
+#' # This example creates a linear utility function.
+#' 
+#' my_linear_utility <- Utility(fun="linear",
+#' 	par=c(lambda=1))
+#' 
 #' @references
 #' Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and Uncertainty, 5(4), 297-323.
 #' 
@@ -96,25 +121,13 @@ setClass(
 #' 
 #' Birnbaum, M. H. (2008). New paradoxes of risky decision making. Psychological Review, 115(2), 463-501.
 #' 
-#' @examples
-#' 
-#' # This example creates a power utility function.
-#' 
-#' tk_1992_utility <- create_utility(utility_function="power",
-#'	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
-#'
-#' # This example creates a linear utility function.
-#' 
-#' my_linear_utility <- create_utility(utility_function="linear",
-#' 	parameters=c(lambda=1))
-#' 
 #' @export
-create_utility <- function(utility_function, parameters)
+Utility <- function(fun, par)
 {
 
 	new(Class = "Utility",
-		utility_function = utility_function,
-		parameters = parameters
+		fun = fun,
+		par = par
 	)
 }
 
@@ -131,7 +144,7 @@ setMethod(f = "get_number_of_utility_parameters",
 	signature = "Utility",
 	definition = function(object)
 	{
-		return (length(object@parameters))
+		return (length(object@par))
 	}
 )
 
@@ -148,7 +161,7 @@ setMethod(f = "get_utility_function",
 	signature = "Utility",
 	definition = function(object)
 	{
-		return (object@utility_function)
+		return (object@fun)
 	}
 )
 
@@ -168,7 +181,7 @@ setMethod(f = "compute_utility",
 		
 		if (get_utility_function(object) == "linear")
 		{
-			lambda <- object@parameters[1]			
+			lambda <- object@par[1]			
 			
 			if (value > 0)
 			{		
@@ -187,8 +200,8 @@ setMethod(f = "compute_utility",
 		{
 			# implements Wakker (2010), p.80, Eqn 3.5.4			
 			
-			alpha <- object@parameters[1]	
-			lambda <- object@parameters[2]	
+			alpha <- object@par[1]	
+			lambda <- object@par[2]	
 			
 			if (value >= 0)
 			{
@@ -228,9 +241,9 @@ setMethod(f = "compute_utility",
 			# and Birnbaum (2008), p.466
 			# u(-x) = -lambda * u(x), x >= 0
 			
-			alpha <- object@parameters[1]
-			beta <- object@parameters[2]			
-			lambda <- object@parameters[3]
+			alpha <- object@par[1]
+			beta <- object@par[2]			
+			lambda <- object@par[3]
 			
 		
 			if (value > 0)
@@ -271,9 +284,9 @@ setMethod(f = "compute_utility",
 		}
 		else if (get_utility_function(object) == "general_power")
 		{
-			alpha <- object@parameters[1]				
-			beta <- object@parameters[2]
-			lambda <- object@parameters[3]			
+			alpha <- object@par[1]				
+			beta <- object@par[2]
+			lambda <- object@par[3]			
 			
 			if (value >= 0)
 			{			
@@ -287,8 +300,8 @@ setMethod(f = "compute_utility",
 		else if (get_utility_function(object) == "general_linear")
 		{
 			
-			alpha <- object@parameters[1]			
-			lambda <- object@parameters[2]			
+			alpha <- object@par[1]			
+			lambda <- object@par[2]			
 			
 			if (value >= 0)
 			{		
@@ -322,7 +335,7 @@ setMethod(f = "compute_certainty_equivalent",
 		
 		if (get_utility_function(object) == "linear")
 		{
-			lambda <- object@parameters[1]			
+			lambda <- object@par[1]			
 			
 			if (value > 0)
 			{			
@@ -339,8 +352,8 @@ setMethod(f = "compute_certainty_equivalent",
 		}
 		else if (get_utility_function(object) == "exponential")
 		{
-			alpha <- object@parameters[1]			
-			lambda <- object@parameters[2]	
+			alpha <- object@par[1]			
+			lambda <- object@par[2]	
 			
 			if (value >= 0)
 			{
@@ -375,9 +388,9 @@ setMethod(f = "compute_certainty_equivalent",
 		}		
 		else if (get_utility_function(object) == "power")
 		{
-			alpha <- object@parameters[1]
-			beta <- object@parameters[2]			
-			lambda <- object@parameters[3]			
+			alpha <- object@par[1]
+			beta <- object@par[2]			
+			lambda <- object@par[3]			
 			
 			if (value > 0)
 			{
@@ -418,22 +431,22 @@ setMethod(f = "compute_certainty_equivalent",
 		{
 			if (value >= 0)
 			{
-				alpha <- object@parameters[1]
-				beta <- object@parameters[2]
+				alpha <- object@par[1]
+				beta <- object@par[2]
 				certainty_equivalent <- (value / beta)^(1.0 / alpha)				
 			}
 			else if (value < 0)
 			{
-				alpha <- object@parameters[1]				
-				beta <- object@parameters[2]
-				lambda <- object@parameters[3]
+				alpha <- object@par[1]				
+				beta <- object@par[2]
+				lambda <- object@par[3]
 				certainty_equivalent <- (-value / (beta * lambda))^(1.0 / alpha)		
 			}
 		}
 		else if (get_utility_function(object) == "general_linear")
 		{
-			alpha <- object@parameters[1]			
-			lambda <- object@parameters[2]			
+			alpha <- object@par[1]			
+			lambda <- object@par[2]			
 			
 			if (value >= 0)
 			{		

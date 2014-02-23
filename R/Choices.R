@@ -4,20 +4,22 @@
 #
 ########################	
 
-#' The Choices class
+#' The Choices class.
 #' 
-#' The Choices class contains a vector of Gambles class objects.
+#' The Choices class contains choices for a decision maker. Each choice contains gambles.
 #' 
 #' @section Slots:
 #'  \describe{
 #'    \item{\code{choices}:}{Object of class \code{"vector"}, containing Gambles objects for decision makers to choose from.}
 #'  }
 #'
-#' @note Choices contains a vector of Gambles class objects. Each vector element stores a decision making choice.  
-#' @name Choices 
-#' @rdname Choices
-#' @exportClass Choices
+#' @note A function (also called Choices) has been defined to create instances of this class from the command line.
+#' Another function (called choicesFromFile) reads in data from external text files to create instances of the class.
+#' @name Choices-class
 #' @aliases Choices-class
+#' @rdname Choices-class
+#' @seealso {\code{\link{Choices}},\code{\link{choicesFromFile}}}
+#' @exportClass Choices
 setClass(Class = "Choices",
 	representation = representation
 	(
@@ -30,11 +32,11 @@ setClass(Class = "Choices",
 		
 		for (index1 in 1: length(choices))
 		{
-			my_gambles_vector <- get_gambles(choices[index1])
+			my_gambless <- get_gambles(choices[index1])
 			
-			for (index2 in 1:length(my_gambles_vector))
+			for (index2 in 1:length(my_gambless))
 			{
-				my_gamble <- my_gambles_vector[index2]
+				my_gamble <- my_gambless[index2]
 				
 				# make sure probabilities of all outcomes sum to <= 1	
 				probability_sum = sum(sapply(my_gamble@outcomes, get_probability))
@@ -60,7 +62,7 @@ setClass(Class = "Choices",
 # show choice
 ########################	
 
-# override existing show function
+
 setMethod(f = "show",
 	signature = "Choices",
 	definition = function(object)
@@ -69,13 +71,13 @@ setMethod(f = "show",
 		
 		for (a in 1:length(object@choices))
 		{	
-			my_gambles_vector <- get_gambles(object@choices[[a]])
+			my_gambless <- get_gambles(object@choices[[a]])
 			
-			for (n in 1:length(my_gambles_vector))
+			for (n in 1:length(my_gambless))
 			{
-				a_gamble <- my_gambles_vector[[n]]	
+				a_gamble <- my_gambless[[n]]	
 				
-				for (m in 1:get_number_of_outcomes(my_gambles_vector[[n]]))
+				for (m in 1:get_number_of_outcomes(my_gambless[[n]]))
 				{	
 					an_outcome <- a_gamble@outcomes[[m]]
 					
@@ -98,12 +100,13 @@ setMethod(f = "show",
 
 ########################
 # There are two ways to create an instance of a Choices class.
-# The first way is by reading in choices data from an external text file. (create_choices_from_file)
-# The second way is to create a choice using a series of four vectors. (create_choices)
+# The first way is by reading in choices data from an external text file. (choicesFromFile)
+# The second way is to create a choice using a series of five vectors. (choices)
 ########################	
 
-#' @name create_choices_from_file
-#' @title create_choices_from_file
+#' @name choicesFromFile
+#' @title Create an instance of a Choices class using data from an external text file.
+#' @aliases choicesFromFile
 #' @description Create an instance of a Choices class using data from an external text file.
 #' @details This function is used to create a new instance of a Choices class from an external text file.
 #' This file has at least 5 columns, delimited by the DELIMITER character string.
@@ -132,7 +135,8 @@ setMethod(f = "show",
 #' 
 #' Note that the last line is a blank row.
 #'  
-#' @usage create_choices_from_file(input_file, choice_id_header, gamble_id_header, outcome_id_header, objective_consequence_header, probability_header, DELIMITER)
+#' @usage choicesFromFile(input_file, choice_id_header, gamble_id_header, 
+#' outcome_id_header, objective_consequence_header, probability_header, DELIMITER)
 #' @param input_file text, the input_file.
 #' @param choice_id_header text, the column name of the choice_id variable.
 #' @param gamble_id_header text, the column name of the gamble_id variable.
@@ -147,7 +151,7 @@ setMethod(f = "show",
 #' 
 #' my_input_file <- system.file("external", "allais_constant_ratio_paradox.txt", package="pt")
 #' 
-#' my_choices <- create_choices_from_file(input_file=my_input_file, 
+#' my_choices <- choicesFromFile(input_file=my_input_file, 
 #' 	choice_id_header="choice_id", 
 #' 	gamble_id_header="gamble_id", 
 #' 	outcome_id_header="outcome_id", 
@@ -158,7 +162,7 @@ setMethod(f = "show",
 #' my_choices
 #' 
 #' @export
-create_choices_from_file <- function(input_file, choice_id_header, gamble_id_header, outcome_id_header, objective_consequence_header, probability_header, DELIMITER)
+choicesFromFile <- function(input_file, choice_id_header, gamble_id_header, outcome_id_header, objective_consequence_header, probability_header, DELIMITER)
 {
 	object <- new(Class = "Choices")
 		
@@ -168,69 +172,73 @@ create_choices_from_file <- function(input_file, choice_id_header, gamble_id_hea
 
 }
 
-#' @name create_choices
-#' @title create_choices
+#' @name Choices
+#' @title Create a new instance of a Choices class.
+#' @rdname Choices
+#' @aliases Choices
 #' @description Create choices using five vectors.
 #' @details This function creates a new instance of a Choices class. The inputs are five vectors, representing
 #' the properties of each outcome.
-#' @usage create_choices(choice_id_vector, gamble_id_vector, outcome_id_vector, objective_consequence_vector, probability_string_vector)
-#' @param choice_id_vector vector, a vector containing the choice_id of each objective_consequence.
-#' @param gamble_id_vector vector, a vector containing the gamble_id of each objective_consequence.
-#' @param outcome_id_vector vector, a vector containing the outcome_id of each objective_consequence.
-#' @param objective_consequence_vector vector, a vector containing the objective consequences.
-#' @param probability_string_vector vector, a vector containing the probability_string of each objective consequence.
+#' @usage Choices(choice_ids, gamble_ids, outcome_ids, objective_consequences, probability_strings)
+#' @param choice_ids vector, contains the choice_id of each objective_consequence.
+#' @param gamble_ids vector, contains the gamble_id of each objective_consequence.
+#' @param outcome_ids vector, contains the outcome_id of each objective_consequence.
+#' @param objective_consequences vector, contains the objective consequences.
+#' @param probability_strings vector, contains the probability_string of each objective consequence.
 #' @examples
-#' choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
+#' choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 4, 1, 2, 3, 4)
+#' outcome_ids <- c(1, 2, 3, 4, 1, 2, 3, 4)
 #' 
-#' objective_consequence_vector <- c(7, 7, 84, 90, 7, 10, 90, 90)
+#' objective_consequences <- c(7, 7, 84, 90, 
+#' 7, 10, 90, 90)
 #' 
-#' probability_string_vector <- c("0.1", "0.3", "0.3", "0.3", "0.1", "0.3", "0.3", "0.3")
+#' probability_strings <- c("0.1", "0.3", "0.3", "0.3", 
+#' "0.1", "0.3", "0.3", "0.3")
 #' 
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
 #' @export
-create_choices <- function(choice_id_vector, gamble_id_vector, outcome_id_vector, objective_consequence_vector, probability_string_vector)
+Choices <- function(choice_ids, gamble_ids, outcome_ids, objective_consequences, probability_strings)
 {
 
 	# perform validity checks on the input
 	
-	# firstly the choice_id_vector and all other vectors must be the same length
+	# firstly the choice_ids and all other vectors must be the same length
 	
-	choice_id_vector_length <- length(choice_id_vector)
-	gamble_id_vector_length <- length(gamble_id_vector)
-	outcome_id_vector_length <- length(outcome_id_vector)	
-	objective_consequence_vector_length <- length(objective_consequence_vector)
-	probability_string_vector_length <- length(probability_string_vector)
+	choice_ids_length <- length(choice_ids)
+	gamble_ids_length <- length(gamble_ids)
+	outcome_ids_length <- length(outcome_ids)	
+	objective_consequences_length <- length(objective_consequences)
+	probability_strings_length <- length(probability_strings)
 	
 
-	if (choice_id_vector_length != gamble_id_vector_length)
+	if (choice_ids_length != gamble_ids_length)
 	{
-		stop(paste("choice_id_vector has length: ", choice_id_vector_length, " and gamble_id_vector has length: ", gamble_id_vector_length, "\n"));			
+		stop(paste("choice_ids has length: ", choice_ids_length, " and gamble_ids has length: ", gamble_ids_length, "\n"));			
 	}
 	
-	if (choice_id_vector_length != outcome_id_vector_length)
+	if (choice_ids_length != outcome_ids_length)
 	{
-		stop(paste("choice_id_vector has length: ", choice_id_vector_length, " and outcome_id_vector has length: ", outcome_id_vector_length, "\n"));			
+		stop(paste("choice_ids has length: ", choice_ids_length, " and outcome_ids has length: ", outcome_ids_length, "\n"));			
 	}	
 
-	if (choice_id_vector_length != objective_consequence_vector_length)
+	if (choice_ids_length != objective_consequences_length)
 	{
-		stop(paste("choice_id_vector has length: ", choice_id_vector_length, " and objective_consequence_vector has length: ", objective_consequence_vector_length, "\n"));			
+		stop(paste("choice_ids has length: ", choice_ids_length, " and objective_consequences has length: ", objective_consequences_length, "\n"));			
 	}
 	
-	if (choice_id_vector_length != probability_string_vector_length)
+	if (choice_ids_length != probability_strings_length)
 	{
-		stop(paste("choice_id_vector has length: ", choice_id_vector_length, " and probability_string_vector has length: ", probability_string_vector_length, "\n"));			
+		stop(paste("choice_ids has length: ", choice_ids_length, " and probability_strings has length: ", probability_strings_length, "\n"));			
 	}	
 
 	
@@ -238,58 +246,58 @@ create_choices <- function(choice_id_vector, gamble_id_vector, outcome_id_vector
 	
 	object <- new(Class = "Choices")
 
-	cid_choice_vector <- c()
-	gamid_gamble_vector <- c()
-	outc_gamble_vector <- c()
-	prob_string_gamble_vector <- c()
-	obj_cons_gamble_vector <- c()
-	old_choice_id <- choice_id_vector[1]
+	cid_choices <- c()
+	gamid_gambles <- c()
+	outc_gambles <- c()
+	prob_string_gambles <- c()
+	obj_cons_gambles <- c()
+	old_choice_id <- choice_ids[1]
 
-	for (index in 1:length(choice_id_vector))
+	for (index in 1:length(choice_ids))
 	{	
 		
 		# create a new choice
-		if (choice_id_vector[index] != old_choice_id)
+		if (choice_ids[index] != old_choice_id)
 		{	
-			my_gambles <- create_gambles_v3(gamid_gamble_vector, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+			my_gambles <- create_gambles_v3(gamid_gambles, outc_gambles, obj_cons_gambles, prob_string_gambles)
 			object@choices <- append(object@choices, my_gambles)
-			old_choice_id <- choice_id_vector[index]
+			old_choice_id <- choice_ids[index]
 
-			cid_choice_vector <- c()
-			gamid_gamble_vector <- c()
-			outc_gamble_vector <- c()
-			prob_string_gamble_vector <- c()
-			obj_cons_gamble_vector <- c()
+			cid_choices <- c()
+			gamid_gambles <- c()
+			outc_gambles <- c()
+			prob_string_gambles <- c()
+			obj_cons_gambles <- c()
 			
-			choice_id <- choice_id_vector[index]
-			gamble_id <- gamble_id_vector[index]
-			outcome_id <- outcome_id_vector[index]	
-			objective_consequence <- objective_consequence_vector[index]
-			probability_string <- probability_string_vector[index]
+			choice_id <- choice_ids[index]
+			gamble_id <- gamble_ids[index]
+			outcome_id <- outcome_ids[index]	
+			objective_consequence <- objective_consequences[index]
+			probability_string <- probability_strings[index]
 			
-			cid_choice_vector <- append(cid_choice_vector, choice_id)			
-			gamid_gamble_vector <- append(gamid_gamble_vector, gamble_id)
-			outc_gamble_vector <- append(outc_gamble_vector, outcome_id)	
-			obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
-			prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)			
+			cid_choices <- append(cid_choices, choice_id)			
+			gamid_gambles <- append(gamid_gambles, gamble_id)
+			outc_gambles <- append(outc_gambles, outcome_id)	
+			obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
+			prob_string_gambles <- append(prob_string_gambles, probability_string)			
 		}
 		else
 		{
-			choice_id <- choice_id_vector[index]			
-			gamble_id <- gamble_id_vector[index]
-			outcome_id <- outcome_id_vector[index]	
-			objective_consequence <- objective_consequence_vector[index]
-			probability_string <- probability_string_vector[index]
+			choice_id <- choice_ids[index]			
+			gamble_id <- gamble_ids[index]
+			outcome_id <- outcome_ids[index]	
+			objective_consequence <- objective_consequences[index]
+			probability_string <- probability_strings[index]
 
-			cid_choice_vector <- append(cid_choice_vector, choice_id)	
-			gamid_gamble_vector <- append(gamid_gamble_vector, gamble_id)
-			outc_gamble_vector <- append(outc_gamble_vector, outcome_id)	
-			obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
-			prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)
+			cid_choices <- append(cid_choices, choice_id)	
+			gamid_gambles <- append(gamid_gambles, gamble_id)
+			outc_gambles <- append(outc_gambles, outcome_id)	
+			obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
+			prob_string_gambles <- append(prob_string_gambles, probability_string)
 			
-			if (index == length(choice_id_vector))
+			if (index == length(choice_ids))
 			{
-				my_gambles <- create_gambles_v3(gamid_gamble_vector, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+				my_gambles <- create_gambles_v3(gamid_gambles, outc_gambles, obj_cons_gambles, prob_string_gambles)
 				object@choices <- append(object@choices, my_gambles)
 			}
 		}
@@ -321,11 +329,11 @@ setMethod(f = "read_choices_data_file",
 		#read in outcomes from external file
 		my_data_frame <- data.frame(read.table(file = input_file, header = TRUE, stringsAsFactors = FALSE, sep = DELIMITER))
 
-		cid_choice_vector <- c()
-		gamid_gamble_vector <- c()
-		outc_gamble_vector <- c()
-		prob_string_gamble_vector <- c()
-		obj_cons_gamble_vector <- c()
+		cid_choices <- c()
+		gamid_gambles <- c()
+		outc_gambles <- c()
+		prob_string_gambles <- c()
+		obj_cons_gambles <- c()
 		old_choice_id <- eval(parse(text = my_data_frame[1, choice_id_header]))
 				
 		for (index in 1:nrow(my_data_frame))
@@ -339,33 +347,33 @@ setMethod(f = "read_choices_data_file",
 			# create a new choice
 			if (choice_id != old_choice_id)
 			{	
-				my_gambles <- create_gambles_v3(gamid_gamble_vector, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+				my_gambles <- create_gambles_v3(gamid_gambles, outc_gambles, obj_cons_gambles, prob_string_gambles)
 				object@choices <- append(object@choices, my_gambles)
 				old_choice_id <- choice_id
 				
-				cid_choice_vector <- c()
-				gamid_gamble_vector <- c()
-				outc_gamble_vector <- c()
-				prob_string_gamble_vector <- c()
-				obj_cons_gamble_vector <- c()
+				cid_choices <- c()
+				gamid_gambles <- c()
+				outc_gambles <- c()
+				prob_string_gambles <- c()
+				obj_cons_gambles <- c()
 				
-				cid_choice_vector <- append(cid_choice_vector, choice_id)
-				gamid_gamble_vector <- append(gamid_gamble_vector, gamble_id)
-				outc_gamble_vector <- append(outc_gamble_vector, outcome_id)	
-				obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
-				prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)			
+				cid_choices <- append(cid_choices, choice_id)
+				gamid_gambles <- append(gamid_gambles, gamble_id)
+				outc_gambles <- append(outc_gambles, outcome_id)	
+				obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
+				prob_string_gambles <- append(prob_string_gambles, probability_string)			
 			}
 			else
 			{	
-				cid_choice_vector <- append(cid_choice_vector, choice_id)				
-				gamid_gamble_vector <- append(gamid_gamble_vector, gamble_id)
-				outc_gamble_vector <- append(outc_gamble_vector, outcome_id)	
-				obj_cons_gamble_vector <- append(obj_cons_gamble_vector, objective_consequence)
-				prob_string_gamble_vector <- append(prob_string_gamble_vector, probability_string)
+				cid_choices <- append(cid_choices, choice_id)				
+				gamid_gambles <- append(gamid_gambles, gamble_id)
+				outc_gambles <- append(outc_gambles, outcome_id)	
+				obj_cons_gambles <- append(obj_cons_gambles, objective_consequence)
+				prob_string_gambles <- append(prob_string_gambles, probability_string)
 				
 				if (index == nrow(my_data_frame))
 				{
-					my_gambles <- create_gambles_v3(gamid_gamble_vector, outc_gamble_vector, obj_cons_gamble_vector, prob_string_gamble_vector)
+					my_gambles <- create_gambles_v3(gamid_gambles, outc_gambles, obj_cons_gambles, prob_string_gambles)
 					object@choices <- append(object@choices, my_gambles)
 				}
 			}
@@ -409,47 +417,61 @@ setMethod(f = "get_choices",
 # ev related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareEV
+#' @rdname compareEV
+#' @exportMethod compareEV
 setGeneric(name = "compareEV",
-	def = function(object, ...)
+	def = function(object, digits)
 	{
 		standardGeneric("compareEV")
 	}
 )
 
-#' @rdname compareEV-methods
-#' @aliases compareEV,Choices-method
 #' @name compareEV
-#' @title compareEV
+#' @title Compare the expected value (EV) of choice gambles.
+#' @aliases compareEV,Choices-method
+#' @rdname compareEV
 #' @description Compare the expected value (EV) of choice gambles.
+#' @param object Choices, an instance of a Choices class.
+#' @param digits numeric, the number of digits to display in the output.
+#' @references
+#' 
+#' Montgomery, H., & Adelbratt, T. (1982). Gambling decisions and information about expected value. Organizational Behavior and Human Performance, 29(1), 39-57.
+#' 
+#' Lichtenstein, S., Slovic, P., & Zink, D. (1969). Effect of instruction in expected value on optimality of gambling decisions. Journal of Experimental Psychology, 79(2, Pt.1), 236-240.
+#' 
+#' Li, S. (2003). The role of Expected Value illustrated in decision-making under risk: Single-play vs multiple-play. Journal of Risk Research, 6(2), 113-124.
+#' 
+#' Colbert, G., Murray, D., & Nieschwietz, R. (2009). The use of expected value in pricing judgments. Journal of Risk Research, 12(2), 199-208.
+#' 
+#' Yates, J. F. (1990). Judgment and decision making. Englewood Cliffs, NJ: Prentice Hall.
+#' 
 #' @examples
 #' 
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the EV for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
 #' compareEV(my_choices, digits=4)
-#' 
-#' @export
 setMethod(f = "compareEV",
 	signature = "Choices",
 	definition = function(object, digits)
@@ -475,18 +497,20 @@ setMethod(f = "compareEV",
 # EU related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareEU
+#' @rdname compareEU
+#' @exportMethod compareEU
 setGeneric(name = "compareEU",
-	def = function(object, ...)
+	def = function(object, utility, digits)
 	{
 		standardGeneric("compareEU")
 	}
 )
 
-#' @rdname compareEU-methods
-#' @aliases compareEU,Choices-method
 #' @name compareEU
-#' @title compareEU
+#' @title Compare the expected utility (EU) of choice gambles.
+#' @aliases compareEU,Choices-method
+#' @rdname compareEU
 #' @description Compare the expected utility (EU) of choice gambles.
 #' @param object Choices, an instance of a Choices class.
 #' @param utility Utility, an instance of a Utility class.
@@ -503,31 +527,30 @@ setGeneric(name = "compareEU",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the EU for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="power",
-#' parameters=c(alpha=1.0, beta=1.0, lambda=1.0))
+#' my_utility <- Utility(fun="power",
+#' par=c(alpha=1.0, beta=1.0, lambda=1.0))
 #' 
 #' compareEU(my_choices, utility=my_utility, digits=4)
-#' 
 #' @export
 setMethod(f = "compareEU",
 	signature = "Choices",
@@ -540,7 +563,7 @@ setMethod(f = "compareEU",
 		{	
 			df <- compare_gambles_under_expected_utility(object@choices[[n]], utility, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "eu", "euce", "eurp")]
+			df <- df[c("cid", "gid", "ev", "eu", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 
@@ -554,21 +577,23 @@ setMethod(f = "compareEU",
 # SWU related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareSWU
+#' @rdname compareSWU
+#' @exportMethod compareSWU
 setGeneric(name = "compareSWU",
-	def = function(object, ...)
+	def = function(object, prob_weight, utility, digits)
 	{
 		standardGeneric("compareSWU")
 	}
 )
 
-#' @rdname compareSWU-methods
-#' @aliases compareSWU,Choices-method
 #' @name compareSWU
-#' @title compareSWU
+#' @title Compare choice gambles under Edwards' (1954, 1962) Subjective Weighted Utility (SWU).
+#' @aliases compareSWU,Choices-method
+#' @rdname compareSWU
 #' @description Compare choice gambles under Edwards' (1954, 1962) Subjective Weighted Utility (SWU).
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -583,51 +608,50 @@ setGeneric(name = "compareSWU",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the SWU for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="power",
-#' 	parameters=c(alpha=0.4, beta=0.4, lambda=1))
+#' my_utility <- Utility(fun="power",
+#' 	par=c(alpha=0.4, beta=0.4, lambda=1))
 #'
 #' my_pwf <-
-#' create_probability_weighting(probability_function="linear_in_log_odds",
-#' 	parameters=c(alpha=0.4, beta=0.4))
+#' ProbWeight(fun="linear_in_log_odds",
+#' 	par=c(alpha=0.4, beta=0.4))
 #'
 #' compareSWU(my_choices,
-#'	probability_weighting_specification=my_pwf,
+#'	prob_weight=my_pwf,
 #'	utility=my_utility,
 #'	digits=4)
-#' 
 #' @export
 setMethod(f = "compareSWU",
 	signature = "Choices",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 	
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			df <- compare_gambles_under_swu(object@choices[[n]], probability_weighting_specification, utility, digits)
+			df <- compare_gambles_under_swu(object@choices[[n]], prob_weight, utility, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "swu", "swuce", "swurp")]
+			df <- df[c("cid", "gid", "ev", "swu", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 		
@@ -639,21 +663,23 @@ setMethod(f = "compareSWU",
 # swau related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareSWAU
+#' @rdname compareSWAU
+#' @exportMethod compareSWAU
 setGeneric(name = "compareSWAU",
-	def = function(object, ...)
+	def = function(object, prob_weight, utility, digits)
 	{
 		standardGeneric("compareSWAU")
 	}
 )
 
-#' @rdname compareSWAU-methods
-#' @aliases compareSWAU,Choices-method
 #' @name compareSWAU
-#' @title compareSWAU
+#' @title Compare choices under Subjectively weighted average utility (SWAU).
+#' @aliases compareSWAU,Choices-method
+#' @rdname compareSWAU
 #' @description Compare choices under Subjectively weighted average utility (SWAU).
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -672,51 +698,50 @@ setGeneric(name = "compareSWAU",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the SWAU for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="power",
-#' 	parameters=c(alpha=0.4, beta=0.4, lambda=1))
+#' my_utility <- Utility(fun="power",
+#' 	par=c(alpha=0.4, beta=0.4, lambda=1))
 #'
 #' my_pwf <-
-#' create_probability_weighting(probability_function="linear_in_log_odds",
-#' 	parameters=c(alpha=0.4, beta=0.4))
+#' ProbWeight(fun="linear_in_log_odds",
+#' 	par=c(alpha=0.4, beta=0.4))
 #'
 #' compareSWAU(my_choices,
-#'	probability_weighting_specification=my_pwf,
+#'	prob_weight=my_pwf,
 #'	utility=my_utility,
 #'	digits=4)
-#'	
 #' @export
 setMethod(f = "compareSWAU",
 	signature = "Choices",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			df <- compare_gambles_under_swau(object@choices[[n]], probability_weighting_specification, utility, digits)
+			df <- compare_gambles_under_swau(object@choices[[n]], prob_weight, utility, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "swau", "swauce", "swaurp")]
+			df <- df[c("cid", "gid", "ev", "swau", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 		
@@ -729,21 +754,23 @@ setMethod(f = "compareSWAU",
 # RDU related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareRDU
+#' @rdname compareRDU
+#' @exportMethod compareRDU
 setGeneric(name = "compareRDU",
-	def = function(object, ...)
+	def = function(object, prob_weight, utility, digits)
 	{
 		standardGeneric("compareRDU")
 	}
 )
 
-#' @rdname compareRDU-methods
-#' @aliases compareRDU,Choices-method
 #' @name compareRDU
-#' @title compareRDU
+#' @title Compare choice gambles under Quiggin's (1993) Rank-dependent utility (RDU).
+#' @aliases compareRDU,Choices-method
+#' @rdname compareRDU
 #' @description Compare choice gambles under Quiggin's (1993) Rank-dependent utility (RDU).
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -758,51 +785,50 @@ setGeneric(name = "compareRDU",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the RDU for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' tk_1992_utility <- create_utility(utility_function="power",
-#' 	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+#' tk_1992_utility <- Utility(fun="power",
+#' 	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 #' 	
-#' tk_1992_positive_probability_weighting <-
-#'	create_probability_weighting(probability_function=
+#' tk_1992_positive_probWeight <-
+#'	ProbWeight(fun=
 #'	"Tversky_Kahneman_1992",
-#'	parameters=c(alpha=0.61))
+#'	par=c(alpha=0.61))
 #'	
 #' compareRDU(my_choices,
-#'	probability_weighting_specification=
-#'	tk_1992_positive_probability_weighting,
+#'	prob_weight=
+#'	tk_1992_positive_probWeight,
 #'	utility=tk_1992_utility,
 #'	digits=4)
-#'	
 #' @export
 setMethod(f = "compareRDU",
 	signature = "Choices",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 		
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			results_list <- compare_gambles_under_rdu(object@choices[[n]], probability_weighting_specification, utility, digits)
+			results_list <- compare_gambles_under_rdu(object@choices[[n]], prob_weight, utility, digits)
 			
 			for (m in 1:length(results_list))
 			{
@@ -810,7 +836,7 @@ setMethod(f = "compareRDU",
 				df <- df_list$summary
 				df
 				df$cid <- n
-				df <- df[c("cid", "gid", "ev", "rdu", "rduce", "rdurp")]	
+				df <- df[c("cid", "gid", "ev", "rdu", "ce", "rp")]	
 				
 				summary_df <- rbind(summary_df, df)
 			}
@@ -825,22 +851,24 @@ setMethod(f = "compareRDU",
 # PT related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name comparePT
+#' @rdname comparePT
+#' @exportMethod comparePT
 setGeneric(name = "comparePT",
-	def = function(object, ...)
+	def = function(object, prob_weight_for_positive_outcomes, prob_weight_for_negative_outcomes, utility, digits)
 	{
 		standardGeneric("comparePT")
 	}
 )
 
-#' @rdname comparePT-methods
-#' @aliases comparePT,Choices-method
 #' @name comparePT
-#' @title comparePT
+#' @title Compare choice gambles under Tversky and Kahneman's (1992) (Cumulative) prospect theory (PT).
+#' @aliases comparePT,Choices-method
+#' @rdname comparePT
 #' @description Compare choice gambles under Tversky and Kahneman's (1992) (Cumulative) prospect theory (PT).
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification_for_positive_outcomes Probability_Weighting, an instance of a Probability_Weighting class.
-#' @param probability_weighting_specification_for_negative_outcomes Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight_for_positive_outcomes ProbWeight, an instance of a ProbWeight class.
+#' @param prob_weight_for_negative_outcomes ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -853,53 +881,52 @@ setGeneric(name = "comparePT",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the PT for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' tk_1992_utility <- create_utility(utility_function="power",
-#'	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+#' tk_1992_utility <- Utility(fun="power",
+#'	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 #'	
-#' tk_1992_positive_probability_weighting <-
-#'	create_probability_weighting(probability_function=
+#' tk_1992_positive_probWeight <-
+#'	ProbWeight(fun=
 #'	"Tversky_Kahneman_1992",
-#'	parameters=c(alpha=0.61))
+#'	par=c(alpha=0.61))
 #'	
-#' tk_1992_negative_probability_weighting <-
-#'	create_probability_weighting(probability_function=
+#' tk_1992_negative_probWeight <-
+#'	ProbWeight(fun=
 #'	"Tversky_Kahneman_1992",
-#'	parameters=c(alpha=0.69))
+#'	par=c(alpha=0.69))
 #'	
 #' comparePT(my_choices,
-#'	probability_weighting_specification_for_positive_outcomes=
-#'	tk_1992_positive_probability_weighting,
-#'	probability_weighting_specification_for_negative_outcomes=
-#'	tk_1992_negative_probability_weighting,
+#'	prob_weight_for_positive_outcomes=
+#'	tk_1992_positive_probWeight,
+#'	prob_weight_for_negative_outcomes=
+#'	tk_1992_negative_probWeight,
 #'	utility=tk_1992_utility, 
 #'	digits=4)
-#'	
 #' @export
 setMethod(f = "comparePT",
 	signature = "Choices",
 	definition = function(object, 
-		probability_weighting_specification_for_positive_outcomes, 
-		probability_weighting_specification_for_negative_outcomes, 
+		prob_weight_for_positive_outcomes, 
+		prob_weight_for_negative_outcomes, 
 		utility, 
 		digits)
 	{	
@@ -908,14 +935,14 @@ setMethod(f = "comparePT",
 		
 		for (n in 1:length(object@choices))
 		{	
-			results_list <- compare_gambles_under_pt(object@choices[[n]], probability_weighting_specification_for_positive_outcomes, probability_weighting_specification_for_negative_outcomes, utility, digits)
+			results_list <- compare_gambles_under_pt(object@choices[[n]], prob_weight_for_positive_outcomes, prob_weight_for_negative_outcomes, utility, digits)
 			
 			for (m in 1:length(results_list))
 			{
 				df_list <- results_list[[m]]
 				df <- df_list$summary
 				df$cid <- n
-				df <- df[c("cid", "gid", "ev", "pt", "ptce", "ptrp")]	
+				df <- df[c("cid", "gid", "ev", "pt", "ce", "rp")]	
 				
 				summary_df <- rbind(summary_df, df)
 			}
@@ -932,21 +959,23 @@ setMethod(f = "comparePT",
 # TAX related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareTAX
+#' @rdname compareTAX
+#' @exportMethod compareTAX
 setGeneric(name = "compareTAX",
-	def = function(object, ...)
+	def = function(object, prob_weight, utility, delta, digits)
 	{
 		standardGeneric("compareTAX")
 	}
 )
 
-#' @rdname compareTAX-methods
-#' @aliases compareTAX,Choices-method
 #' @name compareTAX
-#' @title compareTAX
+#' @title Compare choice gambles under Birnbaum's (2008) configural weight (special) TAX theory.
+#' @aliases compareTAX,Choices-method
+#' @rdname compareTAX
 #' @description Compare choice gambles under Birnbaum's (2008) configural weight (special) TAX theory.
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param delta numeric, the delta parameter in Birnbaum's TAX theory.
 #' @param digits numeric, the number of digits to display in the output.
@@ -958,52 +987,51 @@ setGeneric(name = "compareTAX",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the TAX for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="linear",
-#'	parameters=c(lambda=1))
+#' my_utility <- Utility(fun="linear",
+#'	par=c(lambda=1))
 #'	
 #' power_probability_weighting <-
-#'	create_probability_weighting(probability_function="power",
-#'	parameters=c(alpha=0.7, beta=1))
+#'	ProbWeight(fun="power",
+#'	par=c(alpha=0.7, beta=1))
 #'	
 #' compareTAX(my_choices,
-#'	probability_weighting_specification=power_probability_weighting,
+#'	prob_weight=power_probability_weighting,
 #'	utility=my_utility, 
 #'	delta=-1, 
 #'	digits=4)
-#'	
 #' @export
 setMethod(f = "compareTAX",
 	signature = "Choices",
-	definition = function(object, probability_weighting_specification, utility, delta, digits)
+	definition = function(object, prob_weight, utility, delta, digits)
 	{	
 	
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			df <- compare_gambles_under_tax(object@choices[[n]], probability_weighting_specification, utility, delta, digits)
+			df <- compare_gambles_under_tax(object@choices[[n]], prob_weight, utility, delta, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "tax", "taxce", "taxrp")]
+			df <- df[c("cid", "gid", "ev", "tax", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 
@@ -1016,22 +1044,24 @@ setMethod(f = "compareTAX",
 # RAM related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareRAM
+#' @rdname compareRAM
+#' @exportMethod compareRAM
 setGeneric(name = "compareRAM",
-	def = function(object, ...)
+	def = function(object, branch_weight_list, prob_weight, utility, digits)
 	{
 		standardGeneric("compareRAM")
 	}
 )
 
-#' @rdname compareRAM-methods
-#' @aliases compareRAM,Choices-method
 #' @name compareRAM
-#' @title compareRAM
+#' @title Compare choice gambles under Birnbaum's (2008) configural weight RAM theory.
+#' @aliases compareRAM,Choices-method
+#' @rdname compareRAM
 #' @description Compare choice gambles under Birnbaum's (2008) configural weight RAM theory.
 #' @param object Choices, an instance of a Choices class.
-#' @param branch_weighting_vector_list list, a list of branch weighting vectors.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param branch_weight_list list, a list of branch weighting vectors.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -1042,59 +1072,58 @@ setGeneric(name = "compareRAM",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the RAM for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
 #' # note that the maximum number of outcomes in the gambles is 3,
 #' # so branch weights for 3 outcomes need to be provided. 
 #' 
-#' branch_weighting_vector_list <- list(c(1),
+#' branch_weight_list <- list(c(1),
 #'	c(0.3738, 0.6262),
 #'	c(0.16, 0.33, 0.51))
 #'	
-#' my_utility <- create_utility(utility_function="linear",
-#'	parameters=c(lambda=1))
+#' my_utility <- Utility(fun="linear",
+#'	par=c(lambda=1))
 #'	
 #' power_probability_weighting <-
-#'	create_probability_weighting(probability_function="power",
-#'	parameters=c(alpha=0.7, beta=1))
+#'	ProbWeight(fun="power",
+#'	par=c(alpha=0.7, beta=1))
 #'	
 #' compareRAM(my_choices,
-#'	branch_weighting_vector_list=branch_weighting_vector_list,
-#'	probability_weighting_specification=power_probability_weighting,
+#'	branch_weight_list=branch_weight_list,
+#'	prob_weight=power_probability_weighting,
 #'	utility=my_utility, 
 #'	digits=4)
-#' 
 #' @export
 setMethod(f = "compareRAM",
 	signature = "Choices",
-	definition = function(object, branch_weighting_vector_list, probability_weighting_specification, utility, digits)
+	definition = function(object, branch_weight_list, prob_weight, utility, digits)
 	{	
 		
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			df <- compare_gambles_under_ram(object@choices[[n]], branch_weighting_vector_list, probability_weighting_specification, utility, digits)
+			df <- compare_gambles_under_ram(object@choices[[n]], branch_weight_list, prob_weight, utility, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "ramu", "ramuce", "ramurp")]
+			df <- df[c("cid", "gid", "ev", "ramu", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 		
@@ -1107,21 +1136,23 @@ setMethod(f = "compareRAM",
 # GDU related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name compareGDU
+#' @rdname compareGDU
+#' @exportMethod compareGDU
 setGeneric(name = "compareGDU",
-	def = function(object, ...)
+	def = function(object, prob_weight, utility, digits)
 	{
 		standardGeneric("compareGDU")
 	}
 )
 
-#' @rdname compareGDU-methods
-#' @aliases compareGDU,Choices-method
 #' @name compareGDU
-#' @title compareGDU
+#' @title Compare choice gambles under Luce's (2000) (Lower) Gains-decompositions utility (GDU) theory.
+#' @aliases compareGDU,Choices-method
+#' @rdname compareGDU
 #' @description Compare choice gambles under Luce's (2000) (Lower) Gains-decompositions utility (GDU) theory.
 #' @param object Choices, an instance of a Choices class.
-#' @param probability_weighting_specification Probability_Weighting, an instance of a Probability_Weighting class.
+#' @param prob_weight ProbWeight, an instance of a ProbWeight class.
 #' @param utility Utility, an instance of a Utility class.
 #' @param digits numeric, the number of digits to display in the output.
 #' @references
@@ -1132,51 +1163,50 @@ setGeneric(name = "compareGDU",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the GDU for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
 #' my_pwf <-
-#'	create_probability_weighting(probability_function="compound_invariance",
-#'	parameters=c(alpha=0.542, beta=1.382))
+#'	ProbWeight(fun="compound_invariance",
+#'	par=c(alpha=0.542, beta=1.382))
 #'	
-#' my_utility <- create_utility(utility_function="power",
-#'	parameters=c(alpha=1, beta=1, lambda=1))
+#' my_utility <- Utility(fun="power",
+#'	par=c(alpha=1, beta=1, lambda=1))
 #'	
 #' compareGDU(my_choices,
-#'	probability_weighting_specification=my_pwf,
+#'	prob_weight=my_pwf,
 #'	utility=my_utility,
 #'	digits=4)
-#'
 #' @export
 setMethod(f = "compareGDU",
 	signature = "Choices",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{	
 	
 		summary_df <- data.frame()
 		
 		for (n in 1:length(object@choices))
 		{	
-			df <- compare_gambles_under_gdu(object@choices[[n]], probability_weighting_specification, utility, digits)
+			df <- compare_gambles_under_gdu(object@choices[[n]], prob_weight, utility, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "gdu", "gduce", "gdurp")]
+			df <- df[c("cid", "gid", "ev", "gdu", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 		
@@ -1190,18 +1220,20 @@ setMethod(f = "compareGDU",
 # PRT related functions
 ########################	
 
-# declare a custom function to compare choices
+#' @name comparePRT
+#' @rdname comparePRT
+#' @exportMethod comparePRT
 setGeneric(name = "comparePRT",
-	def = function(object, ...)
+	def = function(object, utility, gamma, digits)
 	{
 		standardGeneric("comparePRT")
 	}
 )
 
-#' @rdname comparePRT-methods
-#' @aliases comparePRT,Choices-method
 #' @name comparePRT
-#' @title comparePRT
+#' @title Compare choice gambles under Viscusi's (1989) Prospective reference theory (PRT).
+#' @aliases comparePRT,Choices-method
+#' @rdname comparePRT
 #' @description Compare choice gambles under Viscusi's (1989) Prospective reference theory (PRT).
 #' @param object Choices, an instance of a Choices class.
 #' @param utility Utility, an instance of a Utility class.
@@ -1215,28 +1247,28 @@ setGeneric(name = "comparePRT",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and computes the PRT for each gamble in the choices.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' my_utility <- create_utility(utility_function="power",
-#'	parameters=c(alpha=0.631, beta=0.631, lambda=1))
+#' my_utility <- Utility(fun="power",
+#'	par=c(alpha=0.631, beta=0.631, lambda=1))
 #'	
 #' gamma <- 0.676
 #'	
@@ -1244,7 +1276,6 @@ setGeneric(name = "comparePRT",
 #'	utility=my_utility,
 #'	gamma=gamma,
 #'	digits=4)
-#'
 #' @export
 setMethod(f = "comparePRT",
 	signature = "Choices",
@@ -1257,7 +1288,7 @@ setMethod(f = "comparePRT",
 		{	
 			df <- compare_gambles_under_prt(object@choices[[n]], utility, gamma, digits)
 			df$cid <- n
-			df <- df[c("cid", "gid", "ev", "prtu", "prtuce", "prturp")]
+			df <- df[c("cid", "gid", "ev", "prtu", "ce", "rp")]
 			summary_df <- rbind(summary_df, df)
 		}
 		
@@ -1270,20 +1301,24 @@ setMethod(f = "comparePRT",
 # I/O wrappers
 ########################	
 
-# declare a custom function to save_choices
-setGeneric(name = "save_choices",
-	def = function(object, ...)
+#' @name saveChoices
+#' @rdname saveChoices
+#' @exportMethod saveChoices
+setGeneric(name = "saveChoices",
+	def = function(object, output_file, choice_id_header, 
+		gamble_id_header, outcome_id_header, probability_header, 
+		objective_consequence_header, DELIMITER)
 	{
-		standardGeneric("save_choices")
+		standardGeneric("saveChoices")
 	}
 )
 
-#' @rdname save_choices-methods
-#' @aliases save_choices,Choices-method
-#' @name save_choices
-#' @title save_choices
+#' @name saveChoices
+#' @title Saves a Choices object to an external text file.
+#' @aliases saveChoices,Choices-method
+#' @rdname saveChoices
 #' @description Saves a Choices object to an external text file.
-#' @param my_choices Choices, an instance of a Choices class.
+#' @param object Choices, an instance of a Choices class.
 #' @param output_file text, the output file for saving my_choices.
 #' @param choice_id_header text, the column name for the choice_id field in the output file.
 #' @param gamble_id_header text, the column name for the gamble_id field in the output file.
@@ -1297,27 +1332,27 @@ setGeneric(name = "save_choices",
 #' # This example creates the two Allais common consequence paradox choices, 
 #' # and saves them to an external text file.
 #' 
-#' choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
+#' choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
 #' 
-#' gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
+#' gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
 #' 
-#' outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
+#' outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
 #' 
-#' objective_consequence_vector <- c(2500, 2400, 0, 2400, 
+#' objective_consequences <- c(2500, 2400, 0, 2400, 
 #' 	2500, 0, 2400, 0)
 #' 	
-#' probability_string_vector <- c("0.33", "0.66", "0.01", "1.0", 
+#' probability_strings <- c("0.33", "0.66", "0.01", "1.0", 
 #' 	"0.33", "0.67", "0.34", "0.66")
 #' 	
-#' my_choices <- create_choices(choice_id_vector=choice_id_vector,
-#' 	gamble_id_vector=gamble_id_vector, 
-#' 	outcome_id_vector=outcome_id_vector, 
-#' 	objective_consequence_vector=objective_consequence_vector, 
-#' 	probability_string_vector=probability_string_vector)
+#' my_choices <- Choices(choice_ids=choice_ids,
+#' 	gamble_ids=gamble_ids, 
+#' 	outcome_ids=outcome_ids, 
+#' 	objective_consequences=objective_consequences, 
+#' 	probability_strings=probability_strings)
 #' 	
 #' my_choices
 #' 
-#' save_choices(my_choices, 
+#' saveChoices(my_choices, 
 #'	output_file="saved_choices.txt",
 #'	choice_id_header="choice_id",
 #'	gamble_id_header="gamble_id",
@@ -1328,9 +1363,8 @@ setGeneric(name = "save_choices",
 #' 
 #' # after finishing with the file, delete to keep the workspace tidy
 #' rm(my_choices)
-#' 
 #' @export
-setMethod(f = "save_choices",
+setMethod(f = "saveChoices",
 	signature = "Choices",
 	definition = function(object, 
 		output_file, 
@@ -1351,20 +1385,20 @@ setMethod(f = "save_choices",
 			choice_id <- i
 			my_gambles <- object@choices[[i]]
 			
-			my_gambles_vector <- get_gambles(my_gambles)
+			my_gambless <- get_gambles(my_gambles)
 					
-			for (j in 1:length(my_gambles_vector))
+			for (j in 1:length(my_gambless))
 			{
-				my_gamble <- my_gambles_vector[[j]]
+				my_gamble <- my_gambless[[j]]
 				gamble_id <- get_gamble_id(my_gamble)
 				
-				outcome_vector <- get_outcomes(my_gamble)
+				outcomes <- get_outcomes(my_gamble)
 				
-				for (k in 1:length(outcome_vector))
+				for (k in 1:length(outcomes))
 				{
-					outcome_id <- get_outcome_id(outcome_vector[[k]])
-					objective_consequence <- get_objective_consequence(outcome_vector[[k]])
-					probability_string <- get_probability_string(outcome_vector[[k]])	
+					outcome_id <- get_outcome_id(outcomes[[k]])
+					objective_consequence <- get_objective_consequence(outcomes[[k]])
+					probability_string <- get_probability_string(outcomes[[k]])	
 					
 					#[rows, cols]
 					df[row_index, 1] <- choice_id
@@ -1393,8 +1427,8 @@ setMethod(f = "save_choices",
 	}
 )
 
-#' @name create_vsd_choices
-#' @title create_vsd_choices
+#' @name vsdChoices
+#' @title Create choice situations that can elicit violations of (first-order) stochastic dominance in decision makers, using Birbaum's (1997) recipe.
 #' @description Create choice situations that can elicit violations of (first-order) stochastic dominance in decision makers, using Birbaum's (1997) recipe.
 #' @details Given a binary gamble G0, this function creates a pair of three outcome gambles G+ and G-
 #' and a pair of four outcome gambles GS+, GS- that can elicit vsd behaviour in decision makers. e.g.
@@ -1409,7 +1443,7 @@ setMethod(f = "save_choices",
 #' 
 #' 
 #' @examples
-#' my_choices_list <- create_vsd_choices(x=12, y=96, p="0.1", q="0.9", x_plus=14, y_minus=90, r="0.05")
+#' my_choices_list <- vsdChoices(x=12, y=96, p="0.1", q="0.9", x_plus=14, y_minus=90, r="0.05")
 #' 
 #' original_choice <- my_choices_list[[1]]
 #' 
@@ -1429,7 +1463,7 @@ setMethod(f = "save_choices",
 #' Birnbaum, M. H. (1997). Violations of monotonicity in judgment and decision making. In A. A. J. Marley (Ed.), Choice, decision, and measurement: Essays in honor of R. Duncan Luce (pp. 73-100). Mahwah, NJ: Erlbaum.
 #' 
 #' @usage
-#' create_vsd_choices(x, y, p, q, x_plus, y_minus, r)
+#' vsdChoices(x, y, p, q, x_plus, y_minus, r)
 #' @param x numeric, x is one of the objective consequences in the original binary gamble G0.
 #' @param y numeric, y is the other objective consequences in the original binary gamble G0.
 #' @param p text, p is a probability string associated with the objective consequence x.
@@ -1438,7 +1472,7 @@ setMethod(f = "save_choices",
 #' @param y_minus numeric, y_minus
 #' @param r numeric, r the g_minus probability offset
 #' @export
-create_vsd_choices <- function(x, y, p, q, x_plus, y_minus, r)
+vsdChoices <- function(x, y, p, q, x_plus, y_minus, r)
 {
 	if ((x < 0) || (y < 0))
 	{
@@ -1456,25 +1490,25 @@ create_vsd_choices <- function(x, y, p, q, x_plus, y_minus, r)
 	nr <- as.numeric(r)
 	
 	#g0
-	choice_id_vector <- c(1, 1)	
-	gamble_id_vector <- c(1, 1)
-	outcome_id_vector <- c(1, 2)
-	objective_consequence_vector <- c(x, y)
-	probability_string_vector <- c(as.character(np),
+	choice_ids <- c(1, 1)	
+	gamble_ids <- c(1, 1)
+	outcome_ids <- c(1, 2)
+	objective_consequences <- c(x, y)
+	probability_strings <- c(as.character(np),
 		as.character(nq))		
-	g0 <- create_choices(choice_id_vector=choice_id_vector,
-		gamble_id_vector=gamble_id_vector, 		
-		outcome_id_vector=outcome_id_vector, 
-		objective_consequence_vector=objective_consequence_vector, 
-		probability_string_vector=probability_string_vector)	
+	g0 <- Choices(choice_ids=choice_ids,
+		gamble_ids=gamble_ids, 		
+		outcome_ids=outcome_ids, 
+		objective_consequences=objective_consequences, 
+		probability_strings=probability_strings)	
 		
 	#gplusminus
-	choice_id_vector <- c(1, 1, 1, 1, 1, 1)
-	gamble_id_vector <- c(1, 1, 1, 2, 2, 2)
-	outcome_id_vector <- c(1, 2, 3, 1, 2, 3)
-	objective_consequence_vector <- c(x, x_plus, y, 
+	choice_ids <- c(1, 1, 1, 1, 1, 1)
+	gamble_ids <- c(1, 1, 1, 2, 2, 2)
+	outcome_ids <- c(1, 2, 3, 1, 2, 3)
+	objective_consequences <- c(x, x_plus, y, 
 		x, y_minus, y)
-	probability_string_vector <- c(		
+	probability_strings <- c(		
 		as.character(eval(parse(text="np-nr"))), 
 		as.character(eval(parse(text="np-nr"))), 	
 		as.character(nq), 
@@ -1483,20 +1517,20 @@ create_vsd_choices <- function(x, y, p, q, x_plus, y_minus, r)
 		as.character(eval(parse(text="np-nr"))),		
 		as.character(eval(parse(text="nq-nr"))))
 	
-	gplusminus <- create_choices(choice_id_vector=choice_id_vector,
-		gamble_id_vector=gamble_id_vector, 
-		outcome_id_vector=outcome_id_vector, 
-		objective_consequence_vector=objective_consequence_vector, 
-		probability_string_vector=probability_string_vector)		
+	gplusminus <- Choices(choice_ids=choice_ids,
+		gamble_ids=gamble_ids, 
+		outcome_ids=outcome_ids, 
+		objective_consequences=objective_consequences, 
+		probability_strings=probability_strings)		
 	
 	#gsplusminus
-	choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
-	gamble_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
-	outcome_id_vector <- c(1, 2, 3, 4, 1, 2, 3, 4)
-	objective_consequence_vector <- c(x, x_plus, y, y,
+	choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
+	gamble_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
+	outcome_ids <- c(1, 2, 3, 4, 1, 2, 3, 4)
+	objective_consequences <- c(x, x_plus, y, y,
 		x, x, y_minus, y)
 		
-	probability_string_vector <- c(		
+	probability_strings <- c(		
 		as.character(eval(parse(text="np-nr"))), 
 		as.character(eval(parse(text="np-nr"))),
 		as.character(eval(parse(text="np-nr"))), 		
@@ -1507,11 +1541,11 @@ create_vsd_choices <- function(x, y, p, q, x_plus, y_minus, r)
 		as.character(eval(parse(text="np-nr"))), 		
 		as.character(eval(parse(text="nq-nr"))))
 	
-	gsplusminus <- create_choices(choice_id_vector=choice_id_vector,
-		gamble_id_vector=gamble_id_vector, 
-		outcome_id_vector=outcome_id_vector, 
-		objective_consequence_vector=objective_consequence_vector, 
-		probability_string_vector=probability_string_vector)
+	gsplusminus <- Choices(choice_ids=choice_ids,
+		gamble_ids=gamble_ids, 
+		outcome_ids=outcome_ids, 
+		objective_consequences=objective_consequences, 
+		probability_strings=probability_strings)
 	
 	
 	my_list <- list("g0"=g0, "gplusminus"=gplusminus, "gsplusminus"=gsplusminus)

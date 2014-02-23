@@ -1,19 +1,14 @@
 \name{drawChoices}
 \alias{drawChoices}
-\title{drawChoices}
+\title{Draw a one-stage decision tree.}
 \usage{
-  drawChoices(choices, window_width, window_height,
-    decision_square_x, decision_square_edge_length,
-    circle_radius, y_split_gap, x_split_offset,
-    probability_text_digits, y_probability_text_offset,
-    y_value_text_offset, x_value_text_offset,
-    probability_text_font_colour,
-    probability_text_font_size,
-    objective_consequence_text_font_colour,
-    objective_consequence_text_font_size, label,
-    label_font_colour, label_font_size, label_positions,
-    line_positions, line_colours, line_styles, line_arrows,
-    line_widths)
+drawChoices(choices, window_width, window_height, decision_square_x,
+  decision_square_edge_length, circle_radius, y_split_gap, x_split_offset,
+  probability_text_digits, y_probability_text_offset, y_value_text_offset,
+  x_value_text_offset, probability_text_font_colour, probability_text_font_size,
+  objective_consequence_text_font_colour, objective_consequence_text_font_size,
+  label, label_font_colour, label_font_size, label_positions, line_positions,
+  line_colours, line_styles, line_arrows, line_widths)
 }
 \arguments{
   \item{choices,}{an instance of class Choices}
@@ -83,24 +78,24 @@
   \item{line_widths}{vector, line_widths}
 }
 \description{
-  Draws choices.
+Draws choices.
 }
 \examples{
 # This example creates the Allais common consequence paradox choices, and
 # draws them.
 
-choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2)
-gamble_id_vector <- c(1, 1, 1, 2, 1, 1, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 1, 1, 2, 1, 2)
-objective_consequence_vector <- c(2500, 2400, 0, 2400,
+choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2)
+gamble_ids <- c(1, 1, 1, 2, 1, 1, 2, 2)
+outcome_ids <- c(1, 2, 3, 1, 1, 2, 1, 2)
+objective_consequences <- c(2500, 2400, 0, 2400,
 	2500, 0, 2400, 0)
-probability_string_vector <- c("0.33", "0.66", "0.01", "1.0",
+probability_strings <- c("0.33", "0.66", "0.01", "1.0",
 	"0.33", "0.67", "0.34", "0.66")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector,
-	outcome_id_vector=outcome_id_vector,
-	objective_consequence_vector=objective_consequence_vector,
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids,
+	outcome_ids=outcome_ids,
+	objective_consequences=objective_consequences,
+	probability_strings=probability_strings)
 my_choices
 
 drawChoices(my_choices, window_width=5, window_height=5,

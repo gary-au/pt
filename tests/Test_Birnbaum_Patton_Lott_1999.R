@@ -20,29 +20,29 @@ library("pt")
 # A < B
 # C < D
 
-choice_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2, 2)
-gamble_id_vector <- c(1, 1, 2, 2, 1, 1, 2, 2, 2)
-outcome_id_vector <- c(1, 2, 1, 2, 1, 2, 1, 2, 3)
-objective_consequence_vector <- c(100, 200, 100, 200, 110, 120, 101, 102, 103)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 2, 2, 2, 2, 2)
+gamble_ids <- c(1, 1, 2, 2, 1, 1, 2, 2, 2)
+outcome_ids <- c(1, 2, 1, 2, 1, 2, 1, 2, 3)
+objective_consequences <- c(100, 200, 100, 200, 110, 120, 101, 102, 103)
+probability_strings <- 
 	c("0.5", "0.5", "0.99", "0.01", "0.5", "0.5", "0.01", "0.01", "0.98")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.4, beta=0.4, lambda=2.25))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=0.4, beta=0.4, lambda=2.25))
 my_pwf <- 
-	create_probability_weighting(probability_function="linear_in_log_odds", 
-		parameters=c(alpha=0.4, beta=0.4))
+	ProbWeight(fun="linear_in_log_odds", 
+		par=c(alpha=0.4, beta=0.4))
 compareSWU(my_choices,
-	probability_weighting_specification=my_pwf,
+	prob_weight=my_pwf,
 	utility=my_utility, digits=4)
 
-#   cid gid  ev   swu swuce swurp
+#   cid gid  ev   swu ce rp
 # 1   1   1 150 4.181 35.75 114.2
 # 2   1   2 101 5.012 56.24 44.76
 # 3   2   1 115 3.812 28.37 86.63
@@ -64,27 +64,27 @@ compareSWU(my_choices,
 # S < R
 # S' > R'
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2)
-gamble_id_vector <- c(1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3)
-objective_consequence_vector <- c(2, 40, 44, 2, 10, 98, 40, 44, 108, 10, 98, 108)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2)
+gamble_ids <- c(1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2)
+outcome_ids <- c(1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3)
+objective_consequences <- c(2, 40, 44, 2, 10, 98, 40, 44, 108, 10, 98, 108)
+probability_strings <- 
 	c("0.5", "0.25", "0.25", "0.5", "0.25", "0.25", "0.25", "0.25", "0.5", "0.25", "0.25", "0.5")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
-tk_1992_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=0.88, beta=0.88, lambda=2.25))
+tk_1992_utility <- Utility(fun="power", 
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 linear_in_log_odds_probability_weighting <- 
-	create_probability_weighting(probability_function="linear_in_log_odds", 
-		parameters=c(alpha=0.61, beta=0.724))
+	ProbWeight(fun="linear_in_log_odds", 
+		par=c(alpha=0.61, beta=0.724))
 comparePT(my_choices, 
-	probability_weighting_specification_for_positive_outcomes=linear_in_log_odds_probability_weighting,
-	probability_weighting_specification_for_negative_outcomes=linear_in_log_odds_probability_weighting,
+	prob_weight_for_positive_outcomes=linear_in_log_odds_probability_weighting,
+	prob_weight_for_negative_outcomes=linear_in_log_odds_probability_weighting,
 	utility=tk_1992_utility, digits=4)
 
 #  gid od oc   pr     dw    sv     pt
@@ -103,7 +103,7 @@ comparePT(my_choices,
 #    2  3 108 0.50 0.4200 61.576 25.86
 #    2  2  98 0.25 0.1660 56.530 35.24
 #    2  1  10 0.25 0.4141  7.586 38.38
-#   cid gid ev    pt  ptce  ptrp
+#   cid gid ev    pt  ce  rp
 # 1   1   1 22 12.46 17.58 4.417
 # 2   1   2 28 17.48 25.83 2.174
 # 3   2   1 75 41.14 68.29 6.713
@@ -125,32 +125,32 @@ comparePT(my_choices,
 # E > F
 # F' > E'
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2)
-gamble_id_vector <- c(1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
-objective_consequence_vector <- c(4, 45, 49, 110, 4, 11, 97, 110, 4, 45, 49, 110, 4, 11, 97, 110)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2)
+gamble_ids <- c(1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
+outcome_ids <- c(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+objective_consequences <- c(4, 45, 49, 110, 4, 11, 97, 110, 4, 45, 49, 110, 4, 11, 97, 110)
+probability_strings <- 
 	c("0.59", "0.2", "0.2", "0.01", "0.59", "0.2", "0.2", "0.01", "0.01", "0.2", "0.2", "0.59", "0.01", "0.2", "0.2", "0.59")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=0.7, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=0.7, beta=1))
 delta <- -1
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid    ev   tax taxce  taxrp
+#   cid gid    ev   tax ce  rp
 # 1   1   1 22.26  21.7  21.7 0.5595
 # 2   1   2 25.06 20.56 20.56  4.501
 # 3   2   1 83.74 49.85 49.85  33.89
@@ -171,32 +171,32 @@ compareTAX(my_choices,
 #   ~ 55.18 TAX
 # A < B < C
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 1, 2, 2, 3, 3, 3)
-outcome_id_vector <- c(1, 2, 3, 1, 2, 1, 2, 3)
-objective_consequence_vector <- c(0, 0, 100, 0, 100, 0, 100, 100)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
+gamble_ids <- c(1, 1, 1, 2, 2, 3, 3, 3)
+outcome_ids <- c(1, 2, 3, 1, 2, 1, 2, 3)
+objective_consequences <- c(0, 0, 100, 0, 100, 0, 100, 100)
+probability_strings <- 
 	c("0.25", "0.25", "0.5", "0.5", "0.5", "0.5", "0.25", "0.25")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=0.7, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=0.7, beta=1))
 delta <- 0
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid ev   tax taxce taxrp
+#   cid gid ev   tax ce rp
 # 1   1   1 50 44.82 44.82  5.18
 # 2   1   2 50    50    50     0
 # 3   1   3 50 55.18 55.18 -5.18
@@ -216,32 +216,32 @@ compareTAX(my_choices,
 #   ~ 37.5 TAX
 # A < B < C
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 1, 2, 2, 3, 3, 3)
-outcome_id_vector <- c(1, 2, 3, 1, 2, 1, 2, 3)
-objective_consequence_vector <- c(0, 0, 100, 0, 100, 0, 100, 100)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
+gamble_ids <- c(1, 1, 1, 2, 2, 3, 3, 3)
+outcome_ids <- c(1, 2, 3, 1, 2, 1, 2, 3)
+objective_consequences <- c(0, 0, 100, 0, 100, 0, 100, 100)
+probability_strings <- 
 	c("0.25", "0.25", "0.5", "0.5", "0.5", "0.5", "0.25", "0.25")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=1.0, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=1.0, beta=1))
 delta <- -1
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid ev   tax taxce taxrp
+#   cid gid ev   tax ce rp
 # 1   1   1 50    25    25    25
 # 2   1   2 50 33.33 33.33 16.67
 # 3   1   3 50  37.5  37.5  12.5
@@ -260,32 +260,32 @@ compareTAX(my_choices,
 #   ~ 63.10 TAX
 # Gplus < G0 < Gminus
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 1, 1)
-gamble_id_vector <- c(1, 1, 2, 2, 2, 3, 3, 3)
-outcome_id_vector <- c(1, 2, 1, 2, 3, 1, 2, 3)
-objective_consequence_vector <- c(12, 96, 12, 14, 96, 12, 90, 96)
-probability_string_vector <- 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 1, 1)
+gamble_ids <- c(1, 1, 2, 2, 2, 3, 3, 3)
+outcome_ids <- c(1, 2, 1, 2, 3, 1, 2, 3)
+objective_consequences <- c(12, 96, 12, 14, 96, 12, 90, 96)
+probability_strings <- 
 	c("0.1", "0.9", "0.05", "0.05", "0.9", "0.1", "0.05", "0.85")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=0.7, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=0.7, beta=1))
 delta <- -1
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid   ev   tax taxce taxrp
+#   cid gid   ev   tax ce rp
 # 1   1   1 87.6  58.1  58.1  29.5
 # 2   1   2 87.7 45.77 45.77 41.93
 # 3   1   3 87.3  63.1  63.1  24.2
@@ -316,38 +316,38 @@ compareTAX(my_choices,
 # S'' < R''
 # S' < R'
 # S''' > R'''
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4)
-gamble_id_vector <- c(1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 1, 2, 3, 1, 2, 1, 2, 1, 2, 3, 1, 2, 3, 1, 2, 1, 2)
-objective_consequence_vector <- c(2, 40, 44, 2, 10, 98, 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4)
+gamble_ids <- c(1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2)
+outcome_ids <- c(1, 2, 3, 1, 2, 3, 1, 2, 1, 2, 1, 2, 3, 1, 2, 3, 1, 2, 1, 2)
+objective_consequences <- c(2, 40, 44, 2, 10, 98, 
 	10, 44, 10, 98, 
 	40, 44, 108, 10, 98, 108, 
 	40, 98, 10, 98)
-probability_string_vector <- 
+probability_strings <- 
 	c("0.6", "0.2", "0.2", "0.6", "0.2", "0.2", 
 		"0.6", "0.4", "0.8", "0.2",
 		"0.2", "0.2", "0.6", "0.2", "0.2", "0.6", 
 		"0.4", "0.6", "0.2", "0.8")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=0.7, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=0.7, beta=1))
 delta <- -1
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid   ev   tax taxce taxrp
+#   cid gid   ev   tax ce rp
 # 1   1   1   18 16.19 16.19 1.809
 # 2   1   2 22.8 15.47 15.47 7.331
 # 3   2   1 23.6 19.74 19.74 3.864
@@ -375,34 +375,34 @@ compareTAX(my_choices,
 # Gplus < Gminus
 # GSplus > GSminus
 
-choice_id_vector <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2)
-gamble_id_vector <- c(1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
-outcome_id_vector <- c(1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 1, 2, 3, 4)
-objective_consequence_vector <- c(12, 14, 96, 12, 90, 96, 
+choice_ids <- c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2)
+gamble_ids <- c(1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2)
+outcome_ids <- c(1, 2, 3, 1, 2, 3, 1, 2, 3, 4, 1, 2, 3, 4)
+objective_consequences <- c(12, 14, 96, 12, 90, 96, 
 	12, 14, 96, 96, 12, 12, 90, 96)
-probability_string_vector <- 
+probability_strings <- 
 	c("0.05", "0.05", "0.9", "0.1", "0.05", "0.85", 
 		"0.05", "0.05", "0.05", "0.85", "0.05", "0.05", "0.05", "0.85")
-my_choices <- create_choices(choice_id_vector=choice_id_vector,
-	gamble_id_vector=gamble_id_vector, 
-	outcome_id_vector=outcome_id_vector, 
-	objective_consequence_vector=objective_consequence_vector, 
-	probability_string_vector=probability_string_vector)
+my_choices <- Choices(choice_ids=choice_ids,
+	gamble_ids=gamble_ids, 
+	outcome_ids=outcome_ids, 
+	objective_consequences=objective_consequences, 
+	probability_strings=probability_strings)
 my_choices
 
 my_pwf <- 
-	create_probability_weighting(probability_function="power",
-		parameters=c(alpha=0.7, beta=1))
+	ProbWeight(fun="power",
+		par=c(alpha=0.7, beta=1))
 delta <- -1
-my_utility <- create_utility(utility_function="power", 
-	parameters=c(alpha=1, beta=1, lambda=1))
+my_utility <- Utility(fun="power", 
+	par=c(alpha=1, beta=1, lambda=1))
 compareTAX(my_choices, 
-	probability_weighting_specification=my_pwf, 
+	prob_weight=my_pwf, 
 	utility=my_utility,
 	delta=delta,
 	digits=4)
 
-#   cid gid   ev   tax taxce taxrp
+#   cid gid   ev   tax ce rp
 # 1   1   1 87.7 45.77 45.77 41.93
 # 2   1   2 87.3  63.1  63.1  24.2
 # 3   2   1 87.7 53.06 53.06 34.64

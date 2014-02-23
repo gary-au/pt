@@ -4,32 +4,12 @@
 #
 ########################	
 
-#' The Gamble class
-#' 
-#' @section Slots:
-#'  \describe{
-#'    \item{\code{gamble_id}:}{Object of class \code{"numeric"}, containing the unique id of the gamble.}
-#'    \item{\code{outcomes}:}{Object of class \code{"vector"}, containing the possible outcomes of the gamble.}
-#'  }
-#'
-#' @note The Gamble class represents a gamble, i.e. a choice option containing various outcomes whose probabilities need to sum to unity.
-#' @name Gamble 
-#' @rdname Gamble
-#' @exportClass Gamble
-#' @aliases Gamble-class
+
 setClass(Class = "Gamble",
 	representation = representation
 	(
 		gamble_id = "numeric",
-		outcomes = "vector",
-	
-		expected_value = "numeric",
-		expected_utility = "numeric",
-		rdu_value = "numeric",	
-		pt_value = "numeric",
-			
-		certainty_equivalent = "numeric",
-		risk_premium = "numeric"		
+		outcomes = "vector"		
 	),
 	# check for input consistency when creating new Outcome objects using "new" constructor
 	validity = function(object)
@@ -38,12 +18,7 @@ setClass(Class = "Gamble",
 		
 		# make sure probabilities of all outcomes sum to <= 1	
 		probability_sum = sum(sapply(object@outcomes, get_probability))
-# 		print(probability_sum)
-		
-# 		TOLERANCE <- 0.000000000000001
-# 		
-# 		if (abs(1.0 - probability_sum) < TOLERANCE)
-# 		{
+
 		if (probability_sum < 0 | probability_sum > 1)
 		{
 			stop(paste("sum of probabilities: ", probability_sum, " is outside valid range [0, 1].\n"));
@@ -173,26 +148,26 @@ create_gamble <- function()
 }
 
 
-create_gamble_v3 <- function(gamble_id, outcome_id_vector, objective_consequence_vector, probability_string_vector)
+create_gamble_v3 <- function(gamble_id, outcome_ids, objective_consequences, probability_strings)
 {
 
 	# perform validity checks on the input
 	
-	# firstly the objective_consequence_vector and probability_string_vector must be the same length
+	# firstly the objective_consequences and probability_strings must be the same length
 	
-	objective_consequence_vector_length <- length(objective_consequence_vector)
-	probability_string_vector_length <- length(probability_string_vector)
+	objective_consequences_length <- length(objective_consequences)
+	probability_strings_length <- length(probability_strings)
 	
-	if (objective_consequence_vector_length != probability_string_vector_length)
+	if (objective_consequences_length != probability_strings_length)
 	{
-		stop(paste("objective_consequence_vector has length: ", objective_consequence_vector_length, " and probability_string_vector has length: ", probability_string_vector_length, "\n"));			
+		stop(paste("objective_consequences has length: ", objective_consequences_length, " and probability_strings has length: ", probability_strings_length, "\n"));			
 	}
 	
-	# secondly the probabilities in probability_vector must sum to 1
+	# secondly the probabilities in probabilitys must sum to 1
 
-	probability_vector <- unlist(lapply(probability_string_vector, function(probability_string_vector) eval(parse(text=probability_string_vector))))
+	probabilitys <- unlist(lapply(probability_strings, function(probability_strings) eval(parse(text=probability_strings))))
 	
-	probability_sum <- sum(probability_vector)
+	probability_sum <- sum(probabilitys)
 	
 	if (probability_sum < 0 | probability_sum > 1)
 	{
@@ -205,12 +180,12 @@ create_gamble_v3 <- function(gamble_id, outcome_id_vector, objective_consequence
 	
 	object@gamble_id <- gamble_id
 	
-	for (n in 1:length(objective_consequence_vector))
+	for (n in 1:length(objective_consequences))
 	{
-		outcome_id <- outcome_id_vector[n]
+		outcome_id <- outcome_ids[n]
 		
-		probability_string <- probability_string_vector[n]				
-		objective_consequence <- objective_consequence_vector[n]
+		probability_string <- probability_strings[n]				
+		objective_consequence <- objective_consequences[n]
 
 		my_outcome <- create_outcome(outcome_id = outcome_id, position = n, objective_consequence = objective_consequence, probability_string = probability_string, rank = 0, decision_weight = 0.0, subjective_value = 0.0, w = 0.0)
 
@@ -535,9 +510,9 @@ setReplaceMethod(f = "set_g_probabilities",
 	definition = function(object, value)
 	{	
 		
-		probability_vector <- unlist(lapply(value, function(value) eval(parse(text=value))))
+		probabilitys <- unlist(lapply(value, function(value) eval(parse(text=value))))
 		
-		probability_sum = sum(probability_vector)
+		probability_sum = sum(probabilitys)
 		
 		if (probability_sum < 0 | probability_sum > 1)
 		{
@@ -602,41 +577,6 @@ setMethod(f = "get_gamble_outcome_subjective_value",
 # expected_value related functions
 ########################	
 
-# declare a custom function to retrieve expected_value
-setGeneric(name = "get_expected_value",
-	def = function(object)
-	{
-		standardGeneric("get_expected_value")
-	}
-)
-
-# provide implementation of custom function to retrieve expected_value
-setMethod(f = "get_expected_value",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@expected_value)
-	}
-)
-
-# declare a custom function to assign expected_value
-setGeneric(name = "set_expected_value<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_expected_value<-")
-	}
-)
-
-# provide implementation of custom function to assign expected_value	
-setReplaceMethod(f = "set_expected_value",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@expected_value <- value
-		return (object)
-	}
-)
-
 # declare a custom function to compute expected value
 setGeneric(name = "compute_expected_value",
 	def = function(object)
@@ -687,83 +627,10 @@ setMethod(f = "apply_value_function",
 	}
 )
 
-########################
-# certainty_equivalent related functions
-########################	
-
-# declare a custom function to retrieve certainty_equivalent
-setGeneric(name = "get_certainty_equivalent",
-	def = function(object)
-	{
-		standardGeneric("get_certainty_equivalent")
-	}
-)
-
-# provide implementation of custom function to retrieve certainty_equivalent
-setMethod(f = "get_certainty_equivalent",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@certainty_equivalent)
-	}
-)
-
-# declare a custom function to assign certainty_equivalent
-setGeneric(name = "set_certainty_equivalent<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_certainty_equivalent<-")
-	}
-)
-
-# provide implementation of custom function to assign certainty_equivalent	
-setReplaceMethod(f = "set_certainty_equivalent",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@certainty_equivalent <- value
-		return (object)
-	}
-)
 
 ########################
 # risk_premium related functions
 ########################	
-
-# declare a custom function to retrieve risk_premium
-setGeneric(name = "get_risk_premium",
-	def = function(object)
-	{
-		standardGeneric("get_risk_premium")
-	}
-)
-
-# provide implementation of custom function to retrieve risk_premium
-setMethod(f = "get_risk_premium",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@risk_premium)
-	}
-)
-
-# declare a custom function to assign risk_premium
-setGeneric(name = "set_risk_premium<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_risk_premium<-")
-	}
-)
-
-# provide implementation of custom function to assign risk_premium	
-setReplaceMethod(f = "set_risk_premium",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@risk_premium <- value
-		return (object)
-	}
-)
 
 # declare a custom function
 setGeneric(name = "compute_risk_premium",
@@ -788,42 +655,6 @@ setMethod(f = "compute_risk_premium",
 ########################
 # expected_utility related functions
 ########################	
-
-# declare a custom function to retrieve expected_utility
-setGeneric(name = "get_expected_utility",
-	def = function(object)
-	{
-		standardGeneric("get_expected_utility")
-	}
-)
-
-# provide implementation of custom function to retrieve expected_utility
-setMethod(f = "get_expected_utility",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@expected_utility)
-	}
-)
-
-# declare a custom function to assign expected_utility
-setGeneric(name = "set_expected_utility<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_expected_utility<-")
-	}
-)
-
-# provide implementation of custom function to assign expected_utility	
-setReplaceMethod(f = "set_expected_utility",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@expected_utility <- value
-		return (object)
-	}
-)
-
 
 # declare a custom function
 setGeneric(name = "compute_utilities",
@@ -853,40 +684,6 @@ setMethod(f = "compute_utilities",
 # pt_value related functions
 ########################	
 
-# declare a custom function to retrieve pt_value
-setGeneric(name = "get_pt_value",
-	def = function(object)
-	{
-		standardGeneric("get_pt_value")
-	}
-)
-
-# provide implementation of custom function to retrieve pt_value
-setMethod(f = "get_pt_value",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@pt_value)
-	}
-)
-
-# declare a custom function to assign pt_value
-setGeneric(name = "set_pt_value<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_pt_value<-")
-	}
-)
-
-# provide implementation of custom function to assign pt_value	
-setReplaceMethod(f = "set_pt_value",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@pt_value <- value
-		return (object)
-	}
-)
 
 # declare a custom function
 setGeneric(name = "compute_pt_value",
@@ -945,8 +742,8 @@ setGeneric(name = "compute_prospect",
 
 setMethod(f = "compute_prospect",
 	signature = "Gamble",
-	definition = function(object, probability_weighting_specification_for_positive_outcomes, 
-probability_weighting_specification_for_negative_outcomes, utility_family, digits)
+	definition = function(object, prob_weight_for_positive_outcomes, 
+prob_weight_for_negative_outcomes, utility_family, digits)
 	{
 
 		#order gambles from highest to lowest, i.e. perform complete sign-ranking.
@@ -962,14 +759,14 @@ probability_weighting_specification_for_negative_outcomes, utility_family, digit
 			{
 				lower_sum <- sum_outcome_probabilities(object, 1, i - 1)
 				upper_sum <- sum_outcome_probabilities(object, 1, i)
-				positive_weighting <- compute_probability_weighting(probability_weighting_specification_for_positive_outcomes, sum_outcome_probabilities(object, 1, i)) - compute_probability_weighting(probability_weighting_specification_for_positive_outcomes, sum_outcome_probabilities(object, 1, i - 1))
+				positive_weighting <- compute_prob_weight(prob_weight_for_positive_outcomes, sum_outcome_probabilities(object, 1, i)) - compute_prob_weight(prob_weight_for_positive_outcomes, sum_outcome_probabilities(object, 1, i - 1))
 				set_decision_weight(object@outcomes[[i]]) <- positive_weighting
 			}
 			else
 			{
 				lower_sum <- sum_outcome_probabilities(object, i + 1, length(object@outcomes))
 				upper_sum <- sum_outcome_probabilities(object, i, length(object@outcomes))
-				negative_weighting <- compute_probability_weighting(probability_weighting_specification_for_negative_outcomes, sum_outcome_probabilities(object, i, length(object@outcomes))) - compute_probability_weighting(probability_weighting_specification_for_negative_outcomes, sum_outcome_probabilities(object, i + 1, length(object@outcomes)))
+				negative_weighting <- compute_prob_weight(prob_weight_for_negative_outcomes, sum_outcome_probabilities(object, i, length(object@outcomes))) - compute_prob_weight(prob_weight_for_negative_outcomes, sum_outcome_probabilities(object, i + 1, length(object@outcomes)))
 				set_decision_weight(object@outcomes[[i]]) <- negative_weighting
 			}
 		}		
@@ -980,23 +777,18 @@ probability_weighting_specification_for_negative_outcomes, utility_family, digit
 		pt_df <- compute_pt_value(object)
 		
 		pt_value <- pt_df[nrow(pt_df), ncol(pt_df)]	
-		
-		set_pt_value(object) <- pt_value
-		
+
 		# compute expected value
 		
 		expected_value <- compute_expected_value(object)	
-		set_expected_value(object) <- expected_value
 		
 		# compute certainty equivalent
 		
 		certainty_equivalent <- compute_certainty_equivalent(utility_family, pt_value)
-		set_certainty_equivalent(object) <- certainty_equivalent
 
 		# compute risk premium
 		
 		risk_premium <- compute_risk_premium(object, expected_value, certainty_equivalent)
-		set_risk_premium(object) <- risk_premium
 		
 		summary_df <- data.frame(get_gamble_id(object), 
 			format(expected_value, digits=digits, scientific=FALSE),
@@ -1006,7 +798,7 @@ probability_weighting_specification_for_negative_outcomes, utility_family, digit
 			row.names=NULL, 
 			stringsAsFactors=FALSE)
 		
-		colnames(summary_df) <- c("gid", "ev", "pt", "ptce", "ptrp")
+		colnames(summary_df) <- c("gid", "ev", "pt", "ce", "rp")
 		
 		df_list <- list("calculations"=pt_df, "summary"=summary_df)
 		
@@ -1018,41 +810,6 @@ probability_weighting_specification_for_negative_outcomes, utility_family, digit
 # RDU calculations
 ########################	
 
-# declare a custom function to assign rdu_value
-setGeneric(name = "set_rdu_value<-",
-	def = function(object, value)
-	{
-		standardGeneric("set_rdu_value<-")
-	}
-)
-
-# provide implementation of custom function to assign rdu_value	
-setReplaceMethod(f = "set_rdu_value",
-	signature = "Gamble",
-	definition = function(object, value)
-	{
-		object@rdu_value <- value
-		return (object)
-	}
-)
-
-# declare a custom function to retrieve rdu_value
-setGeneric(name = "get_rdu_value",
-	def = function(object)
-	{
-		standardGeneric("get_rdu_value")
-	}
-)
-
-# provide implementation of custom function to retrieve rdu_value
-setMethod(f = "get_rdu_value",
-	signature = "Gamble",
-	definition = function(object)
-	{
-		return (object@rdu_value)
-	}
-)
-
 # declare a custom function
 setGeneric(name = "compute_rdu",
 	def = function(object, ...)
@@ -1063,7 +820,7 @@ setGeneric(name = "compute_rdu",
 
 setMethod(f = "compute_rdu",
 	signature = "Gamble",
-	definition = function(object, probability_weighting_specification, utility_family, input_file, DELIMITER)
+	definition = function(object, prob_weight, utility_family, input_file, DELIMITER)
 	{
 		# following Wakker (2010) p. 165, 5.6 Calculating rank-dependent utility:
 		# rank outcomes from best to worst
@@ -1086,7 +843,7 @@ setMethod(f = "compute_rdu",
 	
 		# for all ranks, calculate the w of each rank
 		
-		object <- compute_ws(object, probability_weighting_specification)
+		object <- compute_ws(object, prob_weight)
 		
 		# calculate decision weights of each outcome
 	
@@ -1099,22 +856,18 @@ setMethod(f = "compute_rdu",
 		# multiply each outcome utility by the decision weight and sum the results
 		
 		rdu_value <- compute_rdu_value(object)	
-		set_rdu_value(object) <- rdu_value
 		
 		# compute expected value
 		
 		expected_value <- compute_expected_value(object)		
-		set_expected_value(object) <- expected_value
 		
 		# compute certainty equivalent
 		
 		certainty_equivalent <- compute_certainty_equivalent(utility_family, rdu_value)
-		set_certainty_equivalent(object) <- certainty_equivalent
 		
 		# compute risk premium
 		
 		risk_premium <- compute_risk_premium(object, expected_value, certainty_equivalent)
-		set_risk_premium(object) <- risk_premium
 		
 		return (object)		
 	}
@@ -1166,7 +919,7 @@ setMethod(f = "compute_ws",
 
 		for (n in 1:length(object@outcomes))
 		{
-			set_w(object@outcomes[[n]]) <- compute_probability_weighting(probability_weighting, 
+			set_w(object@outcomes[[n]]) <- compute_prob_weight(probability_weighting, 
 get_rank(object@outcomes[[n]]))
 		}	
 		
@@ -1261,7 +1014,7 @@ setGeneric(name = "compute_rdu_value_for_gamble",
 
 setMethod(f = "compute_rdu_value_for_gamble",
 	signature = "Gamble",
-	definition = function(object, probability_weighting_specification, utility_family, digits)
+	definition = function(object, prob_weight, utility_family, digits)
 	{
 
 		#order gambles from highest to lowest, i.e. perform a complete sign-ranking.
@@ -1274,7 +1027,7 @@ setMethod(f = "compute_rdu_value_for_gamble",
 		
 		# for all ranks, calculate the w of each rank
 		
-		object <- compute_ws(object, probability_weighting_specification)
+		object <- compute_ws(object, prob_weight)
 		
 		# calculate decision weights of each outcome
 	
@@ -1288,22 +1041,18 @@ setMethod(f = "compute_rdu_value_for_gamble",
 		
 		rdu_df <- compute_rdu_value(object)
 		rdu_value <- rdu_df[nrow(rdu_df), ncol(rdu_df)]
-		set_rdu_value(object) <- rdu_value
 		
 		# compute expected value
 		
 		expected_value <- compute_expected_value(object)
-		set_expected_value(object) <- expected_value
 		
 		# compute certainty equivalent
 		
 		certainty_equivalent <- compute_certainty_equivalent(utility_family, rdu_value)
-		set_certainty_equivalent(object) <- certainty_equivalent
 		
 		# compute risk premium
 		
 		risk_premium <- compute_risk_premium(object, expected_value, certainty_equivalent)
-		set_risk_premium(object) <- risk_premium
 
 		summary_df <- data.frame(get_gamble_id(object), 
 			format(expected_value, digits=digits, scientific=FALSE), 
@@ -1311,7 +1060,7 @@ setMethod(f = "compute_rdu_value_for_gamble",
 			format(certainty_equivalent, digits=digits, scientific=FALSE), 
 			format(risk_premium, digits=digits, scientific=FALSE),
 			row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "rdu", "rduce", "rdurp")
+		colnames(summary_df) <- c("gid", "ev", "rdu", "ce", "rp")
 		summary_df
 		
 		df_list <- list("calculations"=rdu_df, "summary"=summary_df)
@@ -1343,23 +1092,19 @@ setMethod(f = "compute_expected_utility_for_gamble",
 		
 		#Determine the utility of each outcome value (apply the value function)
 		object <- apply_value_function(object, utility_family)		
-		expected_utility <- sum(sapply(object@outcomes, get_subjective_value) * sapply(object@outcomes, get_probability))
-		set_expected_utility(object) <- expected_utility		
+		expected_utility <- sum(sapply(object@outcomes, get_subjective_value) * sapply(object@outcomes, get_probability))	
 		
 		# compute expected value
 		
 		expected_value <- compute_expected_value(object)
-		set_expected_value(object) <- expected_value
 		
 		# compute certainty equivalent
 		
-		certainty_equivalent <- compute_certainty_equivalent(utility_family, expected_utility)
-		set_certainty_equivalent(object) <- certainty_equivalent	
+		certainty_equivalent <- compute_certainty_equivalent(utility_family, expected_utility)	
 
 		# compute risk premium
 		
 		risk_premium <- compute_risk_premium(object, expected_value, certainty_equivalent)
-		set_risk_premium(object) <- risk_premium
 		
 		df <- data.frame(get_gamble_id(object), 
 			format(expected_value, digits = digits, scientific = FALSE),
@@ -1391,23 +1136,23 @@ setGeneric(name = "compute_swu",
 
 setMethod(f = "compute_swu",
 	signature = "Gamble",
-	definition = function(object,  probability_weighting_specification, utility, digits)
+	definition = function(object,  prob_weight, utility, digits)
 	{
 
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL
+		probabilitys <- NULL
+		objective_consequences <- NULL
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}	
 		
 		swu <- 0
-		for (n in 1:length(objective_consequence_vector))
+		for (n in 1:length(objective_consequences))
 		{
-			w <- compute_probability_weighting(probability_weighting_specification, probability_vector[n])
-			u <- compute_utility(utility, objective_consequence_vector[n])
+			w <- compute_prob_weight(prob_weight, probabilitys[n])
+			u <- compute_utility(utility, objective_consequences[n])
 			
 			swu <- swu + w * u
 		}			
@@ -1429,7 +1174,7 @@ setMethod(f = "compute_swu",
 			format(certainty_equivalent, digits=digits, scientific=FALSE),	
 			format(risk_premium, digits=digits, scientific=FALSE),	
 			row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "swu", "swuce", "swurp")
+		colnames(summary_df) <- c("gid", "ev", "swu", "ce", "rp")
 
 		return (summary_df)
 	}
@@ -1454,34 +1199,34 @@ setGeneric(name = "compute_swau",
 
 setMethod(f = "compute_swau",
 	signature = "Gamble",
-	definition = function(object,  probability_weighting_specification, utility, digits)
+	definition = function(object,  prob_weight, utility, digits)
 	{
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL
+		probabilitys <- NULL
+		objective_consequences <- NULL
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}	
 		
 
 		
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL
+		probabilitys <- NULL
+		objective_consequences <- NULL
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}	
 		
 		numerator <- 0
 		sum_w <- 0
-		for (n in 1:length(objective_consequence_vector))
+		for (n in 1:length(objective_consequences))
 		{
-			w <- compute_probability_weighting(probability_weighting_specification, probability_vector[n])
-			u <- compute_utility(utility, objective_consequence_vector[n])
+			w <- compute_prob_weight(prob_weight, probabilitys[n])
+			u <- compute_utility(utility, objective_consequences[n])
 			
 			numerator <- numerator + w * u
 			sum_w <- sum_w + w
@@ -1506,7 +1251,7 @@ setMethod(f = "compute_swau",
 			format(certainty_equivalent, digits=digits, scientific=FALSE),	
 			format(risk_premium, digits=digits, scientific=FALSE),	
 			row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "swau", "swauce", "swaurp")
+		colnames(summary_df) <- c("gid", "ev", "swau", "ce", "rp")
 
 		return (summary_df)
 	}
@@ -1529,88 +1274,88 @@ setGeneric(name = "compute_gdu",
 
 setMethod(f = "compute_gdu",
 	signature = "Gamble",
-	definition = function(object, probability_weighting_specification, utility, digits)
+	definition = function(object, prob_weight, utility, digits)
 	{
 
 		
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL		
+		probabilitys <- NULL
+		objective_consequences <- NULL		
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}		
 		
-		df <- data.frame(objective_consequence_vector, probability_vector)
+		df <- data.frame(objective_consequences, probabilitys)
 		df
-		df <- df[order(df$objective_consequence_vector, df$probability_vector), ]
+		df <- df[order(df$objective_consequences, df$probabilitys), ]
 		df
 		dim(df)
 		# reverse the order of the rows
 		df <- df[dim(df)[1]:1, ]
 
 		
-		objective_consequence_vector <- df$objective_consequence_vector
-		objective_consequence_vector
-		probability_vector <- df$probability_vector
-		probability_vector		
+		objective_consequences <- df$objective_consequences
+		objective_consequences
+		probabilitys <- df$probabilitys
+		probabilitys		
 		
 
-		# sum all probabilities from highest to second lowest and feed into compute_probability_weighting
+		# sum all probabilities from highest to second lowest and feed into compute_prob_weight
 
-		if (length(objective_consequence_vector) == 1)
+		if (length(objective_consequences) == 1)
 		{
-			u_x <- compute_utility(utility, objective_consequence_vector[1])			
+			u_x <- compute_utility(utility, objective_consequences[1])			
 			
 
 			gdu <- u_x
 		}
-		else if (length(objective_consequence_vector) == 2)
+		else if (length(objective_consequences) == 2)
 		{
-			w_x <- compute_probability_weighting(probability_weighting_specification, probability_vector[1])
-			u_x <- compute_utility(utility, objective_consequence_vector[1])
-			u_y <- compute_utility(utility, objective_consequence_vector[2])
+			w_x <- compute_prob_weight(prob_weight, probabilitys[1])
+			u_x <- compute_utility(utility, objective_consequences[1])
+			u_y <- compute_utility(utility, objective_consequences[2])
 			
 			gdu <- w_x * u_x + (1.0 - w_x) * u_y
 		}
-		else if (length(objective_consequence_vector) == 3)
+		else if (length(objective_consequences) == 3)
 		{
 	
-			u_z <- compute_utility(utility, objective_consequence_vector[3])
-			x <- objective_consequence_vector[1]
-			p <- probability_vector[1]			
-			y <- objective_consequence_vector[2]
-			q <- probability_vector[2]
+			u_z <- compute_utility(utility, objective_consequences[3])
+			x <- objective_consequences[1]
+			p <- probabilitys[1]			
+			y <- objective_consequences[2]
+			q <- probabilitys[2]
 
-			w_x <- compute_probability_weighting(probability_weighting_specification, p/(p+q))
-			u_x <- compute_utility(utility, objective_consequence_vector[1])
-			u_y <- compute_utility(utility, objective_consequence_vector[2])		
+			w_x <- compute_prob_weight(prob_weight, p/(p+q))
+			u_x <- compute_utility(utility, objective_consequences[1])
+			u_y <- compute_utility(utility, objective_consequences[2])		
 			
 			two_outcome_result <- w_x * u_x + (1.0 - w_x) * u_y
 			
-			w_p_q <- compute_probability_weighting(probability_weighting_specification, p+q)
+			w_p_q <- compute_prob_weight(prob_weight, p+q)
 			
 			gdu <- w_p_q * two_outcome_result + (1.0 - w_p_q) * u_z
 		
 		}
-		else if (length(objective_consequence_vector) == 4)
+		else if (length(objective_consequences) == 4)
 		{
-			u_A <- compute_utility(utility, objective_consequence_vector[4])
-			x <- objective_consequence_vector[1]
-			p <- probability_vector[1]			
-			y <- objective_consequence_vector[2]
-			q <- probability_vector[2]
-			z <- objective_consequence_vector[3]
-			r <- probability_vector[3]
+			u_A <- compute_utility(utility, objective_consequences[4])
+			x <- objective_consequences[1]
+			p <- probabilitys[1]			
+			y <- objective_consequences[2]
+			q <- probabilitys[2]
+			z <- objective_consequences[3]
+			r <- probabilitys[3]
 			
-			w_x_y <- compute_probability_weighting(probability_weighting_specification, (p+q)/(p+q+r))
-			u_x_y <- compute_utility(utility, objective_consequence_vector[1] + objective_consequence_vector[2])	
-			u_z <- compute_utility(utility, objective_consequence_vector[3])	
+			w_x_y <- compute_prob_weight(prob_weight, (p+q)/(p+q+r))
+			u_x_y <- compute_utility(utility, objective_consequences[1] + objective_consequences[2])	
+			u_z <- compute_utility(utility, objective_consequences[3])	
 			
 			two_outcome_result <- w_x_y * u_x_y + (1.0 - w_x_y) * u_z
 			
-			w_p_q_r <- compute_probability_weighting(probability_weighting_specification, p+q+r)
+			w_p_q_r <- compute_prob_weight(prob_weight, p+q+r)
 			
 			gdu <- w_p_q_r * two_outcome_result + (1.0 - w_p_q_r) * u_A
 		}
@@ -1618,28 +1363,28 @@ setMethod(f = "compute_gdu",
 		{
 			
 			
-			u_A <- compute_utility(utility, objective_consequence_vector[length(objective_consequence_vector)])
-			x <- objective_consequence_vector[1]
-			p <- probability_vector[1]			
-			y <- objective_consequence_vector[2]
-			q <- probability_vector[2]
-			z <- objective_consequence_vector[3]
-			r <- probability_vector[3]
+			u_A <- compute_utility(utility, objective_consequences[length(objective_consequences)])
+			x <- objective_consequences[1]
+			p <- probabilitys[1]			
+			y <- objective_consequences[2]
+			q <- probabilitys[2]
+			z <- objective_consequences[3]
+			r <- probabilitys[3]
 			
-			numerator <- sum(probability_vector[1:(length(probability_vector)-2)])
-			denominator <- sum(probability_vector[1:(length(probability_vector)-1)])
+			numerator <- sum(probabilitys[1:(length(probabilitys)-2)])
+			denominator <- sum(probabilitys[1:(length(probabilitys)-1)])
 			ratio <- numerator/denominator
 			
-			x_y <- sum(probability_vector[1:(length(objective_consequence_vector)-2)])
+			x_y <- sum(probabilitys[1:(length(objective_consequences)-2)])
 			
-			w_x_y <- compute_probability_weighting(probability_weighting_specification, ratio)
+			w_x_y <- compute_prob_weight(prob_weight, ratio)
 			u_x_y <- compute_utility(utility, x_y)	
-			u_z <- compute_utility(utility, objective_consequence_vector[length(objective_consequence_vector)-2])	
+			u_z <- compute_utility(utility, objective_consequences[length(objective_consequences)-2])	
 			
 			two_outcome_result <- w_x_y * u_x_y + (1.0 - w_x_y) * u_z
 			
-			w_p_q_r <- compute_probability_weighting(probability_weighting_specification,
-				sum(probability_vector[1:(length(probability_vector)-1)]))
+			w_p_q_r <- compute_prob_weight(prob_weight,
+				sum(probabilitys[1:(length(probabilitys)-1)]))
 			
 			gdu <- w_p_q_r * two_outcome_result + (1.0 - w_p_q_r) * u_A			
 	
@@ -1661,7 +1406,7 @@ setMethod(f = "compute_gdu",
 			format(certainty_equivalent, digits=digits, scientific=FALSE),	
 			format(risk_premium, digits=digits, scientific=FALSE),	
 			row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "gdu", "gduce", "gdurp")
+		colnames(summary_df) <- c("gid", "ev", "gdu", "ce", "rp")
 
 		return (summary_df)
 	}
@@ -1687,77 +1432,77 @@ setGeneric(name = "compute_ram_model",
 
 setMethod(f = "compute_ram_model",
 	signature = "Gamble",
-	definition = function(object, branch_weighting_vector, probability_weighting_specification, utility, digits)
+	definition = function(object, branch_weights, prob_weight, utility, digits)
 	{
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL		
+		probabilitys <- NULL
+		objective_consequences <- NULL		
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}		
 		
 		# sort outcomes from lowest to highest (rank order, including probabilities)
-		# also need to keep branch_weighting_vector sorted in alignment as well
+		# also need to keep branch_weights sorted in alignment as well
 
 
-		df <- data.frame(objective_consequence_vector, probability_vector)
+		df <- data.frame(objective_consequences, probabilitys)
 		df
-		df <- df[order(objective_consequence_vector, probability_vector), ]
+		df <- df[order(objective_consequences, probabilitys), ]
 		df
-		df$branch_weighting_vector <- rev(branch_weighting_vector)
+		df$branch_weights <- rev(branch_weights)
 		df
 		
-		objective_consequence_vector <- df$objective_consequence_vector
-		probability_vector <- df$probability_vector
-		branch_weighting_vector <- df$branch_weighting_vector
+		objective_consequences <- df$objective_consequences
+		probabilitys <- df$probabilitys
+		branch_weights <- df$branch_weights
 		
 		##############
-		# test if all elements in objective_consequence_vector are negative
+		# test if all elements in objective_consequences are negative
 		# if so, take absolute values and use reflection (Birnbaum, 2008, p470)
-		negative_vector_flag <- TRUE
+		negatives_flag <- TRUE
 		
-		for (index in 1:length(objective_consequence_vector))
+		for (index in 1:length(objective_consequences))
 		{
-			if (objective_consequence_vector[index] > 0)
+			if (objective_consequences[index] > 0)
 			{
-				negative_vector_flag <- FALSE
+				negatives_flag <- FALSE
 				break
 			}
 		}
 		
-		if (negative_vector_flag == TRUE)
+		if (negatives_flag == TRUE)
 		{
-			objective_consequence_vector <- sapply(objective_consequence_vector, function(x) abs(x))
-			objective_consequence_vector <- rev(objective_consequence_vector)
-			probability_vector <- rev(probability_vector)
+			objective_consequences <- sapply(objective_consequences, function(x) abs(x))
+			objective_consequences <- rev(objective_consequences)
+			probabilitys <- rev(probabilitys)
 		}
 		##############		
 		
 
 		t <- c()
-		for (i in 1:length(probability_vector))
+		for (i in 1:length(probabilitys))
 		{
-			t <- append(t, compute_probability_weighting(probability_weighting_specification, probability_vector[i]))
+			t <- append(t, compute_prob_weight(prob_weight, probabilitys[i]))
 			
 		}		
 		
 
 		u <- c()
-		for (i in 1:length(objective_consequence_vector))
+		for (i in 1:length(objective_consequences))
 		{
-			u <- append(u, compute_utility(utility, objective_consequence_vector[i]))		
+			u <- append(u, compute_utility(utility, objective_consequences[i]))		
 		}		
 		
 		# utility
-		ramu <- sum(branch_weighting_vector * t * u) / sum(branch_weighting_vector * t)
+		ramu <- sum(branch_weights * t * u) / sum(branch_weights * t)
 
 
 		##############
-		# test if all elements in objective_consequence_vector are negative
+		# test if all elements in objective_consequences are negative
 		# if so, take absolute values and use reflection (Birnbaum, 2008, p470)		
-		if (negative_vector_flag == TRUE)
+		if (negatives_flag == TRUE)
 		{
 			ramu <- -ramu
 		}
@@ -1778,7 +1523,7 @@ setMethod(f = "compute_ram_model",
 			format(certainty_equivalent, digits=digits, scientific=FALSE),	
 			format(risk_premium, digits=digits, scientific=FALSE),				
 				row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "ram", "ramce", "ramrp")
+		colnames(summary_df) <- c("gid", "ev", "ram", "ce", "rp")
 
 		return (summary_df)	
 	}
@@ -1802,82 +1547,82 @@ setGeneric(name = "compute_tax_model",
 
 setMethod(f = "compute_tax_model",
 	signature = "Gamble",
-	definition = function(object, probability_weighting_specification, utility, delta, digits)
+	definition = function(object, prob_weight, utility, delta, digits)
 	{
 	
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL		
+		probabilitys <- NULL
+		objective_consequences <- NULL		
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}		
 		
 		# sort outcomes from lowest to highest (rank order, including probabilities)
 
-		df <- data.frame(objective_consequence_vector, probability_vector)
+		df <- data.frame(objective_consequences, probabilitys)
 		df
-		df <- df[order(objective_consequence_vector, probability_vector), ]
+		df <- df[order(objective_consequences, probabilitys), ]
 		df
 		
-		objective_consequence_vector <- df$objective_consequence_vector
-		probability_vector <- df$probability_vector
+		objective_consequences <- df$objective_consequences
+		probabilitys <- df$probabilitys
 		
 		##############
-		# test if all elements in objective_consequence_vector are negative
+		# test if all elements in objective_consequences are negative
 		# if so, take absolute values and use reflection (Birnbaum, 2008, p471)
-		negative_vector_flag <- TRUE
+		negatives_flag <- TRUE
 		
-		for (index in 1:length(objective_consequence_vector))
+		for (index in 1:length(objective_consequences))
 		{
-			if (objective_consequence_vector[index] > 0)
+			if (objective_consequences[index] > 0)
 			{
-				negative_vector_flag <- FALSE
+				negatives_flag <- FALSE
 				break
 			}
 		}
 		
-		if (negative_vector_flag == TRUE)
+		if (negatives_flag == TRUE)
 		{
-			objective_consequence_vector <- sapply(objective_consequence_vector, function(x) abs(x))
-			objective_consequence_vector <- rev(objective_consequence_vector)
-			probability_vector <- rev(probability_vector)
+			objective_consequences <- sapply(objective_consequences, function(x) abs(x))
+			objective_consequences <- rev(objective_consequences)
+			probabilitys <- rev(probabilitys)
 		}
 		##############
 		
 		# t represents how a branch weight depends on its probability
 
 		t <- c()
-		for (i in 1:length(probability_vector))
+		for (i in 1:length(probabilitys))
 		{
-			t <- append(t, compute_probability_weighting(probability_weighting_specification, probability_vector[i]))
+			t <- append(t, compute_prob_weight(prob_weight, probabilitys[i]))
 			
 		}	
 		
 
 		u <- c()
-		for (i in 1:length(objective_consequence_vector))
+		for (i in 1:length(objective_consequences))
 		{
-			u <- append(u, compute_utility(utility, objective_consequence_vector[i]))		
+			u <- append(u, compute_utility(utility, objective_consequences[i]))		
 		}		
 		
 		numerator1 <- sum(t * u)
 		
 		numerator2 <- 0
-		if (length(objective_consequence_vector) > 1)
+		if (length(objective_consequences) > 1)
 		{
-			for (i in 2:(length(objective_consequence_vector)))
+			for (i in 2:(length(objective_consequences)))
 			{                        
 				for (j in 1:(i-1))
 				{
 					if (delta < 0)
 					{
-						omega <- (delta * t[i])/(length(objective_consequence_vector) + 1)
+						omega <- (delta * t[i])/(length(objective_consequences) + 1)
 					}
 					else if (delta >= 0)
 					{
-						omega <- (delta * t[j])/(length(objective_consequence_vector) + 1)				
+						omega <- (delta * t[j])/(length(objective_consequences) + 1)				
 					}
 					numerator2 <- numerator2 + (u[i] - u[j]) * omega
 				}
@@ -1891,9 +1636,9 @@ setMethod(f = "compute_tax_model",
 
 		
 		##############
-		# test if all elements in objective_consequence_vector are negative
+		# test if all elements in objective_consequences are negative
 		# if so, take absolute values and use reflection (Birnbaum, 2008, p471)		
-		if (negative_vector_flag == TRUE)
+		if (negatives_flag == TRUE)
 		{
 			taxu <- -taxu
 		}
@@ -1915,7 +1660,7 @@ setMethod(f = "compute_tax_model",
 			format(certainty_equivalent, digits=digits, scientific=FALSE), 
 			format(risk_premium, digits=digits, scientific=FALSE), 
 			row.names=NULL, stringsAsFactors=FALSE)
-		colnames(summary_df) <- c("gid", "ev", "tax", "taxce", "taxrp")
+		colnames(summary_df) <- c("gid", "ev", "tax", "ce", "rp")
 
 		return (summary_df)
 	}
@@ -1943,24 +1688,24 @@ setMethod(f = "compute_prt",
 	definition = function(object, utility, gamma, digits)
 	{
 		# extract 2 vectors from the gamble outcomes
-		probability_vector <- NULL
-		objective_consequence_vector <- NULL
+		probabilitys <- NULL
+		objective_consequences <- NULL
 		
 		for (n in 1:length(object@outcomes))
 		{
-			objective_consequence_vector <- c(objective_consequence_vector, get_objective_consequence(object@outcomes[[n]]))
-			probability_vector <- c(probability_vector, get_probability(object@outcomes[[n]]))
+			objective_consequences <- c(objective_consequences, get_objective_consequence(object@outcomes[[n]]))
+			probabilitys <- c(probabilitys, get_probability(object@outcomes[[n]]))
 		}				
 		
 		# utility power function	
 		u <- c()
-		for (i in 1:length(objective_consequence_vector))
+		for (i in 1:length(objective_consequences))
 		{
-			u <- append(u, compute_utility(utility, objective_consequence_vector[i]))		
+			u <- append(u, compute_utility(utility, objective_consequences[i]))		
 		}		
 		
 		
-		term1 <- gamma * sum(probability_vector * u)
+		term1 <- gamma * sum(probabilitys * u)
 		
 		term2 <- (1.0 - gamma) * sum(u) / length(u)
 		
@@ -1983,7 +1728,7 @@ setMethod(f = "compute_prt",
 			format(certainty_equivalent, digits=digits, scientific=FALSE), 
 			format(risk_premium, digits=digits, scientific=FALSE), 
 			row.names=NULL, stringsAsFactors=FALSE)				
-		colnames(summary_df) <- c("gid", "ev", "prtu", "prtuce", "prturp")
+		colnames(summary_df) <- c("gid", "ev", "prtu", "ce", "rp")
 
 		return (summary_df)
 	}

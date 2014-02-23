@@ -1,21 +1,62 @@
 \name{Utility}
 \alias{Utility}
-\alias{Utility-class}
-\title{The Utility class}
+\title{Create an instance of a Utility class.}
+\usage{
+Utility(fun, par)
+}
+\arguments{
+  \item{fun}{text, a string selecting the utility function}
+
+  \item{par}{vector, parameters for the utility function}
+}
 \description{
-  The Utility class
+This function creates an instance of a Utility class.
 }
-\note{
-  Utility stores both the functional form and parameter
-  specification for a utility function.
+\details{
+This function creates an instance of a Utility class
+object. Two arguments need to be provided to create this
+object. The first argument is a text string that defines
+the functional form of a utility function stored by the
+Utility class object. The second argument is a vector of
+parameters needed for the selected utility function.
+
+The following functional forms are currently implemented:
+
+linear (requires 1 parameter)
+
+exponential (requires 2 parameters)
+
+power (requires 3 parameters)
+
+general_power (requires 3 parameters)
+
+general_linear (requires 2 parameters)
 }
-\section{Slots}{
-  \describe{ \item{\code{utility_function}:}{Object of
-  class \code{"text"}, containing a text string that
-  specifies the functional form of the utility function.}
-  \item{\code{parameters}:}{Object of class
-  \code{"vector"}, containing numeric values for the
-  parameter specifications associated with the utility
-  function.} }
+\examples{
+# This example creates the power utility function with parameters
+# used in the Tversky & Kahneman (1992) paper.
+
+tk_1992_utility <- Utility(fun="power",
+	par=c(alpha=0.88, beta=0.88, lambda=2.25))
+
+# This example creates a linear utility function.
+
+my_linear_utility <- Utility(fun="linear",
+	par=c(lambda=1))
+}
+\references{
+Tversky, A., & Kahneman, D. (1992). Advances in prospect
+theory: Cumulative representation of uncertainty. Journal
+of Risk and Uncertainty, 5(4), 297-323.
+
+Wakker, P. P. (2010). Prospect theory: For risk and
+ambiguity. Cambridge, UK: Cambridge University Press.
+
+Stott, H. P. (2006). Cumulative prospect theory's
+functional menagerie. Journal of Risk and Uncertainty,
+32(2), 101-130.
+
+Birnbaum, M. H. (2008). New paradoxes of risky decision
+making. Psychological Review, 115(2), 463-501.
 }
 
