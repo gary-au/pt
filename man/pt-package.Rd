@@ -63,8 +63,11 @@ unit probability simplex)
 {\code{\link{plotProbW}}} (draws a single probability
 weighting function)
 
-{\code{\link{plotProbWFam}}} (draws families of probability
-weighting functions)
+{\code{\link{plotOneParProbWFam}}} (draws families of one
+parameter probability weighting functions)
+
+{\code{\link{plotTwoParProbWFam}}} (draws families of two
+parameter probability weighting functions)
 
 {\code{\link{plotRP}}} (draws the risk premium)
 

@@ -5,7 +5,7 @@
 plotProbW(my_title, my_title_colour, my_title_font_size, my_x_label, my_y_label,
   pwf, par, draw_reference_line_flag, reference_line_colour,
   reference_line_style, my_labels, my_label_positions, font_scaling,
-  arrow_positions, window_width, window_height)
+  arrow_positions)
 }
 \arguments{
   \item{my_title}{text, the title}
@@ -39,10 +39,6 @@ plotProbW(my_title, my_title_colour, my_title_font_size, my_x_label, my_y_label,
 
   \item{arrow_positions}{vector, the positions of arrow
   lines}
-
-  \item{window_width}{numeric, the window_width}
-
-  \item{window_height}{numeric, the window_height}
 }
 \description{
 Plot a probability weighting function using base graphics.
@@ -58,7 +54,6 @@ plotProbW(my_title=expression(paste("Kahneman & Tversky (1992), ",
 	my_labels=c(expression(paste(w(italic(p)) == frac(italic(p)^c,
 	(italic(p)^c + (1-italic(p))^c)^(1/c))))),
 	my_label_positions=list(c(0.4,0.8)),
-	font_scaling=1.0,
-	window_width=7, window_height=7)
+	font_scaling=1.0)
 }
 

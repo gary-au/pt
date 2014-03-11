@@ -12,7 +12,7 @@
 #' @section Slots:
 #'  \describe{
 #'    \item{\code{fun}:}{Object of class \code{"text"}, containing a text string that specifies the functional form of the probability weighting function.}
-#'    \item{\code{par}:}{Object of class \code{"vector"}, containing numeric values for the parameter specifications associated with the probability weighting function.}
+#'    \item{\code{par}:}{Object of class \code{"vector"}, containing the parameter specifications for the probability weighting function.}
 #'  }
 #'
 #' @note A function (also called ProbWeight) has been defined to create an instance of this class.
@@ -32,7 +32,10 @@ setClass(
 	validity = function(object)
 	{
 		# run the ProbWeight inspector
-		if (get_probability_function(object) == "Tversky_Kahneman_1992")
+		if (get_probability_function(object) == "linear")
+		{
+		}		
+		else if (get_probability_function(object) == "Tversky_Kahneman_1992")
 		{
 			if (get_number_of_parameters(object) != 1)
 			{
@@ -42,15 +45,15 @@ setClass(
 			{
 				stop(paste(get_probability_function(object), " weighting function requires 1 parameter >= 0.28 as the function is not strictly increasing for smaller values.\n", sep = ""))				
 			}
-		}	
-		else if (get_probability_function(object) == "compound_invariance")
+		}
+		else if (get_probability_function(object) == "linear_in_log_odds")
 		{
 			if (get_number_of_parameters(object) != 2)
 			{
 				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
-			}				
+			}
 		}
-		else if (get_probability_function(object) == "linear_in_log_odds")
+		else if (get_probability_function(object) == "power")
 		{
 			if (get_number_of_parameters(object) != 2)
 			{
@@ -65,27 +68,13 @@ setClass(
 			}
 			else
 			{
-				a <- object@par[1]
-				b <- object@par[2]
+				alpha <- object@par[1]
+				beta <- object@par[2]
 				
-				if ((a < 0) | (b < 0) | ((a + b) > 1))
+				if ((alpha < 0) | (beta < 0) | ((alpha + beta) > 1))
 				{
-					stop(paste("a >= 0, b >= 0, a + b <= 1.\n", sep = ""))					
+					stop(paste("neo additive pwf requires: alpha >= 0, beta >= 0, alpha + beta <= 1.\n", sep = ""))					
 				}
-			}
-		}
-		else if (get_probability_function(object) == "exponential_power")
-		{
-			if (get_number_of_parameters(object) != 2)
-			{
-				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
-			}
-		}		
-		else if (get_probability_function(object) == "power")
-		{
-			if (get_number_of_parameters(object) != 2)
-			{
-				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
 			}
 		}
 		else if (get_probability_function(object) == "hyperbolic_logarithm")
@@ -94,15 +83,66 @@ setClass(
 			{
 				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
 			}
-		}			
-		else if (get_probability_function(object) == "linear")
+			else
+			{
+				alpha <- object@par[1]
+				beta <- object@par[2]
+				
+				if ((alpha < 0) | (beta < 0))
+				{
+					stop(paste("hyperbolic logarithm pwf requires: alpha > 0, beta > 0.", sep = ""))					
+				}
+			}			
+		}
+		else if (get_probability_function(object) == "exponential_power")
 		{
-		}	
+			if (get_number_of_parameters(object) != 2)
+			{
+				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
+			}
+			else
+			{
+				alpha <- object@par[1]
+				beta <- object@par[2]
+				
+				if ((alpha == 0) | (beta < 0))
+				{
+					stop(paste("exponential power pwf requires: alpha != 0, beta > 0.", sep = ""))					
+				}
+			}
+		}
+		else if (get_probability_function(object) == "compound_invariance")
+		{
+			if (get_number_of_parameters(object) != 2)
+			{
+				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
+			}
+			else
+			{
+				alpha <- object@par[1]
+				beta <- object@par[2]
+				
+				if ((alpha < 0) | (beta < 0))
+				{
+					stop(paste("compound invariance pwf requires: alpha > 0, beta > 0.", sep = ""))					
+				}
+			}
+		}
 		else if (get_probability_function(object) == "constant_relative_sensitivity")
 		{
 			if (get_number_of_parameters(object) != 2)
 			{
 				stop(paste(get_probability_function(object), " weighting function requires 2 parameters.\n", sep = ""))
+			}
+			else
+			{
+				alpha <- object@par[1]
+				beta <- object@par[2]
+				
+				if ((alpha < 0) | (beta < 0) | (beta > 1))
+				{
+					stop(paste("compound invariance pwf requires: alpha > 0, 0 <= beta <= 1.", sep = ""))					
+				}
 			}
 		}	
 		else
@@ -124,28 +164,29 @@ setClass(
 #' @details This function creates an instance of a ProbWeight class.
 #' The following functional forms are currently implemented:
 #' 
+#' linear
+#'
 #' Tversky_Kahneman_1992 (requires 1 parameter > 0.28)
 #' 
-#' compound_invariance (requires 2 parameters)
-#' 
 #' linear_in_log_odds (requires 2 parameters)
+#'
+#' power (requires 2 parameters)
 #' 
 #' neo_additive (requires 2 parameters)
 #' 
-#' exponential_power (requires 2 parameters)
-#' 
-#' power (requires 2 parameters)
-#' 
 #' hyperbolic_logarithm (requires 2 parameters)
 #' 
-#' linear
+#' exponential_power (requires 2 parameters)
+#' 
+#' compound_invariance (requires 2 parameters)
 #' 
 #' constant_relative_sensitivity (requires 2 parameters)
 #' 
 #' @usage ProbWeight(fun, par)
 #' @param fun text, the probability function string
-#' @param par vector, a vector of parameters for the probability function
+#' @param par vector, parameters for the probability function
 #' @references
+#' 
 #' Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and Uncertainty, 5(4), 297-323.
 #' 
 #' Prelec, D. (1998). The probability weighting function. Econometrica, 60(3), 497-528.
@@ -244,49 +285,41 @@ setMethod(f = "compute_prob_weight",
 	definition = function(object, probability)
 	{
 		
-		if (get_probability_function(object) == "Tversky_Kahneman_1992")
+		if (get_probability_function(object) == "linear")
 		{
-
-			weight <- kt_pwf(par=object@par, probability)
+			weight <- linear_pwf(p=probability)
 		}
-		else if (get_probability_function(object) == "compound_invariance")
+		else if (get_probability_function(object) == "Tversky_Kahneman_1992")
 		{
-
-			weight <- compound_invariance_pwf(par=object@par, probability)
-		}		
+			weight <- kt_pwf(par=object@par, p=probability)
+		}
 		else if (get_probability_function(object) == "linear_in_log_odds")
 		{
-
-			weight <- linear_in_log_odds_pwf(par=object@par, x=probability)
-		}		
-		else if (get_probability_function(object) == "neo_additive")
-		{	
-			weight <- neo_additive_pwf(par=object@par, x=probability)				
-		}
-		else if (get_probability_function(object) == "exponential_power")
-		{
-
-			weight <- exponential_power_pwf(par=object@par, x=probability)			
+			weight <- linear_in_log_odds_pwf(par=object@par, p=probability)
 		}
 		else if (get_probability_function(object) == "power")
 		{
-
-			weight <- power_pwf(par=object@par, x=probability)			
+			weight <- power_pwf(par=object@par, p=probability)			
+		}				
+		else if (get_probability_function(object) == "neo_additive")
+		{	
+			weight <- neo_additive_pwf(par=object@par, p=probability)				
+		}
+		else if (get_probability_function(object) == "exponential_power")
+		{
+			weight <- exponential_power_pwf(par=object@par, p=probability)			
 		}		
 		else if (get_probability_function(object) == "hyperbolic_logarithm")
 		{
-
-			weight <- hyperbolic_logarithm_pwf(par=object@par, x=probability)
-		}		
-		else if (get_probability_function(object) == "linear")
+			weight <- hyperbolic_logarithm_pwf(par=object@par, p=probability)
+		}
+		else if (get_probability_function(object) == "compound_invariance")
 		{
-
-			weight <- linear_pwf(x=probability)
+			weight <- compound_invariance_pwf(par=object@par, p=probability)
 		}
 		else if (get_probability_function(object) == "constant_relative_sensitivity")
 		{
-
-			weight <- constant_relative_sensitivity_pwf(par=object@par, x=probability)
+			weight <- constant_relative_sensitivity_pwf(par=object@par, p=probability)
 		}					
 		
 	

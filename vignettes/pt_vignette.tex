@@ -65,6 +65,7 @@
 %\VignetteIndexEntry{pt: An R package for Prospect Theory}
 %\VignetteKeywords{pt, Prospect Theory}
 %\VignettePackage{pt}
+%\VignetteEngine{knitr::knitr}
 
 \title{pt: An R package for Prospect Theory\\Version 1.0}
 
@@ -146,7 +147,7 @@ If $u(x_i) = x_i$ then the EU reduces to EV.
 
 \subsection{Subjective weighted utility (SWU)}
 
-\cite{Edwards_1954, Edwards_1962} proposed a more general form to allow for probability weightings $w(p_i)$
+\cite{Edwards_1954, Edwards_1962} proposed a more general form to allow for probability weightings $w(p_i)$ defined by
 
 \begin{equation}
 SWU(G) = \sum_{i=1}^{n} w(p_i) u(x_i),
@@ -223,7 +224,7 @@ x^\alpha, &\text{if $x \geq 0$}\\
 \label{pt_utility_function} 
 \end{equation}
 
-where $\lambda$ is the loss aversion coefficient.
+where $\lambda$ is the loss aversion coefficient (see \citet[][p. 1336]{Wakker_2008} for a review of the power utility family).
 
 \subsection{Subjectively weighted average utility (SWAU)}
 
@@ -286,28 +287,28 @@ CWACVU(G) = \frac{\displaystyle \sum\limits_{i=1}^{n} w(x_i, G) u(x_i, G)}{\disp
 \label{general_cwacvu_equation}
 \end{equation}
 
-Configural value models occur when $w(x_i, G) = w(p_i)$ in Eq. \eqref{general_cwacvu_equation}
+Configural value models occur when $w(x_i, G) = w(p_i)$ in Eq. \eqref{general_cwacvu_equation} and are given by
 
 \begin{equation}
 CVU(G) = \frac{\displaystyle \sum\limits_{i=1}^{n} w(p_i) u(x_i, G)}{\displaystyle \sum\limits_{i=1}^{n} w(p_i)}.
 \label{general_cvu_equation}
 \end{equation}
 
-The lottery-dependent utility of \cite{Becker_Sarin_1987} occurs when $w(p_i) = p_i$ in Eq. \eqref{general_cvu_equation}
+The lottery-dependent utility of \cite{Becker_Sarin_1987} occurs when $w(p_i) = p_i$ in Eq. \eqref{general_cvu_equation} and is given by
 
 \begin{equation}
 LDU(G) = \frac{\displaystyle \sum\limits_{i=1}^{n} p_i u(x_i, G)}{\displaystyle \sum\limits_{i=1}^{n} p_i}.
 \label{ldu_equation}
 \end{equation}
 
-Weighted averaging models occur when $u(x_i, G) = u(x_i)$ in Eq. \eqref{general_cwacvu_equation}
+Weighted averaging models occur when $u(x_i, G) = u(x_i)$ in Eq. \eqref{general_cwacvu_equation} and are given by
 
 \begin{equation}
 WAU(G) = \frac{\displaystyle \sum\limits_{i=1}^{n} w(x_i, G) u(x_i)}{\displaystyle \sum\limits_{i=1}^{n} w(x_i, G)}.
 \label{general_wau_equation}
 \end{equation}
 
-Differentially weighted averaging models occur when $w(x_i, G) = w(x_i, p_i)$ and $u(x_i, G) = u(x_i)$ in Eq. \eqref{general_wau_equation}
+Differentially weighted averaging models occur when $w(x_i, G) = w(x_i, p_i)$ and $u(x_i, G) = u(x_i)$ in Eq. \eqref{general_wau_equation}:
 
 \begin{equation}
 DWAU(G) = \frac{\displaystyle \sum\limits_{i=1}^{n} w(x_i, G) u(x_i)}{\displaystyle \sum\limits_{i=1}^{n} w(x_i, G)}.
@@ -389,7 +390,7 @@ Prospect theory gained widespread attention as it was the first theory to explai
 
 \subsection{Common consequence paradox}
 
-First load the {\bf pt} library. In the remainder of the paper all R code is highlighted using a blue background.
+First load the {\bf pt} library. In the remainder of the paper all R code is highlighted with a background.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -400,7 +401,7 @@ First load the {\bf pt} library. In the remainder of the paper all R code is hig
 \end{knitrout}
 
 
-Consider problems 1 and 2 from \citet[][p. 265-266]{Kahneman_Tversky_1979}, representing the common consequence paradox. This can be modelled using {\bf pt} as follows
+Consider problems 1 and 2 from \citet[][p. 265-266]{Kahneman_Tversky_1979}, representing the common consequence paradox. This can be modelled using {\bf pt} as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -431,7 +432,7 @@ Consider problems 1 and 2 from \citet[][p. 265-266]{Kahneman_Tversky_1979}, repr
 ## 8   2   2   2 0.66    0
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.05}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.025}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.1}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -451,15 +452,12 @@ Consider problems 1 and 2 from \citet[][p. 265-266]{Kahneman_Tversky_1979}, repr
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
 In a group of $72$ subjects, $82\%$ preferred $B > A$ and $83\%$ preferred $C > D$, with $61\%$ of the individuals
-making the majority (modal) choices across both conditions. Compare the EV for each gamble in the two choices
+making the majority (modal) choices across both conditions. Compare the EV for each gamble in the two choices.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -477,7 +475,7 @@ making the majority (modal) choices across both conditions. Compare the EV for e
 \end{knitrout}
 
 
-Here {\tt cid} represents the choice id ({\tt cid} 1 represents the upper decision tree and {\tt cid} 2 represents the lower decision tree), {\tt gid} is the gamble id (in the upper decision tree {\tt gid} 1 represents gamble A and {\tt gid} 2 represents gamble B, while in the lower decision tree {\tt gid} 1 represents gamble C and {\tt gid} 2 represents gamble D), and {\tt ev} is the expected value of each gamble. Gambles $A$ and $C$ have the highest EV, but empirically people are preferring the certainty of $B$ to the uncertainty of $A$ (the certainty effect). Compute the EU using a hypothetical concave utility function
+Here {\tt cid} represents the choice id ({\tt cid} 1 represents the upper decision tree and {\tt cid} 2 represents the lower decision tree), {\tt gid} is the gamble id (in the upper decision tree {\tt gid} 1 represents gamble A and {\tt gid} 2 represents gamble B, while in the lower decision tree {\tt gid} 1 represents gamble C and {\tt gid} 2 represents gamble D), and {\tt ev} is the expected value of each gamble. Gambles $A$ and $C$ have the highest EV, but empirically people are preferring the certainty of $B$ to the uncertainty of $A$ (the certainty effect). Compute the EU using a hypothetical concave utility function.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -502,7 +500,7 @@ Here {\tt eu} is the expected utility of the gamble, {\tt ce} is the certainty e
 averse decision makers have a positive risk premium, risk neutral decision makers have a
 risk premium of zero (they are indifferent to risk) and risk seeking decision makers have a negative risk
 premium. In EU risk aversion is modelled using concave utility functions, representing diminishing marginal utility. However, in other theories such as RDU, risk aversion can arise using convex utility functions and probability weightings (e.g. see \citet[][p. 52-53, 71-3, 175-176]{Wakker_2010}). With a hypothetical
-convex utility function, EU predicts the preferences $A > B$ and $C > D$
+convex utility function, EU predicts the preferences $A > B$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -521,7 +519,7 @@ convex utility function, EU predicts the preferences $A > B$ and $C > D$
 \end{knitrout}
 
 
-With a hypothetical linear utility function $u(x)=x$, EU reduces to EV
+With a hypothetical linear utility function $u(x)=x$, EU reduces to EV.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -540,7 +538,7 @@ With a hypothetical linear utility function $u(x)=x$, EU reduces to EV
 \end{knitrout}
 
 
-In choice 1 if decision makers are preferring $B > A$, this implies (applying the expected utility formula of Eq. \eqref{eu_equation})
+In choice 1 if decision makers are preferring $B > A$, this implies (applying the expected utility formula of Eq. \eqref{eu_equation}) that
 
 \begin{equation}
 \begin{split}
@@ -551,7 +549,7 @@ EU(B) &> EU(A)\\
 \end{equation}
 
 subtracting $0.66 \times u(2400)$ from both sides of the inequality.
-In choice 2 if decision makers are preferring $C > D$, this implies
+In choice 2 if decision makers are preferring $C > D$, this implies that
 
 \begin{equation}
 \begin{split}
@@ -562,7 +560,7 @@ EU(C) &> EU(D)\\
 \end{equation}
 
 subtracting $0.66 \times u(0)$ from both sides of the inequality.
-The inequalities are reversed across the two choice situations, no matter what functional form and parameterisation is used for the expected utility function $u$. Expected utility predicts that people will either choose $A > B$ and $C > D$ or choose $B > A$ and $D > C$ if the independence axiom holds. It does not predict the empirically observed pattern of choices. This pattern has been replicated in a number of studies \cite[e.g. see][]{MacCrimmon_Larsson_1979}. In contrast compute the PTU
+The inequalities are reversed across the two choice situations, no matter what functional form and parameterisation is used for the expected utility function $u$. Expected utility predicts that people will either choose $A > B$ and $C > D$ or choose $B > A$ and $D > C$ if the independence axiom holds. It does not predict the empirically observed pattern of choices. This pattern has been replicated in a number of studies \cite[e.g. see][]{MacCrimmon_Larsson_1979}. In contrast compute the PTU.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -586,15 +584,15 @@ The inequalities are reversed across the two choice situations, no matter what f
 
 
 PT predicts the preferences $B > A$ and $C > D$, in line with the empirical data.
-Given there are three objective consequences in this example $\{0, 2400, 2500\}$, they can be displayed in the probability simplex \citep*{Marschak_1950, Machina_1987} as follows
+Given there are three objective consequences in this example $\{0, 2400, 2500\}$, they can be displayed in the probability simplex \citep*{Marschak_1950, Machina_1987} as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{my_utility} \hlkwb{<-} \hlkwd{Utility}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"power"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{lambda}\hlstd{=}\hlnum{2.25}\hlstd{))}
-\hlkwd{drawSimplex}\hlstd{(}\hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{,}
-        \hlkwc{x1}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{2400}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{2500}\hlstd{,}
-        \hlkwc{line_dot_density}\hlstd{=}\hlnum{5000}\hlstd{,}
+
+\hlkwd{drawSimplex}\hlstd{(}\hlkwc{x1}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{2400}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{2500}\hlstd{,}
+        \hlkwc{line_dot_density}\hlstd{=}\hlnum{3000}\hlstd{,}
         \hlkwc{draw_ev_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ev_colour}\hlstd{=}\hlstr{"black"}\hlstd{,}
         \hlkwc{draw_pt_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{alpha}\hlstd{=}\hlnum{0.61}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.724}\hlstd{,} \hlkwc{pt_colour}\hlstd{=}\hlstr{"red"}\hlstd{,}
         \hlkwc{draw_utility_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{utility}\hlstd{=my_utility,} \hlkwc{eu_colour}\hlstd{=}\hlstr{"purple"}\hlstd{,}
@@ -627,10 +625,7 @@ Given there are three objective consequences in this example $\{0, 2400, 2500\}$
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
@@ -642,7 +637,7 @@ steep. In the second choice, decision makers lean more toward risk neutrality, o
 These paradoxes disappear when non-linear probabilities are allowed, as in theories such as PT, resulting in a ``fanning out" of the indifference curves. This means that an indifference
 curve running through $C$ can be flatter than one running through $A$.
 
-Note that PT is not unique in predicting the empirically observed results. For instance TAX also predicts this pattern of decision making (using fewer parameters and a linear utility function)
+Note that PT is not unique in predicting the empirically observed results. For instance TAX also predicts this pattern of decision making (using fewer parameters and a linear utility function).
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -664,7 +659,7 @@ Note that PT is not unique in predicting the empirically observed results. For i
 
 For illustrative purposes, the fanning out effect shows more clearly in the original formulation of the
 Allais common consequence paradox involving objective consequences of millions. Create choice problems 9.1 and 9.2 from \citet[][Table 2 p. 480]{Birnbaum_2008}
-to show the choices as follows
+to show the choices.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -695,7 +690,7 @@ to show the choices as follows
 ## 8   2   2   2  0.9       2
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.05}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.025}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.1}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -715,22 +710,19 @@ to show the choices as follows
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-Now show the simplex using the following code
+Now show the simplex.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{my_utility} \hlkwb{<-} \hlkwd{Utility}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"power"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{lambda}\hlstd{=}\hlnum{2.25}\hlstd{))}
-\hlkwd{drawSimplex}\hlstd{(}\hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{,}
-        \hlkwc{x1}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{1000000}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{2000000}\hlstd{,}
-        \hlkwc{line_dot_density}\hlstd{=}\hlnum{5000}\hlstd{,}
+
+\hlkwd{drawSimplex}\hlstd{(}\hlkwc{x1}\hlstd{=}\hlnum{2}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{1000000}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{2000000}\hlstd{,}
+        \hlkwc{line_dot_density}\hlstd{=}\hlnum{1000}\hlstd{,}
         \hlkwc{draw_ev_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ev_colour}\hlstd{=}\hlstr{"black"}\hlstd{,}
         \hlkwc{draw_pt_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{alpha}\hlstd{=}\hlnum{0.61}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.724}\hlstd{,} \hlkwc{pt_colour}\hlstd{=}\hlstr{"red"}\hlstd{,}
         \hlkwc{draw_utility_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{utility}\hlstd{=my_utility,} \hlkwc{eu_colour}\hlstd{=}\hlstr{"purple"}\hlstd{,}
@@ -762,16 +754,13 @@ Now show the simplex using the following code
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
 \subsection{Common ratio paradox}
 
-Create choices problems 3 and 4 from \citet[][p. 266]{Kahneman_Tversky_1979} to illustrate the common ratio paradox
+Create choices problems 3 and 4 from \citet[][p. 266]{Kahneman_Tversky_1979} to illustrate the common ratio paradox.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -801,7 +790,7 @@ Create choices problems 3 and 4 from \citet[][p. 266]{Kahneman_Tversky_1979} to 
 ## 7   2   2   2 0.75    0
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.05}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.025}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.1}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -821,17 +810,14 @@ Create choices problems 3 and 4 from \citet[][p. 266]{Kahneman_Tversky_1979} to 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
 In a sample of $95$ people, $80\%$ preferred $B > A$ and $65\%$ preferred $C > D$.
 EU predicts either the preferences $A > B$ and $C > D$ or the preferences $B > A$ and $D > C$.
 Following the reasoning of the previous common consequence example,
-if decision makers are preferring $B > A$, this implies (again applying the expected utility formula of Eq. \eqref{eu_equation})
+if decision makers are preferring $B > A$, this implies (again applying the expected utility formula of Eq. \eqref{eu_equation}) that
 
 \begin{equation}
 \begin{split}
@@ -842,7 +828,7 @@ EU(B) &> EU(A)\\
 \end{split}
 \end{equation}
 
-dividing both sides of the inequality by $u(4000)$ and setting $u(0) = 0$. If decision makers are preferring $C > D$, this implies
+dividing both sides of the inequality by $u(4000)$ and setting $u(0) = 0$. If decision makers are preferring $C > D$, this implies that
 
 \begin{equation}
 \begin{split}
@@ -854,7 +840,7 @@ EU(C) &> EU(D)\\
 \end{split}
 \end{equation}
 
-The inequalities are reversed across the two choice situations. Expected utility predicts that people will either choose $A > B$ and $C > D$ or choose $B > A$ and $D > C$ if the independence axiom holds. It does not predict the empirically observed pattern. {\bf pt} can be used to show the comparative theoretical predictions of all the decision making theories implemented in the package. Firstly show the EV
+The inequalities are reversed across the two choice situations. Expected utility predicts that people will either choose $A > B$ and $C > D$ or choose $B > A$ and $D > C$ if the independence axiom holds. It does not predict the empirically observed pattern. {\bf pt} can be used to show the comparative theoretical predictions of all the decision making theories implemented in the package. Firstly show the EV.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -873,7 +859,7 @@ The inequalities are reversed across the two choice situations. Expected utility
 
 
 Gambles A and C have the highest expected values. However, they are also the riskier choices.
-Compute the EU with a hypothetical concave utility function, and show the risk premium
+Compute the EU with a hypothetical concave utility function, and show the risk premium.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -902,12 +888,12 @@ Compute the EU with a hypothetical concave utility function, and show the risk p
         \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{lambda}\hlstd{=}\hlnum{1}\hlstd{),}
         \hlkwc{ev}\hlstd{=ev,} \hlkwc{eu}\hlstd{=eu,} \hlkwc{ce}\hlstd{=ce,}
         \hlkwc{my_labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{U}\hlstd{(x)}\hlopt{==}\hlstd{x}\hlopt{^}\hlstd{alpha,} \hlstr{",     "}\hlstd{, x}\hlopt{>=}\hlnum{0}\hlstd{)),}
-                \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{plain}\hlstd{()}\hlopt{==-}\hlstd{lambda} \hlopt{*} \hlstd{x}\hlopt{^}\hlstd{beta,} \hlstr{", "}\hlstd{, x}\hlopt{<}\hlnum{0}\hlstd{)),}
+                \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{plain}\hlstd{()}\hlopt{==-}\hlstd{lambda} \hlopt{*} \hlstd{(}\hlopt{-}\hlstd{x)}\hlopt{^}\hlstd{beta,} \hlstr{", "}\hlstd{, x}\hlopt{<}\hlnum{0}\hlstd{)),}
                 \hlstr{"ev"}\hlstd{,}\hlstr{"eu"}\hlstd{,}\hlstr{"ce"}\hlstd{,}\hlstr{"rp"}\hlstd{),}
         \hlkwc{my_label_colors}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"violet"}\hlstd{,}\hlstr{"violet"}\hlstd{,}\hlstr{"black"}\hlstd{,}\hlstr{"red"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"blue"}\hlstd{),}
         \hlkwc{my_label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{2700}\hlstd{,}\hlnum{1275}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{2740}\hlstd{,}\hlnum{1250}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{3250}\hlstd{,}\hlnum{1075}\hlstd{),}
                 \hlkwd{c}\hlstd{(}\hlnum{2800}\hlstd{,}\hlnum{1170}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{3050}\hlstd{,}\hlnum{1075}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{3150}\hlstd{,}\hlnum{1170}\hlstd{)),}
-        \hlkwc{font_scaling}\hlstd{=}\hlnum{1}\hlstd{,} \hlkwc{window_width} \hlstd{=} \hlnum{7}\hlstd{,} \hlkwc{window_height} \hlstd{=} \hlnum{7}\hlstd{)}
+        \hlkwc{font_scaling}\hlstd{=}\hlnum{1}\hlstd{)}
 \end{alltt}
 \end{kframe}
 
@@ -916,16 +902,14 @@ Compute the EU with a hypothetical concave utility function, and show the risk p
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-For this parameterisation $A > B$ and $C > D$.
+For this parameterisation $A > B$ and $C > D$. {\bf pt} can be used to perform a sensitivity analysis to determine
+critical values for risk tolerances.
 The parameters for which the EU preferences are reversed so that $B > A$ and $D > C$ can be identified using
-the code below. Note that all these parameterisations use concave utility functions.
+the code below. Note that both these parameterisations use concave utility functions.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -961,7 +945,7 @@ the code below. Note that all these parameterisations use concave utility functi
 \end{knitrout}
 
 
-Note the reversal in preferences. Using a linear utility function $u(x) = x$ gives the same result as EV
+Note the reversal in preferences. Using a linear utility function $u(x) = x$ gives the same result as EV.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -980,7 +964,7 @@ Note the reversal in preferences. Using a linear utility function $u(x) = x$ giv
 \end{knitrout}
 
 
-Compute the predictions for RDU
+Compute the predictions for RDU.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1000,7 +984,7 @@ Compute the predictions for RDU
 \end{knitrout}
 
 
-In contrast, RDU predicts the preferences $B > A$ and $C > D$. PT reduces to RDU if all outcomes are strictly positive so its predictions are identical to RDU
+In contrast, RDU predicts the preferences $B > A$ and $C > D$. PT reduces to RDU if all outcomes are strictly positive so its predictions are identical to RDU.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1024,23 +1008,22 @@ In contrast, RDU predicts the preferences $B > A$ and $C > D$. PT reduces to RDU
 \end{knitrout}
 
 
-PT explains the common ratio paradox using a curved probability weighting function.
+PT explains the common ratio paradox using a curved probability weighting function. This can be depicted using {\bf pt}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{plotProbW}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"Kahneman & Tversky (1992), "}\hlstd{,}
-        \hlstd{c}\hlopt{==}\hlnum{0.61}\hlstd{)),}
+\hlkwd{plotProbW}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"Tversky & Kahneman (1992), "}\hlstd{,}
+        \hlstd{alpha}\hlopt{==}\hlnum{0.61}\hlstd{)),}
         \hlkwc{my_title_colour}\hlstd{=}\hlstr{"black"}\hlstd{,} \hlkwc{my_title_font_size}\hlstd{=}\hlnum{4}\hlstd{,}
         \hlkwc{my_x_label} \hlstd{=} \hlstr{"p"}\hlstd{,} \hlkwc{my_y_label} \hlstd{=} \hlstr{"w(p)"}\hlstd{,}
-        \hlkwc{pwf}\hlstd{=kt_pwf,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{c}\hlstd{=}\hlnum{0.61}\hlstd{),}
+        \hlkwc{pwf}\hlstd{=kt_pwf,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.61}\hlstd{),}
         \hlkwc{draw_reference_line_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{reference_line_colour}\hlstd{=}\hlstr{"red"}\hlstd{,}
         \hlkwc{reference_line_style}\hlstd{=}\hlstr{"dotted"}\hlstd{,}
-        \hlkwc{my_labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{w}\hlstd{(}\hlkwd{italic}\hlstd{(p))} \hlopt{==} \hlkwd{frac}\hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{c,}
-                \hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{c} \hlopt{+} \hlstd{(}\hlnum{1}\hlopt{-}\hlkwd{italic}\hlstd{(p))}\hlopt{^}\hlstd{c)}\hlopt{^}\hlstd{(}\hlnum{1}\hlopt{/}\hlstd{c))))),}
+        \hlkwc{my_labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{w}\hlstd{(}\hlkwd{italic}\hlstd{(p))} \hlopt{==} \hlkwd{frac}\hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{alpha,}
+                \hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{alpha} \hlopt{+} \hlstd{(}\hlnum{1}\hlopt{-}\hlkwd{italic}\hlstd{(p))}\hlopt{^}\hlstd{alpha)}\hlopt{^}\hlstd{(}\hlnum{1}\hlopt{/}\hlstd{alpha))))),}
         \hlkwc{my_label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.4}\hlstd{,}\hlnum{0.8}\hlstd{)),}
-        \hlkwc{font_scaling}\hlstd{=}\hlnum{1.0}\hlstd{,}
-        \hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{)}
+        \hlkwc{font_scaling}\hlstd{=}\hlnum{1.0}\hlstd{)}
 \end{alltt}
 \end{kframe}
 
@@ -1049,10 +1032,43 @@ PT explains the common ratio paradox using a curved probability weighting functi
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
+
+\end{knitrout}
+
+
+This function is only strictly increasing for $\alpha \geq 0.28$. A family of
+$\alpha$ values can be plotted (see e.g. \cite[][p. 207 Figure 7.2.1]{Wakker_2010}). The lower the $\alpha$ parameter, the more the decision maker exhibits likelihood insensitivity.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plotOneParProbWFam}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlstr{"Tversky & Kahneman (1992) family"}\hlstd{,}
+        \hlkwc{my_title_colour}\hlstd{=}\hlstr{"black"}\hlstd{,} \hlkwc{my_title_font_size}\hlstd{=}\hlnum{4}\hlstd{,}
+        \hlkwc{my_x_label} \hlstd{=} \hlstr{"p"}\hlstd{,} \hlkwc{my_y_label} \hlstd{=} \hlstr{"w(p)"}\hlstd{,} \hlkwc{pwf}\hlstd{=kt_pwf,}
+        \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0.3}\hlstd{,} \hlnum{0.61}\hlstd{,} \hlnum{0.8}\hlstd{,} \hlnum{1.0}\hlstd{,} \hlnum{1.3}\hlstd{),}
+        \hlkwc{draw_reference_line_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{reference_line_colour}\hlstd{=}\hlstr{"red"}\hlstd{,}
+        \hlkwc{reference_line_style}\hlstd{=}\hlstr{"dotted"}\hlstd{,}
+        \hlkwc{my_labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(alpha} \hlopt{==} \hlnum{0.3}\hlstd{)),}
+        \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(alpha} \hlopt{==} \hlnum{0.61}\hlstd{)),}
+        \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(alpha} \hlopt{==} \hlnum{0.8}\hlstd{)),}
+        \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(alpha} \hlopt{==} \hlnum{1.0}\hlstd{)),}
+        \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(alpha} \hlopt{==} \hlnum{1.3}\hlstd{)),}
+        \hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlkwd{w}\hlstd{(}\hlkwd{italic}\hlstd{(p))} \hlopt{==} \hlkwd{frac}\hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{alpha,}
+        \hlstd{(}\hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{alpha} \hlopt{+} \hlstd{(}\hlnum{1}\hlopt{-}\hlkwd{italic}\hlstd{(p))}\hlopt{^}\hlstd{alpha)}\hlopt{^}\hlstd{(}\hlnum{1}\hlopt{/}\hlstd{alpha))))),}
+        \hlkwc{my_label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.9}\hlstd{,}\hlnum{0.15}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.45}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.15}\hlstd{,}\hlnum{0.5}\hlstd{),}
+        \hlkwd{c}\hlstd{(}\hlnum{0.31}\hlstd{,}\hlnum{0.62}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.5}\hlstd{,}\hlnum{0.7}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.42}\hlstd{,} \hlnum{0.9}\hlstd{)),}
+        \hlkwc{font_scaling}\hlstd{=}\hlnum{1.0}\hlstd{,}
+        \hlkwc{arrow_positions} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.3}\hlstd{,}\hlnum{0.5}\hlstd{,}\hlnum{0.39}\hlstd{,}\hlnum{0.41}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.42}\hlstd{,}\hlnum{0.58}\hlstd{,}\hlnum{0.52}\hlstd{,}\hlnum{0.51}\hlstd{),}
+                \hlkwd{c}\hlstd{(}\hlnum{0.59}\hlstd{,}\hlnum{0.66}\hlstd{,}\hlnum{0.66}\hlstd{,}\hlnum{0.66}\hlstd{)))}
 \end{alltt}
 \end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-21} 
+
+}
+
+
+
 \end{knitrout}
 
 
@@ -1062,7 +1078,7 @@ a two-parameter ``linear in log odds" probability weighting function to model pr
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{plotProbWFam}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"linear in log odds,  "}\hlstd{,}
+\hlkwd{plotTwoParProbWFam}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"linear in log odds,  "}\hlstd{,}
         \hlstd{gamma} \hlopt{==} \hlnum{0.6}\hlstd{)),}
         \hlkwc{my_title_colour}\hlstd{=}\hlstr{"black"}\hlstd{,} \hlkwc{my_title_font_size}\hlstd{=}\hlnum{4}\hlstd{,}
         \hlkwc{my_x_label} \hlstd{=} \hlstr{"p"}\hlstd{,} \hlkwc{my_y_label} \hlstd{=} \hlstr{"w(p)"}\hlstd{,} \hlkwc{pwf}\hlstd{=linear_in_log_odds_pwf,}
@@ -1075,20 +1091,16 @@ a two-parameter ``linear in log odds" probability weighting function to model pr
                         \hlstd{delta} \hlopt{*} \hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{gamma} \hlopt{+} \hlstd{(}\hlnum{1}\hlopt{-}\hlkwd{italic}\hlstd{(p))}\hlopt{^}\hlstd{gamma)))),}
         \hlkwc{my_label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.09}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.6}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.42}\hlstd{,} \hlnum{0.9}\hlstd{)),}
         \hlkwc{font_scaling}\hlstd{=}\hlnum{1.0}\hlstd{,}
-        \hlkwc{arrow_positions} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.34}\hlstd{,}\hlnum{0.59}\hlstd{,}\hlnum{0.6}\hlstd{,}\hlnum{0.67}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.23}\hlstd{,}\hlnum{0.75}\hlstd{,}\hlnum{0.35}\hlstd{)),}
-        \hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{)}
+        \hlkwc{arrow_positions} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.28}\hlstd{,}\hlnum{0.56}\hlstd{,}\hlnum{0.35}\hlstd{,}\hlnum{0.53}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.23}\hlstd{,}\hlnum{0.75}\hlstd{,}\hlnum{0.35}\hlstd{)))}
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-21} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-22} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
@@ -1097,7 +1109,7 @@ Likewise, {\bf pt} can be used to show the effects of varying $\gamma$ on the cu
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{plotProbWFam}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"linear in log odds,  "}\hlstd{,}
+\hlkwd{plotTwoParProbWFam}\hlstd{(}\hlkwc{my_title}\hlstd{=}\hlkwd{expression}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"linear in log odds,  "}\hlstd{,}
         \hlstd{delta} \hlopt{==} \hlnum{0.6}\hlstd{)),}
         \hlkwc{my_title_colour}\hlstd{=}\hlstr{"black"}\hlstd{,} \hlkwc{my_title_font_size}\hlstd{=}\hlnum{4}\hlstd{,}
         \hlkwc{my_x_label} \hlstd{=} \hlstr{"p"}\hlstd{,} \hlkwc{my_y_label} \hlstd{=} \hlstr{"w(p)"}\hlstd{,} \hlkwc{pwf}\hlstd{=linear_in_log_odds_pwf,}
@@ -1110,23 +1122,20 @@ Likewise, {\bf pt} can be used to show the effects of varying $\gamma$ on the cu
                         \hlstd{delta} \hlopt{*} \hlkwd{italic}\hlstd{(p)}\hlopt{^}\hlstd{gamma} \hlopt{+} \hlstd{(}\hlnum{1}\hlopt{-}\hlkwd{italic}\hlstd{(p))}\hlopt{^}\hlstd{gamma)))),}
         \hlkwc{my_label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.25}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.5}\hlstd{,}\hlnum{0.1}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.42}\hlstd{,} \hlnum{0.9}\hlstd{)),}
         \hlkwc{font_scaling}\hlstd{=}\hlnum{1.0}\hlstd{,} \hlkwc{arrow_positions} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.5}\hlstd{,}\hlnum{0.25}\hlstd{,}\hlnum{0.45}\hlstd{,}\hlnum{0.3}\hlstd{),}
-                \hlkwd{c}\hlstd{(}\hlnum{0.78}\hlstd{,}\hlnum{0.36}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.47}\hlstd{)),} \hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{)}
+                \hlkwd{c}\hlstd{(}\hlnum{0.78}\hlstd{,}\hlnum{0.36}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.47}\hlstd{)))}
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-22} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-23} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-Repeating the PT calculations using the \cite{Gonzalez_Wu_1999} probability weighting function gives a similar prediction to before
+Repeating the PT calculations using the \cite{Gonzalez_Wu_1999} probability weighting function gives a similar prediction to before.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1149,7 +1158,7 @@ Repeating the PT calculations using the \cite{Gonzalez_Wu_1999} probability weig
 \end{knitrout}
 
 
-Next, SWU predicts the preferences $B > A$ and $C > D$
+Next, SWU predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1169,7 +1178,7 @@ Next, SWU predicts the preferences $B > A$ and $C > D$
 \end{knitrout}
 
 
-SWAU predicts the preferences $B > A$ and $C > D$
+SWAU predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1189,7 +1198,7 @@ SWAU predicts the preferences $B > A$ and $C > D$
 \end{knitrout}
 
 
-RAM predicts the preferences $B > A$ and $C > D$
+RAM predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1211,7 +1220,7 @@ RAM predicts the preferences $B > A$ and $C > D$
 \end{knitrout}
 
 
-GDU predicts the preferences $B > A$ and $C > D$
+GDU predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1231,7 +1240,7 @@ GDU predicts the preferences $B > A$ and $C > D$
 \end{knitrout}
 
 
-PRT predicts the preferences $B > A$ and $C > D$
+PRT predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1250,7 +1259,7 @@ PRT predicts the preferences $B > A$ and $C > D$
 \end{knitrout}
 
 
-TAX predicts the preferences $B > A$ and $C > D$
+TAX predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1278,44 +1287,41 @@ probability simplex. The iso-expected value lines are shown in black, the expect
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{my_utility} \hlkwb{<-} \hlkwd{Utility}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"power"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.88}\hlstd{,} \hlkwc{lambda}\hlstd{=}\hlnum{1}\hlstd{))}
-\hlkwd{drawSimplex}\hlstd{(}\hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{,}
-        \hlkwc{x1}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{3000}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{4000}\hlstd{,}
-        \hlkwc{line_dot_density}\hlstd{=}\hlnum{5000}\hlstd{,}
+
+\hlkwd{drawSimplex}\hlstd{(}\hlkwc{x1}\hlstd{=}\hlnum{0}\hlstd{,} \hlkwc{x2}\hlstd{=}\hlnum{3000}\hlstd{,} \hlkwc{x3}\hlstd{=}\hlnum{4000}\hlstd{,}
+        \hlkwc{line_dot_density}\hlstd{=}\hlnum{1000}\hlstd{,}
         \hlkwc{draw_ev_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{ev_colour}\hlstd{=}\hlstr{"black"}\hlstd{,}
         \hlkwc{draw_pt_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{alpha}\hlstd{=}\hlnum{0.61}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.724}\hlstd{,} \hlkwc{pt_colour}\hlstd{=}\hlstr{"red"}\hlstd{,}
         \hlkwc{draw_utility_flag}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{utility}\hlstd{=my_utility,} \hlkwc{eu_colour}\hlstd{=}\hlstr{"purple"}\hlstd{,}
         \hlkwc{start_points}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.1}\hlstd{,}\hlnum{0.9}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.3}\hlstd{,}\hlnum{0.7}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.4}\hlstd{,}\hlnum{0.6}\hlstd{),}
                 \hlkwd{c}\hlstd{(}\hlnum{0.5}\hlstd{,}\hlnum{0.5}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.6}\hlstd{,}\hlnum{0.4}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.3}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.9}\hlstd{,}\hlnum{0.1}\hlstd{)),}
-                        \hlkwc{labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{,}\hlstr{"B"}\hlstd{,}\hlstr{"C"}\hlstd{,}\hlstr{"D"}\hlstd{,}\hlstr{"increasing preference"}\hlstd{),}
-                \hlkwc{label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.03}\hlstd{,}\hlnum{0.04}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.21}\hlstd{,}\hlnum{0.75}\hlstd{),}
-                        \hlkwd{c}\hlstd{(}\hlnum{0.79}\hlstd{,}\hlnum{0.04}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.85}\hlstd{,}\hlnum{0.18}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.7}\hlstd{)),}
-                \hlkwc{label_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"red"}\hlstd{),}
-                \hlkwc{label_font_sizes}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{16}\hlstd{),}
-                \hlkwc{label_font_faces}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"bold"}\hlstd{),}
-                \hlkwc{label_rotations}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlopt{-}\hlnum{45}\hlstd{),}
-                \hlkwc{circle_radii}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{),}
-                \hlkwc{circle_outline_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{),}
-                \hlkwc{circle_fill_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{),}
-                \hlkwc{circle_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{)),}
-                \hlkwc{lines}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{),}
-                        \hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{,}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{)),}
-                \hlkwc{line_widths}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{),}
-                \hlkwc{line_styles}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{),}
-                \hlkwc{line_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{),}
-                \hlkwc{arrows}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.5}\hlstd{,}\hlnum{0.5}\hlstd{,}\hlnum{0.8}\hlstd{)),}
-                \hlkwc{arrow_widths}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{),} \hlkwc{arrow_styles}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"solid"}\hlstd{),} \hlkwc{arrow_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"red"}\hlstd{))}
+        \hlkwc{labels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{,}\hlstr{"B"}\hlstd{,}\hlstr{"C"}\hlstd{,}\hlstr{"D"}\hlstd{,}\hlstr{"increasing preference"}\hlstd{),}
+        \hlkwc{label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.03}\hlstd{,}\hlnum{0.04}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.21}\hlstd{,}\hlnum{0.75}\hlstd{),}
+                \hlkwd{c}\hlstd{(}\hlnum{0.79}\hlstd{,}\hlnum{0.04}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.85}\hlstd{,}\hlnum{0.18}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.7}\hlstd{,}\hlnum{0.7}\hlstd{)),}
+        \hlkwc{label_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"red"}\hlstd{),}
+        \hlkwc{label_font_sizes}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{16}\hlstd{),}
+        \hlkwc{label_font_faces}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"plain"}\hlstd{,}\hlstr{"bold"}\hlstd{),}
+        \hlkwc{label_rotations}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlopt{-}\hlnum{45}\hlstd{),}
+        \hlkwc{circle_radii}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{,}\hlnum{0.01}\hlstd{),}
+        \hlkwc{circle_outline_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{,}\hlstr{"black"}\hlstd{),}
+        \hlkwc{circle_fill_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"purple"}\hlstd{),}
+        \hlkwc{circle_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{)),}
+        \hlkwc{lines}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.2}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{),}
+                \hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.2}\hlstd{,}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.75}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{)),}
+        \hlkwc{line_widths}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{),}
+        \hlkwc{line_styles}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{,} \hlstr{"dashed"}\hlstd{),}
+        \hlkwc{line_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{,}\hlstr{"blue"}\hlstd{),}
+        \hlkwc{arrows}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.8}\hlstd{,}\hlnum{0.5}\hlstd{,}\hlnum{0.5}\hlstd{,}\hlnum{0.8}\hlstd{)),}
+        \hlkwc{arrow_widths}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{),} \hlkwc{arrow_styles}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"solid"}\hlstd{),} \hlkwc{arrow_colours}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"red"}\hlstd{))}
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-30} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-31} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
@@ -1349,7 +1355,7 @@ gain & risk averse & risk seeking \\
 \label{four_fold_table}
 \end{table}
 
-Consider problems 11, 12. 14 and 14' from \citet[][p. 273, 281]{Kahneman_Tversky_1979} which illustrate the four-fold pattern
+Consider problems 11, 12. 14 and 14' from \citet[][p. 273, 281]{Kahneman_Tversky_1979} which illustrate the four-fold pattern.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1384,7 +1390,7 @@ Consider problems 11, 12. 14 and 14' from \citet[][p. 273, 281]{Kahneman_Tversky
 ## 12   4   2   1     1    -5
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.02}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.07}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -1402,19 +1408,16 @@ Consider problems 11, 12. 14 and 14' from \citet[][p. 273, 281]{Kahneman_Tversky
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-31} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-32} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-The PT predictions can be calculated as follows
+The PT predictions can be calculated as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1465,10 +1468,10 @@ Risk averse for highly unlikely large losses (Insurance) & (H $>$ G) & $83\%$ & 
 The first two choices are exactly the same choices but are framed differently.
 A sample of $70$ subjects were given $1000$ in choice 1 and $68$ different subjects were given $2000$ in choice 2. They were then asked to make two choices. In choice 1 $84\%$ preferred $B > A$. In choice 2 $69\%$ preferred $C > D$. However, the end states are the same in both choices: $1500$ for certain for options $B$ and $D$ and an equal chance gamble to gain $1000$ or $2000$ for options $A$ and $C$. In the first choice (a gains frame), people exhibited risk aversion while in the second choice (a loss frame) they exhibited risk seeking. These patterns have been empirically supported by other researchers, however the patterns may be sensitive to different elicitation procedures. \citet[][]{Harbaugh_Krause_Vesterlund_2010} found more complex choice elicitation procedures led to greater support for the four-fold pattern compared to simpler procedures,
 and suggest increased cognitive load may be responsible for the four-fold pattern. Prospect theory can
-also predict the Markowitz four-fold pattern of risk preferences for outcome magnitudes \cite{Markowitz_1952} using decreasingly elastic utility functions \cite[][]{Scholten_Read_2014} (see Table \ref{markowitz_four_fold_table}).
+also predict the (M4) \cite{Markowitz_1952} four-fold pattern of risk preferences for outcome magnitudes  using decreasingly elastic utility functions \cite[][]{Scholten_Read_2014} (see Table \ref{markowitz_four_fold_table}).
 
 \begin{table}[h]
-\caption{Markowitz four-fold pattern for outcome magnitudes.}
+\caption{(M4) Markowitz four-fold pattern for outcome magnitudes.}
 \centering
 \begin{tabular}{ r|c|c| }
 \multicolumn{1}{r}{}
@@ -1483,16 +1486,111 @@ gain & risk averse & risk seeking \\
 \label{markowitz_four_fold_table}
 \end{table}
 
+To illustrate, consider the following choices from \cite{Hershey_Schoemaker_1980}.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{choice_ids} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{3}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{4}\hlstd{,} \hlnum{4}\hlstd{)}
+\hlstd{gamble_ids} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{2}\hlstd{)}
+\hlstd{outcome_ids} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{1}\hlstd{,} \hlnum{2}\hlstd{)}
+\hlstd{objective_consequences} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{100}\hlstd{,} \hlnum{10000}\hlstd{,} \hlnum{0}\hlstd{,} \hlnum{1000000}\hlstd{,}
+        \hlopt{-}\hlnum{1}\hlstd{,} \hlnum{0}\hlstd{,} \hlopt{-}\hlnum{100}\hlstd{,} \hlopt{-}\hlnum{10000}\hlstd{,} \hlnum{0}\hlstd{,} \hlopt{-}\hlnum{1000000}\hlstd{)}
+\hlstd{probability_strings} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"1"}\hlstd{,} \hlstr{"0.99"}\hlstd{,} \hlstr{"0.01"}\hlstd{,} \hlstr{"1"}\hlstd{,} \hlstr{"0.99"}\hlstd{,} \hlstr{"0.01"}\hlstd{,}
+        \hlstr{"1"}\hlstd{,} \hlstr{"0.99"}\hlstd{,} \hlstr{"0.01"}\hlstd{,} \hlstr{"1"}\hlstd{,} \hlstr{"0.99"}\hlstd{,} \hlstr{"0.01"}\hlstd{)}
+\hlstd{my_choices} \hlkwb{<-} \hlkwd{Choices}\hlstd{(}\hlkwc{choice_ids}\hlstd{=choice_ids,}
+        \hlkwc{gamble_ids}\hlstd{=gamble_ids,}
+        \hlkwc{outcome_ids}\hlstd{=outcome_ids,}
+        \hlkwc{objective_consequences}\hlstd{=objective_consequences,}
+        \hlkwc{probability_strings}\hlstd{=probability_strings)}
+\hlstd{my_choices}
+\end{alltt}
+\begin{verbatim}
+##    cid gid oid   pr       oc
+## 1    1   1   1    1        1
+## 2    1   2   1 0.99        0
+## 3    1   2   2 0.01      100
+## 4    2   1   1    1    10000
+## 5    2   2   1 0.99        0
+## 6    2   2   2 0.01  1000000
+## 7    3   1   1    1       -1
+## 8    3   2   1 0.99        0
+## 9    3   2   2 0.01     -100
+## 10   4   1   1    1   -10000
+## 11   4   2   1 0.99        0
+## 12   4   2   2 0.01 -1000000
+\end{verbatim}
+\begin{alltt}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
+        \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.03}\hlstd{,}
+        \hlkwc{circle_radius}\hlstd{=}\hlnum{0.02}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.07}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
+        \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
+        \hlkwc{y_value_text_offset}\hlstd{=}\hlnum{0.005}\hlstd{,} \hlkwc{x_value_text_offset}\hlstd{=}\hlnum{0.025}\hlstd{,}
+        \hlkwc{probability_text_font_colour}\hlstd{=}\hlstr{"red"}\hlstd{,} \hlkwc{probability_text_font_size}\hlstd{=}\hlnum{10}\hlstd{,}
+        \hlkwc{objective_consequence_text_font_colour}\hlstd{=}\hlstr{"blue"}\hlstd{,}
+        \hlkwc{objective_consequence_text_font_size}\hlstd{=}\hlnum{10}\hlstd{,} \hlkwc{label}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"A"}\hlstd{,}\hlstr{"B"}\hlstd{,}\hlstr{"C"}\hlstd{,}\hlstr{"D"}\hlstd{,}\hlstr{"E"}\hlstd{,}\hlstr{"F"}\hlstd{,}\hlstr{"G"}\hlstd{,}\hlstr{"H"}\hlstd{),}
+        \hlkwc{label_font_colour}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"orange"}\hlstd{,}\hlstr{"magenta"}\hlstd{,}\hlstr{"green"}\hlstd{,}\hlstr{"pink"}\hlstd{,}\hlstr{"orange"}\hlstd{,}\hlstr{"magenta"}\hlstd{,}\hlstr{"green"}\hlstd{,}\hlstr{"pink"}\hlstd{),}
+        \hlkwc{label_font_size}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{,}\hlnum{11}\hlstd{),}
+        \hlkwc{label_positions}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.98}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.8}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.73}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.56}\hlstd{),}
+                \hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.48}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.31}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.23}\hlstd{),}\hlkwd{c}\hlstd{(}\hlnum{0.26}\hlstd{,}\hlnum{0.06}\hlstd{)))}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-34} 
+
+}
+
+
+
+\end{knitrout}
+
+
+A sample of $36$ people were asked to consider the first choice between gambles $A$ and $B$, with
+$81\%$ choosing the risky option $B$ (see \cite[][p. 406 Table 3, Experiment 1, Question 13]{Hershey_Schoemaker_1980}). For small outcome gains, people were risk seeking.
+In the second choice situation between gambles $C$ and $D$, $88\%$ of $37$ people chose $C$, the safe
+option. For large outcome gains, people were risk averse.
+In the third choice situation between gambles $E$ and $F$, $63\%$ of $36$ people chose $E$, the safe
+option. For small outcome losses, people were risk averse.
+Finally, in the fourth choice situation between gambles $G$ and $H$, $68\%$ of $37$ people chose $H$, the risky option. For large outcome losses, people were risk seeking.
+The PT predictions using parameterisations from \citet[][]{Scholten_Read_2014} can be calculated as follows.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{norm_log_utility} \hlkwb{<-} \hlkwd{Utility}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"normalized_logarithmic"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.032}\hlstd{,} \hlkwc{beta}\hlstd{=}\hlnum{0.0031}\hlstd{,} \hlkwc{lambda}\hlstd{=}\hlnum{2.25}\hlstd{))}
+\hlstd{tk_1992_positive_prob_weight} \hlkwb{<-} \hlkwd{ProbWeight}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"Tversky_Kahneman_1992"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.4496}\hlstd{))}
+\hlstd{tk_1992_negative_prob_weight} \hlkwb{<-} \hlkwd{ProbWeight}\hlstd{(}\hlkwc{fun}\hlstd{=}\hlstr{"Tversky_Kahneman_1992"}\hlstd{,} \hlkwc{par}\hlstd{=}\hlkwd{c}\hlstd{(}\hlkwc{alpha}\hlstd{=}\hlnum{0.6704}\hlstd{))}
+\hlkwd{comparePT}\hlstd{(my_choices,}
+        \hlkwc{prob_weight_for_positive_outcomes}\hlstd{=tk_1992_positive_prob_weight,}
+        \hlkwc{prob_weight_for_negative_outcomes}\hlstd{=tk_1992_negative_prob_weight,}
+        \hlkwc{utility}\hlstd{=norm_log_utility,} \hlkwc{digits}\hlstd{=}\hlnum{4}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##   cid gid     ev     pt    ce     rp
+## 1   1   1      1 0.9843 11.86 -10.86
+## 2   1   2      1  4.382 13.23 -12.23
+## 3   2   1  10000  180.4  3690   6310
+## 4   2   2  10000  31.67 31.68   9968
+## 5   3   1     -1 -2.247     1     -2
+## 6   3   2     -1 -8.447 3.776 -4.776
+## 7   4   1 -10000  -2515 10000 -20000
+## 8   4   2 -10000 -251.5 133.6 -10134
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The predicted preferences are $B > A$, $C > D$, $E > F$ and $H > G$, in line with the empirical data.
 
 \section{Loss aversion}
 
 \citet[][p. 466]{Birnbaum_2008} defines loss aversion as ``the behavioral finding that people show risk
 aversion for mixed gambles".
 Prospect theory explains loss aversion through a kinked utility function centred around a reference point (which usually but not always represents the status quo).
-This construct underpins the famous quote from \citet[][p. 279]{Kahneman_Tversky_1979}: ``losses loom larger than gains". It extends the EU utility function into the domain of losses and embodies the conceptual advance that decision makers consider changes in wealth states
+This construct underpins the famous quote from \citet[][p. 279]{Kahneman_Tversky_1979} that ``losses loom larger than gains". It extends the EU utility function into the domain of losses and embodies the conceptual advance that decision makers consider changes in wealth states
 relative to the reference point of their current wealth (rather than only final wealth states), developing a line of thought from \cite{Markowitz_1952}. \citet[][p. 269-277]{Kahneman_2011} offers an account of how this idea came about.
 
-Consider the choice from \citet[][Table 5 p. 221]{Erev_2013}, consisting of the option of maintaining the status quo or the option of taking a symmetrical gamble where the absolute value of the loss is the same as the gain. Assume the units of the gambles are of high nominal value and that real money is involved. {\bf pt} can model this choice
+Consider the choice from \citet[][Table 5 p. 221]{Erev_2013} consisting of the option of maintaining the status quo or the option of taking a symmetrical gamble where the absolute value of the loss is the same as the gain. Assume the units of the gambles are of high nominal value and that real money is involved. {\bf pt} can model this choice.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1516,7 +1614,7 @@ Consider the choice from \citet[][Table 5 p. 221]{Erev_2013}, consisting of the 
 ## 3   1   2   2 1/2  100
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.05}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.025}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.15}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -1529,15 +1627,12 @@ Consider the choice from \citet[][Table 5 p. 221]{Erev_2013}, consisting of the 
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-33} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-36} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
@@ -1547,7 +1642,7 @@ From an evolutionary psychology perspective, \cite{de_Martino_Camerer_Adolphs_Pu
 
 \cite{Erev_2013} tabled the loss aversion coefficient $\lambda$ across a number of studies such as \cite{Kobberling_Wakker_2005, Abdellaoui_Bleichrodt_Paraschiv_2007}, and found it fell within in the range $[0.78, 2.61]$,
 with a strong positive correlation between the magnitude of $\lambda$ and the absolute value of the
-objective consequences. Expressed very roughly, decision makers require gains to be at least twice the absolute value of the losses in an equal chance binary gamble before they will consider taking on the gamble \cite[see][p. 1053-1054]{Tversky_Kahneman_1991}. Calculations for PT can be performed via
+objective consequences. Expressed very roughly, decision makers require gains to be at least twice the absolute value of the losses in an equal chance binary gamble before they will consider taking on the gamble \cite[see][p. 1053-1054]{Tversky_Kahneman_1991}. Calculations for PT can be performed via the following code.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1572,7 +1667,7 @@ Prospect theory gives a negative value of $-30.2$ for gamble $B$, less than the 
 the riskless choice is preferred.
 Note that loss aversion can be explained by other theories such as TAX, without the use of a kinked utility
 function \citep*{Birnbaum_2006}. In the following example a linear utility function is used in the TAX calculation. In the internal calculations for TAX, branch weights of $2/3$ and
-$1/3$ are given to the $-100$ and $100$ outcomes, respectively
+$1/3$ are given to the $-100$ and $100$ outcomes, respectively.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1601,7 +1696,7 @@ However, empirical research has detected violations of some of these assumptions
 \subsection{Violations of gain-loss separability}
 
 A PT assumption is the separability of gains and losses, implicit in the kinked shape of the utility function around a reference point.
-The PT utility function of Eq. \eqref{pt_utility_function} can be plotted as follows
+The PT utility function of Eq. \eqref{pt_utility_function} can be plotted as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1613,24 +1708,20 @@ The PT utility function of Eq. \eqref{pt_utility_function} can be plotted as fol
         \hlkwc{fun_colour} \hlstd{=} \hlstr{"purple"}\hlstd{,}
         \hlkwc{draw_reference_line_flag} \hlstd{=} \hlnum{TRUE}\hlstd{,}
         \hlkwc{reference_line_colour} \hlstd{=} \hlstr{"red"}\hlstd{,}
-        \hlkwc{reference_line_style} \hlstd{=} \hlnum{1}\hlstd{,}
-        \hlkwc{window_width} \hlstd{=} \hlnum{5}\hlstd{,} \hlkwc{window_height} \hlstd{=} \hlnum{5}\hlstd{)}
+        \hlkwc{reference_line_style} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-36} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-39} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-At present very little empirical research has been conducted on gain-loss separability. The limited research available has generated evidence where gain-loss separability is violated \citep*{Birnbaum_Bahra_2007, Wu_Markle_2008, Por_Budescu_2013}. Consider tests 15, 13 and 11 from \citet[][Table 4 p. 1021]{Birnbaum_Bahra_2007}
+At present very little empirical research has been conducted on gain-loss separability. The limited research available has generated evidence where gain-loss separability is violated \citep*{Birnbaum_Bahra_2007, Wu_Markle_2008, Por_Budescu_2013}. Consider tests 15, 13 and 11 from \citet[][Table 4 p. 1021]{Birnbaum_Bahra_2007}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1673,7 +1764,7 @@ At present very little empirical research has been conducted on gain-loss separa
 ## 18   3   2   3 0.25 -100
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.02}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.04}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -1690,19 +1781,16 @@ At present very little empirical research has been conducted on gain-loss separa
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-37} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-40} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-In a sample of $178$ participants $71\%$ preferred $B > A$, $65\%$ preferred $D > C$ and $76\%$ preferred $E > F$. The calculations for PT can be run as
+In a sample of $178$ participants $71\%$ preferred $B > A$, $65\%$ preferred $D > C$ and $76\%$ preferred $E > F$. The calculations for PT can be run as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1732,7 +1820,7 @@ PT incorrectly predicts the preferences $A > B$ and $C > D$ but correctly predic
 \cite{Por_Budescu_2013} suggest violations of gain-loss separability could limit the ability of PT to generalise from purely positive or negative domain gambles to mixed gambles.
 
 In contrast, TAX explains loss aversion through the increased weighting provided to negative choice branches
-rather than through using a kinked utility function. Note the linear utility $u(x) = x$ and loss aversion coefficient $\lambda = 1$ used in the following TAX calculation
+rather than through using a kinked utility function. Note the linear utility $u(x) = x$ and loss aversion coefficient $\lambda = 1$ used in the following TAX calculation.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1756,7 +1844,7 @@ rather than through using a kinked utility function. Note the linear utility $u(
 
 In this case TAX successfully predicts $B > A$, $D > C$ and $E > F$, in line with the empirical results.
 However, this is not true for other cases.
-Consider test 7 from \citet[][Table 1 p. 1326]{Wu_Markle_2008}. These choices can be modelled as follows
+Consider test 7 from \citet[][Table 1 p. 1326]{Wu_Markle_2008}. These choices can be modelled as follows.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1793,7 +1881,7 @@ Consider test 7 from \citet[][Table 1 p. 1326]{Wu_Markle_2008}. These choices ca
 ## 12   3   2   2 0.25 -6000
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{7}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{7}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.02}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.06}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -1810,19 +1898,16 @@ Consider test 7 from \citet[][Table 1 p. 1326]{Wu_Markle_2008}. These choices ca
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-40} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-43} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-With $81$ participants, $51.9\%$ preferred $A > B$, $85.2\%$ preferred $D > C$ and $63\%$ preferred $F > E$. The PT predictions can be generated via
+With $81$ participants, $51.9\%$ preferred $A > B$, $85.2\%$ preferred $D > C$ and $63\%$ preferred $F > E$. The PT predictions can be generated via the following code.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1849,7 +1934,7 @@ With $81$ participants, $51.9\%$ preferred $A > B$, $85.2\%$ preferred $D > C$ a
 
 
 With the parameterisations from \cite{Tversky_Kahneman_1992}, PT correctly predicts the preferences $A > B$ and $D > C$, but incorrectly predicts $E > F$.
-The predictions for TAX are generated via
+The predictions for TAX are generated via the following code.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1876,7 +1961,7 @@ TAX correctly predicts $A > B$ and $E > F$, but incorrectly predicts $C > D$.
 \subsection{Violations of coalescing}
 
 PT assumes gamble outcomes with the same objective consequences can be coalesced without affecting choice preferences. \cite{Birnbaum_2004}, however, identified situations
-where this was not true for the majority of decision makers. Consider problems 14 and 8 from \citet[][Table 3 p. 95]{Birnbaum_2004}, which are tests of coalescing
+where this was not true for the majority of decision makers. Consider problems 14 and 8 from \citet[][Table 3 p. 95]{Birnbaum_2004} which are tests of coalescing.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1911,7 +1996,7 @@ where this was not true for the majority of decision makers. Consider problems 1
 ## 10   2   2   2 0.05   7
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_choices,} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_choices,}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.02}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.07}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -1927,19 +2012,16 @@ where this was not true for the majority of decision makers. Consider problems 1
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-43} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-46} 
 
 }
 
 
-\begin{kframe}\begin{alltt}
-\hlkwd{invisible}\hlstd{(}\hlkwd{dev.off}\hlstd{())}
-\end{alltt}
-\end{kframe}
+
 \end{knitrout}
 
 
-In a sample of $100$ participants, $63\%$ preferred $B > A$ and $75\%$ preferred $C > D$ \cite[][Table 3 p. 95 (unframed condition)]{Birnbaum_2004}. However, PT incorrectly predicts the preferences $A > B$ and $C > D$
+In a sample of $100$ participants, $63\%$ preferred $B > A$ and $75\%$ preferred $C > D$ \cite[][Table 3 p. 95 (unframed condition)]{Birnbaum_2004}. However, PT incorrectly predicts the preferences $A > B$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1963,7 +2045,7 @@ In a sample of $100$ participants, $63\%$ preferred $B > A$ and $75\%$ preferred
 \end{knitrout}
 
 
-For these choices TAX correctly predicts the preferences $B > A$ and $C > D$
+For these choices TAX correctly predicts the preferences $B > A$ and $C > D$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -1996,7 +2078,7 @@ Prospect theory assumes decision makers satisfy first-order stochastic dominance
 detected.
 \citet[][p. 74]{Birnbaum_1997} created a recipe for gambles where first order stochastic dominance is systematically
 violated in choices between the gambles. These were empirically investigated in \citet[][]{Birnbaum_Navarrete_1998}. 
-{\bf pt} can be used to create choices using this recipe
+{\bf pt} can be used to create choices using this recipe.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2031,7 +2113,7 @@ violated in choices between the gambles. These were empirically investigated in 
 ## 8   1   2   4 0.85 96
 \end{verbatim}
 \begin{alltt}
-\hlkwd{drawChoices}\hlstd{(my_list[[}\hlnum{2}\hlstd{]],} \hlkwc{window_width}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{window_height}\hlstd{=}\hlnum{5}\hlstd{,}
+\hlkwd{drawChoices}\hlstd{(my_list[[}\hlnum{2}\hlstd{]],}
         \hlkwc{decision_square_x}\hlstd{=}\hlnum{0.2}\hlstd{,} \hlkwc{decision_square_edge_length}\hlstd{=}\hlnum{0.05}\hlstd{,}
         \hlkwc{circle_radius}\hlstd{=}\hlnum{0.025}\hlstd{,} \hlkwc{y_split_gap}\hlstd{=}\hlnum{0.1}\hlstd{,} \hlkwc{x_split_offset}\hlstd{=}\hlnum{0.03}\hlstd{,}
         \hlkwc{probability_text_digits}\hlstd{=}\hlnum{4}\hlstd{,} \hlkwc{y_probability_text_offset}\hlstd{=}\hlnum{0.015}\hlstd{,}
@@ -2044,7 +2126,7 @@ violated in choices between the gambles. These were empirically investigated in 
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-46} 
+{\centering \includegraphics[width=0.8\linewidth]{figure/unnamed-chunk-49} 
 
 }
 
@@ -2076,7 +2158,7 @@ oc & pr  &   & oc & pr  \\
 \end{table}
 
 However, \citet[][Table 1 p. 61]{Birnbaum_Navarrete_1998} found in $100$ participants, $73\%$ preferred $B > A$.
-For any set of functional forms and parameterisations, PT predicts $A > B$
+For any set of functional forms and parameterisations, PT predicts $A > B$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -2097,7 +2179,7 @@ For any set of functional forms and parameterisations, PT predicts $A > B$
 \end{knitrout}
 
 
-However TAX predicts $B > A$
+However TAX predicts $B > A$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}

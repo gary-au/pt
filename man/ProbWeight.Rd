@@ -7,8 +7,8 @@ ProbWeight(fun, par)
 \arguments{
   \item{fun}{text, the probability function string}
 
-  \item{par}{vector, a vector of parameters for the
-  probability function}
+  \item{par}{vector, parameters for the probability
+  function}
 }
 \description{
 Creates an instance of the ProbWeight class.
@@ -17,21 +17,21 @@ Creates an instance of the ProbWeight class.
 This function creates an instance of a ProbWeight class.
 The following functional forms are currently implemented:
 
-Tversky_Kahneman_1992 (requires 1 parameter > 0.28)
+linear
 
-compound_invariance (requires 2 parameters)
+Tversky_Kahneman_1992 (requires 1 parameter > 0.28)
 
 linear_in_log_odds (requires 2 parameters)
 
-neo_additive (requires 2 parameters)
-
-exponential_power (requires 2 parameters)
-
 power (requires 2 parameters)
+
+neo_additive (requires 2 parameters)
 
 hyperbolic_logarithm (requires 2 parameters)
 
-linear
+exponential_power (requires 2 parameters)
+
+compound_invariance (requires 2 parameters)
 
 constant_relative_sensitivity (requires 2 parameters)
 }

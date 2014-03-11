@@ -24,13 +24,25 @@ The following functional forms are currently implemented:
 
 linear (requires 1 parameter)
 
-exponential (requires 2 parameters)
-
 power (requires 3 parameters)
 
-general_power (requires 3 parameters)
+exponential (requires 2 parameters)
 
-general_linear (requires 2 parameters)
+normalized_exponential_uf (requires 3 parameters)
+
+normalized_logarithmic_uf (requires 3 parameters)
+
+normalized_power_uf (requires 3 parameters)
+
+quadratic_uf (requires 3 parameters)
+
+logarithmic_uf (requires 3 parameters)
+
+expo_power_uf (requires 4 parameters)
+
+general_linear_uf (requires 3 parameters)
+
+general_power_uf (requires 5 parameters)
 }
 \examples{
 # This example creates the power utility function with parameters

@@ -2,19 +2,14 @@
 \alias{drawSimplex}
 \title{Draw the probability simplex.}
 \usage{
-drawSimplex(window_width, window_height, x1, x2, x3, line_dot_density,
-  draw_ev_flag, ev_colour, draw_pt_flag, alpha, beta, pt_colour,
-  draw_utility_flag, utility, eu_colour, start_points, labels, label_positions,
-  label_colours, label_font_sizes, label_font_faces, label_rotations,
-  circle_radii, circle_outline_colours, circle_fill_colours, circle_positions,
-  lines, line_widths, line_styles, line_colours, arrows, arrow_widths,
-  arrow_styles, arrow_colours)
+drawSimplex(x1, x2, x3, line_dot_density, draw_ev_flag, ev_colour, draw_pt_flag,
+  alpha, beta, pt_colour, draw_utility_flag, utility, eu_colour, start_points,
+  labels, label_positions, label_colours, label_font_sizes, label_font_faces,
+  label_rotations, circle_radii, circle_outline_colours, circle_fill_colours,
+  circle_positions, lines, line_widths, line_styles, line_colours, arrows,
+  arrow_widths, arrow_styles, arrow_colours)
 }
 \arguments{
-  \item{window_width}{numeric, the window_width}
-
-  \item{window_height}{numeric, window_height}
-
   \item{x1}{numeric, x1}
 
   \item{x2}{numeric, x2}
@@ -109,8 +104,7 @@ drawn.
 my_utility <- Utility(fun="power",
 	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 
-drawSimplex(window_width=7, window_height=7,
-	x1=0, x2=100, x3=200,
+drawSimplex(x1=0, x2=100, x3=200,
 	line_dot_density=100,
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red",

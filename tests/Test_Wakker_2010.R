@@ -277,7 +277,7 @@ compareRDU(my_choices, pow_prob_weight, linear_utility, digits=4)
 my_input_file <- system.file("external", "exercise_5.6.1.a.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, lambda=1))
+general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, gamma=0.5, delta=10, lambda=1))
 pow_prob_weight <- ProbWeight(fun="power", par=c(alpha=2.0, beta=1.0))
 compareRDU(my_choices, pow_prob_weight, general_power_utility, digits=4)
 
@@ -295,7 +295,7 @@ compareRDU(my_choices, pow_prob_weight, general_power_utility, digits=4)
 my_input_file <- system.file("external", "exercise_5.6.1.b.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, lambda=1))
+general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, gamma=0.5, delta=10, lambda=1))
 pow_prob_weight <- ProbWeight(fun="power", par=c(alpha=2.0, beta=1.0))
 compareRDU(my_choices, pow_prob_weight, general_power_utility, digits=4)
 
@@ -332,7 +332,7 @@ compareRDU(my_choices, pow_prob_weight, linear_utility, digits=4)
 my_input_file <- system.file("external", "assignment_5.6.3.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, lambda=1))
+general_power_utility <- Utility(fun="general_power", par=c(alpha=0.5, beta=10, gamma=0.5, delta=10, lambda=1))
 pow_prob_weight <- ProbWeight(fun="power", par=c(alpha=2.0, beta=1.0))
 compareRDU(my_choices, pow_prob_weight, general_power_utility, digits=4)
 
@@ -350,7 +350,7 @@ compareRDU(my_choices, pow_prob_weight, general_power_utility, digits=4)
 my_input_file <- system.file("external", "figure_6.3.1.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, lambda=1))
+general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, beta=1/100, lambda=1))
 pow_prob_weight <- ProbWeight(fun="power", par=c(alpha=2.0, beta=1.0))
 compareRDU(my_choices, pow_prob_weight, general_linear_utility, digits=4)
 
@@ -369,7 +369,7 @@ compareRDU(my_choices, pow_prob_weight, general_linear_utility, digits=4)
 my_input_file <- system.file("external", "figure_6.3.1.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, lambda=1))
+general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, beta=1/100, lambda=1))
 pow_prob_weight <- ProbWeight(fun="power", par=c(alpha=0.5, beta=1.0))
 compareRDU(my_choices, pow_prob_weight, general_linear_utility, digits=4)
 
@@ -388,7 +388,7 @@ compareRDU(my_choices, pow_prob_weight, general_linear_utility, digits=4)
 my_input_file <- system.file("external", "exercise_7.2.1.txt", package="pt")
 my_choices <- choicesFromFile(input_file=my_input_file, choice_id_header="choice_id", gamble_id_header="gamble_id", outcome_id_header="outcome_id", objective_consequence_header="objective_consequence", probability_header="probability", DELIMITER="\t")
 my_choices
-general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, lambda=1))
+general_linear_utility <- Utility(fun="general_linear", par=c(alpha=1/100, beta=1/100, lambda=1))
 tk_1992_positive_probWeight <- ProbWeight(fun="Tversky_Kahneman_1992", par=c(c=0.5))
 compareRDU(my_choices, tk_1992_positive_probWeight, general_linear_utility, digits=4)
 

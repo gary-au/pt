@@ -2,20 +2,16 @@
 \alias{drawChoices}
 \title{Draw a one-stage decision tree.}
 \usage{
-drawChoices(choices, window_width, window_height, decision_square_x,
-  decision_square_edge_length, circle_radius, y_split_gap, x_split_offset,
-  probability_text_digits, y_probability_text_offset, y_value_text_offset,
-  x_value_text_offset, probability_text_font_colour, probability_text_font_size,
+drawChoices(choices, decision_square_x, decision_square_edge_length,
+  circle_radius, y_split_gap, x_split_offset, probability_text_digits,
+  y_probability_text_offset, y_value_text_offset, x_value_text_offset,
+  probability_text_font_colour, probability_text_font_size,
   objective_consequence_text_font_colour, objective_consequence_text_font_size,
   label, label_font_colour, label_font_size, label_positions, line_positions,
   line_colours, line_styles, line_arrows, line_widths)
 }
 \arguments{
   \item{choices,}{an instance of class Choices}
-
-  \item{window_width}{numeric, the window_width}
-
-  \item{window_height}{numeric, window_height}
 
   \item{decision_square_x}{numeric, the decision_square_x
   position}
@@ -98,8 +94,7 @@ my_choices <- Choices(choice_ids=choice_ids,
 	probability_strings=probability_strings)
 my_choices
 
-drawChoices(my_choices, window_width=5, window_height=5,
-	decision_square_x=0.2, decision_square_edge_length=0.05,
+drawChoices(my_choices, decision_square_x=0.2, decision_square_edge_length=0.05,
 	circle_radius=0.025, y_split_gap=0.1, x_split_offset=0.03,
 	probability_text_digits=4, y_probability_text_offset=0.015,
 	y_value_text_offset=0.005, x_value_text_offset=0.025,

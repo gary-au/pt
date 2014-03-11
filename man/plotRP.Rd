@@ -4,7 +4,7 @@
 \usage{
 plotRP(my_title, my_title_colour, my_title_font_size, my_x_label, xmin, xmax,
   my_y_label, my_color, fun, par, ev, eu, ce, my_labels, my_label_colors,
-  my_label_positions, font_scaling, window_width, window_height)
+  my_label_positions, font_scaling)
 }
 \arguments{
   \item{my_title}{text, the title}
@@ -42,10 +42,6 @@ plotRP(my_title, my_title_colour, my_title_font_size, my_x_label, xmin, xmax,
 
   \item{font_scaling}{numeric, the scaling of the text
   labels}
-
-  \item{window_width}{numeric, the window_width}
-
-  \item{window_height}{numeric, the window_height}
 }
 \description{
 Plot the risk premium.
@@ -92,12 +88,11 @@ plotRP(my_title = "risk premium",
 	ev=ev, eu=eu, ce=ce,
 	my_labels=c(expression(paste(U(x)==x^alpha, ",
 	", x>=0)),
-	expression(paste(plain()==-lambda * x^beta, ", ", x<0)),
+	expression(paste(plain()==-lambda * (-x)^beta, ", ", x<0)),
 	"ev","eu","ce","rp"),
 	my_label_colors=c("violet","violet","black","red","orange","blue"),
 	my_label_positions=list(c(2700,1275),c(2740,1250),c(3250,1075),
 	c(2800,1170),c(3050,1075),c(3150,1170)),
-	font_scaling=1,
-	window_width = 7, window_height = 7)
+	font_scaling=1)
 }
 

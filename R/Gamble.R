@@ -14,7 +14,7 @@ setClass(Class = "Gamble",
 	# check for input consistency when creating new Outcome objects using "new" constructor
 	validity = function(object)
 	{
-		cat("~~~ Gamble: inspector ~~~ \n")
+
 		
 		# make sure probabilities of all outcomes sum to <= 1	
 		probability_sum = sum(sapply(object@outcomes, get_probability))

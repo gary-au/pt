@@ -6,12 +6,12 @@
 
 #' The Utility class.
 #' 
-#' The Utility class stores both the functional form and parameter specification for a utility function.
+#' The Utility class stores both the functional form and parameter specifications for a utility function.
 #' 
 #' @section Slots:
 #'  \describe{
 #'    \item{\code{fun}:}{Object of class \code{"text"}, containing a text string that specifies the functional form of the utility function.}
-#'    \item{\code{par}:}{Object of class \code{"vector"}, containing numeric values for the parameter specifications associated with the utility function.}
+#'    \item{\code{par}:}{Object of class \code{"vector"}, containing the parameter specifications for the utility function.}
 #'  }
 #'
 #' @note A wrapper function (also called Utility) can be used to create an instance of this class.
@@ -35,13 +35,6 @@ setClass(Class = "Utility",
 			{
 				stop(paste(get_utility_function(object), " utility function requires 1 parameter.\n", sep = ""))
 			}
-		}	
-		else if (get_utility_function(object) == "exponential")
-		{
-			if (get_number_of_utility_parameters(object) != 2)
-			{
-				stop(paste(get_utility_function(object), " utility function requires 2 parameters.\n", sep = ""))
-			}				
 		}
 		else if (get_utility_function(object) == "power")
 		{
@@ -50,23 +43,69 @@ setClass(Class = "Utility",
 				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
 			}
 		}
-		else if (get_utility_function(object) == "general_power")
+		else if (get_utility_function(object) == "exponential")
+		{
+			if (get_number_of_utility_parameters(object) != 2)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 2 parameters.\n", sep = ""))
+			}				
+		}
+		else if (get_utility_function(object) == "normalized_exponential")
 		{
 			if (get_number_of_utility_parameters(object) != 3)
 			{
 				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
-			}
+			}				
 		}
-		else if (get_utility_function(object) == "general_linear")
+		else if (get_utility_function(object) == "normalized_logarithmic")
+		{
+			if (get_number_of_utility_parameters(object) != 3)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
+			}				
+		}
+		else if (get_utility_function(object) == "normalized_power")
+		{
+			if (get_number_of_utility_parameters(object) != 3)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
+			}				
+		}
+		else if (get_utility_function(object) == "quadratic")
+		{
+			if (get_number_of_utility_parameters(object) != 3)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
+			}				
+		}		
+		else if (get_utility_function(object) == "logarithmic")
 		{
 			if (get_number_of_utility_parameters(object) != 2)
 			{
 				stop(paste(get_utility_function(object), " utility function requires 2 parameters.\n", sep = ""))
 			}
+		}			
+		else if (get_utility_function(object) == "expo_power")
+		{
+			if (get_number_of_utility_parameters(object) != 4)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 4 parameters.\n", sep = ""))
+			}				
 		}		
-	
-		
-		
+		else if (get_utility_function(object) == "general_linear")
+		{
+			if (get_number_of_utility_parameters(object) != 3)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 3 parameters.\n", sep = ""))
+			}				
+		}
+		else if (get_utility_function(object) == "general_power")
+		{
+			if (get_number_of_utility_parameters(object) != 5)
+			{
+				stop(paste(get_utility_function(object), " utility function requires 5 parameters.\n", sep = ""))
+			}				
+		}		
 		return (TRUE)
 	}
 )
@@ -88,13 +127,25 @@ setClass(Class = "Utility",
 #' 
 #' linear (requires 1 parameter)
 #' 
-#' exponential (requires 2 parameters)
-#' 
 #' power (requires 3 parameters)
 #' 
-#' general_power (requires 3 parameters)
+#' exponential (requires 2 parameters)
 #' 
-#' general_linear (requires 2 parameters)
+#' normalized_exponential_uf (requires 3 parameters)
+#' 
+#' normalized_logarithmic_uf (requires 3 parameters)
+#' 
+#' normalized_power_uf (requires 3 parameters)
+#' 
+#' quadratic_uf (requires 3 parameters)
+#' 
+#' logarithmic_uf (requires 3 parameters)
+#' 
+#' expo_power_uf (requires 4 parameters)
+#' 
+#' general_linear_uf (requires 3 parameters)
+#' 
+#' general_power_uf (requires 5 parameters)
 #' 
 #' @usage Utility(fun, par)
 #' @param fun text, a string selecting the utility function 
@@ -176,64 +227,25 @@ setGeneric(name = "compute_utility",
 # provide implementation of custom function
 setMethod(f = "compute_utility",
 	signature = "Utility",
-	definition = function(object, value)
+	definition = function(object, objective_consequence)
 	{
 		
 		if (get_utility_function(object) == "linear")
 		{
 			lambda <- object@par[1]			
 			
-			if (value > 0)
+			if (objective_consequence > 0)
 			{		
-				utility <- value
+				utility <- objective_consequence
 			}
-			else if (value == 0)
+			else if (objective_consequence == 0)
 			{
 					utility <- 0				
 			}			
-			else if (value < 0)
+			else if (objective_consequence < 0)
 			{				
-				utility <- -lambda * -value			
+				utility <- -lambda * -objective_consequence			
 			}
-		}
-		else if (get_utility_function(object) == "exponential")
-		{
-			# implements Wakker (2010), p.80, Eqn 3.5.4			
-			
-			alpha <- object@par[1]	
-			lambda <- object@par[2]	
-			
-			if (value >= 0)
-			{
-				if (alpha > 0)
-				{
-					utility <- (1 - exp(-alpha * value))					
-				}
-				else if (alpha == 0)
-				{
-					utility <- value
-				}
-				else if (alpha < 0)
-				{
-					utility <- (exp(-alpha * value) - 1)						
-				}
-			}
-			else if (value < 0)
-			{
-				if (alpha > 0)
-				{
-					utility <- lambda * (1 - exp(-alpha * value))					
-				}
-				else if (alpha == 0)
-				{
-					utility <- lambda * value
-				}
-				else if (alpha < 0)
-				{
-					utility <- lambda * (exp(-alpha * value) - 1)						
-				}				
-			}
-		
 		}
 		else if (get_utility_function(object) == "power")
 		{
@@ -246,72 +258,206 @@ setMethod(f = "compute_utility",
 			lambda <- object@par[3]
 			
 		
-			if (value > 0)
+			if (objective_consequence > 0)
 			{
 				if (alpha > 0)
 				{
-					utility <- value^alpha			
+					utility <- objective_consequence^alpha			
 				}
 				else if (alpha == 0)
 				{
-					utility <- log(value)
+					utility <- log(objective_consequence)
 				}
 				else if (alpha < 0)
 				{
-					utility <- (-value)^alpha
+					utility <- 1 - (1 + objective_consequence)^alpha
 				}				
 
 			}
-			else if (value == 0)
+			else if (objective_consequence == 0)
 			{
 					utility <- 0				
 			}
-			else if (value < 0)
+			else if (objective_consequence < 0)
 			{
 				if (beta > 0)
 				{
-					utility <- -lambda * (-value)^beta			
+					utility <- -lambda * (-objective_consequence)^beta			
 				}
 				else if (beta == 0)
 				{
-					utility <- -lambda * log(-value)
+					utility <- -lambda * log(-objective_consequence)
 				}
 				else if (beta < 0)
 				{
-					utility <- -lambda * (value)^beta
+					utility <- -lambda * (1.0 - (1.0 - objective_consequence)^beta)
 				}				
 			}
+		}		
+		else if (get_utility_function(object) == "exponential")
+		{
+			# implements Wakker (2010), p.80, Eqn 3.5.4			
+			
+			alpha <- object@par[1]	
+			lambda <- object@par[2]	
+			
+			if (objective_consequence >= 0)
+			{
+				if (alpha > 0)
+				{
+					utility <- (1 - exp(-alpha * objective_consequence))					
+				}
+				else if (alpha == 0)
+				{
+					utility <- objective_consequence
+				}
+				else if (alpha < 0)
+				{
+					utility <- (exp(-alpha * objective_consequence) - 1)						
+				}
+			}
+			else if (objective_consequence < 0)
+			{
+				if (alpha > 0)
+				{
+					utility <- lambda * (1 - exp(-alpha * objective_consequence))					
+				}
+				else if (alpha == 0)
+				{
+					utility <- lambda * objective_consequence
+				}
+				else if (alpha < 0)
+				{
+					utility <- lambda * (exp(-alpha * objective_consequence) - 1)						
+				}				
+			}
+		
+		}
+		else if (get_utility_function(object) == "normalized_exponential")
+		{
+			
+			alpha <- object@par[1]
+			beta <- object@par[2]				
+			lambda <- object@par[3]			
+			
+			if (objective_consequence >= 0)
+			{		
+				utility <- (1/alpha) * ( 1- exp(-alpha * objective_consequence))
+			}
+			else if (objective_consequence < 0)
+			{				
+				utility <- (-lambda/beta) * (1 - exp(-beta * (-objective_consequence)))
+			}	
+		}
+		else if (get_utility_function(object) == "normalized_logarithmic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]				
+			lambda <- object@par[3]			
+			
+			if (objective_consequence >= 0)
+			{		
+				utility <- (1/alpha) * log( 1 + alpha * objective_consequence)
+			}
+			else if (objective_consequence < 0)
+			{				
+				utility <- (-lambda/beta) * log(1 + beta * (-objective_consequence))
+			}				
+		}
+		else if (get_utility_function(object) == "normalized_power")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]				
+			lambda <- object@par[3]			
+			
+			if (objective_consequence >= 0)
+			{		
+				utility <- (1/alpha) * log( 1 + alpha * objective_consequence)
+			}
+			else if (objective_consequence < 0)
+			{				
+				utility <- (-lambda/beta) * log(1 + beta * (-objective_consequence))
+			}			
+		}
+		else if (get_utility_function(object) == "quadratic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			if (objective_consequence >= 0)
+			{			
+				utility <- alpha * objective_consequence - objective_consequence^2
+			}
+			else if (objective_consequence < 0)
+			{
+				utility <- -lambda * (beta * (-objective_consequence) - (-objective_consequence)^2)
+			}
+		}
+		else if (get_utility_function(object) == "logarithmic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]	
+			
+			if (objective_consequence >= 0)
+			{			
+				utility <- log(alpha + objective_consequence)
+			}
+			else if (objective_consequence < 0)
+			{
+				utility <- -lambda * (log(beta + (-objective_consequence)))
+			}
+		}		
+		else if (get_utility_function(object) == "expo_power")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			gamma <- object@par[3]
+			lambda <- object@par[4]			
+			
+			if (objective_consequence >= 0)
+			{		
+				utility <- gamma - exp(-beta * objective_consequence^alpha)
+			}
+			else if (objective_consequence < 0)
+			{				
+				utility <- -lambda * gamma - exp(-beta * (-objective_consequence)^alpha)
+			}			
+		}
+		else if (get_utility_function(object) == "general_linear")
+		{
+			
+			alpha <- object@par[1]
+			beta <- object@par[2]			
+			lambda <- object@par[3]			
+			
+			if (objective_consequence >= 0)
+			{		
+				utility <- alpha * objective_consequence
+			}
+			else if (objective_consequence < 0)
+			{				
+				utility <- -lambda * beta * (-objective_consequence)
+			}	
 		}
 		else if (get_utility_function(object) == "general_power")
 		{
 			alpha <- object@par[1]				
 			beta <- object@par[2]
-			lambda <- object@par[3]			
+			gamma <- object@par[3]
+			delta <- object@par[4]			
+			lambda <- object@par[5]			
 			
-			if (value >= 0)
+			if (objective_consequence >= 0)
 			{			
-				utility <- (beta * value^alpha)
+				utility <- (beta * objective_consequence^alpha)
 			}
-			else if (value < 0)
+			else if (objective_consequence < 0)
 			{
-				utility <- -lambda * (beta * value)^alpha
+				utility <- -lambda * (delta * -objective_consequence)^gamma
 			}
 		}
-		else if (get_utility_function(object) == "general_linear")
-		{
-			
-			alpha <- object@par[1]			
-			lambda <- object@par[2]			
-			
-			if (value >= 0)
-			{		
-				utility <- alpha * value
-			}
-			else if (value < 0)
-			{				
-				utility <- -lambda * alpha * value
-			}	
-		}		
 		
 		return (utility)	
 	}
@@ -328,7 +474,7 @@ setGeneric(name = "compute_certainty_equivalent",
 # provide implementation of custom function
 setMethod(f = "compute_certainty_equivalent",
 	signature = "Utility",
-	definition = function(object, value)
+	definition = function(object, utility)
 	{
 	
 		certainty_equivalent <- 0.0
@@ -337,127 +483,221 @@ setMethod(f = "compute_certainty_equivalent",
 		{
 			lambda <- object@par[1]			
 			
-			if (value > 0)
+			if (utility > 0)
 			{			
-				certainty_equivalent <- value
+				certainty_equivalent <- utility
 			}
-			else if (value == 0)
+			else if (utility == 0)
 			{
 				certainty_equivalent <- 0				
 			}			
-			else if (value < 0)
+			else if (utility < 0)
 			{
-				certainty_equivalent <- (-value / -lambda)
+				certainty_equivalent <- (-utility / -lambda)
 			}			
 		}
-		else if (get_utility_function(object) == "exponential")
-		{
-			alpha <- object@par[1]			
-			lambda <- object@par[2]	
-			
-			if (value >= 0)
-			{
-				if (alpha > 0)
-				{
-					certainty_equivalent <- (-1 / alpha) * log(1 - value)					
-				}
-				else if (alpha == 0)
-				{
-					certainty_equivalent <- value
-				}
-				else if (alpha < 0)
-				{
-					certainty_equivalent <- (-1 / alpha) * log(value + 1)					
-				}
-			}
-			else
-			{
-				if (alpha > 0)
-				{
-					certainty_equivalent <- (-1 / alpha) * log(1 + value/lambda)					
-				}
-				else if (alpha == 0)
-				{
-					certainty_equivalent <- -value/lambda
-				}
-				else if (alpha < 0)
-				{
-					certainty_equivalent <- (-1 / alpha) * log(-value/lambda + 1)					
-				}
-			}
-		}		
 		else if (get_utility_function(object) == "power")
 		{
 			alpha <- object@par[1]
 			beta <- object@par[2]			
 			lambda <- object@par[3]			
 			
-			if (value > 0)
+			if (utility > 0)
 			{
 				if (alpha > 0)
 				{
-					certainty_equivalent <- value^(1 / alpha)			
+					certainty_equivalent <- utility^(1 / alpha)			
 				}
 				else if (alpha == 0)
 				{
-					certainty_equivalent <- exp(value)
+					certainty_equivalent <- exp(utility)
 				}
 				else if (alpha < 0)
 				{
-					certainty_equivalent <- -1 * value^(1 / alpha)
+					certainty_equivalent <- (1 - utility)^(1 / alpha) - 1.0
 				}					
 			}
-			else if (value == 0)
+			else if (utility == 0)
 			{
 				certainty_equivalent <- 0
 			}
-			else if (value < 0)
+			else if (utility < 0)
 			{
 				if (beta > 0)
 				{
-					certainty_equivalent <- -1.0 * (-value / lambda)^(1 / beta)			
+					certainty_equivalent <- -1.0 * (-utility / lambda)^(1 / beta)			
 				}
 				else if (beta == 0)
 				{
-					certainty_equivalent <- -1.0 * exp(-value / lambda)
+					certainty_equivalent <- -1.0 * exp(-utility / lambda)
 				}
 				else if (beta < 0)
 				{
-					certainty_equivalent <- (1 - (value/lambda + 1)^(1 / beta))
+					certainty_equivalent <- (1 - (utility/lambda + 1)^(1 / beta))
 				}			
 			}
 		}	
-		else if (get_utility_function(object) == "general_power")
+		else if (get_utility_function(object) == "exponential")
 		{
-			if (value >= 0)
+			alpha <- object@par[1]			
+			lambda <- object@par[2]	
+			
+			if (utility >= 0)
 			{
-				alpha <- object@par[1]
-				beta <- object@par[2]
-				certainty_equivalent <- (value / beta)^(1.0 / alpha)				
+				if (alpha > 0)
+				{
+					certainty_equivalent <- (-1 / alpha) * log(1 - utility)					
+				}
+				else if (alpha == 0)
+				{
+					certainty_equivalent <- utility
+				}
+				else if (alpha < 0)
+				{
+					certainty_equivalent <- (-1 / alpha) * log(utility + 1)					
+				}
 			}
-			else if (value < 0)
+			else
 			{
-				alpha <- object@par[1]				
-				beta <- object@par[2]
-				lambda <- object@par[3]
-				certainty_equivalent <- (-value / (beta * lambda))^(1.0 / alpha)		
+				if (alpha > 0)
+				{
+					certainty_equivalent <- (-1 / alpha) * log(1 + utility/lambda)					
+				}
+				else if (alpha == 0)
+				{
+					certainty_equivalent <- -utility/lambda
+				}
+				else if (alpha < 0)
+				{
+					certainty_equivalent <- (-1 / alpha) * log(-utility/lambda + 1)					
+				}
 			}
+		}
+		else if (get_utility_function(object) == "normalized_exponential")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			if (utility >= 0)
+			{		
+				certainty_equivalent <- (-1/alpha) * log(1 - alpha * utility)
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- (1/beta) * log(1 + (beta/lambda) * utility)	
+			}					
+		}
+		else if (get_utility_function(object) == "normalized_logarithmic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			if (utility >= 0)
+			{		
+				certainty_equivalent <- (1/alpha) * exp(alpha * utility - 1)
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- (-1/beta) * (1 - exp((-beta/lambda) * utility))	
+			}			
+		}
+		else if (get_utility_function(object) == "normalized_power")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			if (utility >= 0)
+			{		
+				certainty_equivalent <- ((1 + alpha) * utility)^(1 + alpha)
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- -(-(1 + beta) * utility / lambda)^(1 + beta)	
+			}			
+		}
+		else if (get_utility_function(object) == "quadratic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			# take positive root of quadratic equation
+			if (utility >= 0)
+			{	
+				certainty_equivalent <- (alpha + sqrt((-alpha)^2 - 4*utility))/2
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- (lambda * beta + sqrt((-lambda*beta)^2 - 4*utility))/2	
+			}	
+		}
+		else if (get_utility_function(object) == "logarithmic")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
+			
+			if (utility >= 0)
+			{	
+				certainty_equivalent <- exp(utility) - alpha
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- beta - exp(-utility/lambda)	
+			}	
+		}
+		else if (get_utility_function(object) == "expo_power")
+		{
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			gamma <- object@par[2]			
+			lambda <- object@par[4]			
+			
+			if (utility >= 0)
+			{		
+				certainty_equivalent <- ((-1/beta) * log(gamma - utility))^(1/alpha)
+			}
+			else if (utility < 0)
+			{				
+				certainty_equivalent <- -((-1/beta)*log(gamma + utility/lambda))^(1/alpha)	
+			}			
 		}
 		else if (get_utility_function(object) == "general_linear")
 		{
-			alpha <- object@par[1]			
-			lambda <- object@par[2]			
+			alpha <- object@par[1]
+			beta <- object@par[2]
+			lambda <- object@par[3]			
 			
-			if (value >= 0)
+			if (utility >= 0)
 			{		
-				certainty_equivalent <- value / alpha
+				certainty_equivalent <- utility / alpha
 			}
-			else if (value < 0)
+			else if (utility < 0)
 			{				
-				certainty_equivalent <- -value/(lambda * alpha)			
+				certainty_equivalent <- utility/(lambda * beta)			
 			}			
-		}		
-	
+		}	
+		else if (get_utility_function(object) == "general_power")
+		{
+			if (utility >= 0)
+			{
+				alpha <- object@par[1]
+				beta <- object@par[2]
+				certainty_equivalent <- (utility / beta)^(1.0 / alpha)				
+			}
+			else if (utility < 0)
+			{
+				alpha <- object@par[1]				
+				beta <- object@par[2]
+				gamma <- object@par[3]
+				delta <- object@par[4]				
+				lambda <- object@par[5]
+				certainty_equivalent <- -(-utility / (delta * lambda))^(1.0 / gamma)		
+			}
+		}
 		
 		return (certainty_equivalent)
 	}

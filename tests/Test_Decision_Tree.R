@@ -15,8 +15,7 @@ my_choices <- Choices(choice_ids, gamble_ids, outcome_ids,
 	objective_consequences, probability_strings)
 my_choices
 
-drawChoices(my_choices, 
-	window_width=5, window_height=5, 
+drawChoices(my_choices,
 	decision_square_x=0.2, decision_square_edge_length=0.05,
 	circle_radius=0.025, y_split_gap=0.1, x_split_offset=0.03, 
 	probability_text_digits=3, y_probability_text_offset=0.015, 
@@ -34,8 +33,7 @@ drawChoices(my_choices,
 my_utility <- Utility(fun="power", 
 	par=c(alpha=0.88, beta=0.88, lambda=2.25))
 
-drawSimplex(window_width=7, window_height=7, 
-	x1=0, x2=100, x3=200,
+drawSimplex(x1=0, x2=100, x3=200,
 	line_dot_density=100,	
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red", 
@@ -64,8 +62,7 @@ drawSimplex(window_width=7, window_height=7,
 my_utility <- Utility(fun="power", 
 	par=c(alpha=0.88, beta=0.88, lambda=1))
 
-drawSimplex(window_width=7, window_height=7, 
-	x1=0, x2=1000000, x3=5000000,
+drawSimplex(x1=0, x2=1000000, x3=5000000,
 	line_dot_density=100,	
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red", 
@@ -94,8 +91,7 @@ drawSimplex(window_width=7, window_height=7,
 my_utility <- Utility(fun="power", 
 	par=c(alpha=0.88, beta=0.88, lambda=1))
 
-drawSimplex(window_width=7, window_height=7, 
-	x1=0, x2=1, x3=2, 
+drawSimplex(x1=0, x2=1, x3=2, 
 	line_dot_density=100,	
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red", 
@@ -125,8 +121,7 @@ drawSimplex(window_width=7, window_height=7,
 my_utility <- Utility(fun="power", 
 	par=c(alpha=0.88, beta=0.88, lambda=1))
 
-drawSimplex(window_width=7, window_height=7, 
-	x1=0, x2=1, x3=2, 
+drawSimplex(x1=0, x2=1, x3=2, 
 	line_dot_density=100,	
 	draw_ev_flag=TRUE, ev_colour="black",
 	draw_pt_flag=TRUE, alpha=0.61, beta=0.724, pt_colour="red", 

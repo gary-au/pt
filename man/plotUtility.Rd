@@ -5,7 +5,7 @@
 plotUtility(my_title, my_title_colour, my_title_font_size, my_x_label, xmin,
   xmax, my_y_label, fun, par, fun_colour, draw_reference_line_flag,
   reference_line_colour, reference_line_style, my_labels, my_label_positions,
-  my_label_colours, my_label_font_sizes, window_width, window_height)
+  my_label_colours, my_label_font_sizes)
 }
 \arguments{
   \item{my_title}{text, the title of the chart.}
@@ -50,10 +50,6 @@ plotUtility(my_title, my_title_colour, my_title_font_size, my_x_label, xmin,
 
   \item{my_label_font_sizes}{vector, stores the font size
   of each text label.}
-
-  \item{window_width}{numeric, the window_width}
-
-  \item{window_height}{numeric, the window_height}
 }
 \description{
 Plot the utility function.
@@ -67,7 +63,6 @@ plotUtility(my_x_label = "objective consequence",
 	fun_colour = "purple",
 	draw_reference_line_flag = TRUE,
 	reference_line_colour = "red",
-	reference_line_style = 1,
-	window_width = 5, window_height = 5)
+	reference_line_style = 1)
 }
 

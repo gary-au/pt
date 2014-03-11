@@ -15,9 +15,8 @@ create an instance of this class.
   \code{"text"}, containing a text string that specifies
   the functional form of the probability weighting
   function.} \item{\code{par}:}{Object of class
-  \code{"vector"}, containing numeric values for the
-  parameter specifications associated with the probability
-  weighting function.} }
+  \code{"vector"}, containing the parameter specifications
+  for the probability weighting function.} }
 }
 \seealso{
 {\code{\link{ProbWeight}}}

@@ -1352,8 +1352,10 @@ setGeneric(name = "saveChoices",
 #' 	
 #' my_choices
 #' 
+#' my_output_file <- paste(tempdir(), "\\", "saved_choices.txt", sep="")
+#' 
 #' saveChoices(my_choices, 
-#'	output_file="saved_choices.txt",
+#'	output_file=my_output_file,
 #'	choice_id_header="choice_id",
 #'	gamble_id_header="gamble_id",
 #'	outcome_id_header="outcome_id",
@@ -1362,7 +1364,10 @@ setGeneric(name = "saveChoices",
 #'	DELIMITER="\\t")
 #' 
 #' # after finishing with the file, delete to keep the workspace tidy
-#' rm(my_choices)
+#' unlink(my_output_file)
+#' # remove the object from the global environment
+#' rm(my_output_file)
+#' 
 #' @export
 setMethod(f = "saveChoices",
 	signature = "Choices",

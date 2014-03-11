@@ -7,7 +7,7 @@ AlwaysSaveHistory: No
 EnableCodeIndexing: Yes
 UseSpacesForTab: No
 NumSpacesForTab: 5
-Encoding: UTF-8
+Encoding: ISO8859-1
 
 RnwWeave: knitr
 LaTeX: pdfLaTeX
